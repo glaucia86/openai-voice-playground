@@ -28,7 +28,7 @@ export default function HomePage() {
         <nav className="site-nav" aria-label="Primary navigation">
           <a href="#playground">Playground</a>
           <a href="#principles">Principles</a>
-          <a href={`${REPOSITORY_URL}/blob/main/tutorial/tutorial.md`} target="_blank" rel="noreferrer">Tutorial</a>
+          <a href={`${REPOSITORY_URL}/blob/main/tutorial/tutorial-01.md`} target="_blank" rel="noreferrer">Tutorial 01</a>
         </nav>
         <a className="github-button" href={REPOSITORY_URL} target="_blank" rel="noreferrer">
           <Code2 aria-hidden="true" /> <span>View source</span> <ArrowUpRight aria-hidden="true" />
@@ -45,7 +45,7 @@ export default function HomePage() {
             </p>
             <div className="hero__actions">
               <a className="button button--primary button--large" href="#playground"><Sparkles aria-hidden="true" /> Open the playground</a>
-              <a className="button button--ghost button--large" href={`${REPOSITORY_URL}/blob/main/tutorial/tutorial.md`} target="_blank" rel="noreferrer"><BookOpenText aria-hidden="true" /> Follow the tutorial</a>
+              <a className="button button--ghost button--large" href={`${REPOSITORY_URL}/blob/main/tutorial/tutorial-01.md`} target="_blank" rel="noreferrer"><BookOpenText aria-hidden="true" /> Follow Tutorial 01</a>
             </div>
             <dl className="hero__facts">
               <div><dt>13</dt><dd>built-in voices</dd></div>
@@ -121,8 +121,8 @@ export default function HomePage() {
           <h2>Follow every decision from empty folder to deployment.</h2>
           <p>The tutorial documents the incremental slices, validation gates, trade-offs, and the prompts used to collaborate with Codex.</p>
         </div>
-        <a className="button button--primary button--large" href={`${REPOSITORY_URL}/blob/main/tutorial/tutorial.md`} target="_blank" rel="noreferrer">
-          <BookOpenText aria-hidden="true" /> Read tutorial/tutorial.md
+        <a className="button button--primary button--large" href={`${REPOSITORY_URL}/blob/main/tutorial/tutorial-01.md`} target="_blank" rel="noreferrer">
+          <BookOpenText aria-hidden="true" /> Read tutorial/tutorial-01.md
         </a>
       </section>
 

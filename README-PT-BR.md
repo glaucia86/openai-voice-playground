@@ -2,7 +2,7 @@
 
 # OpenAI Voice Playground
 
-**Um laboratório educacional, com padrão de produção, para geração de voz e transcrição.**
+**Uma série educacional, com padrão de produção, sobre tecnologias de voz da OpenAI.**
 
 [![Next.js 15](https://img.shields.io/badge/Next.js-15.5-000000?logo=nextdotjs)](https://nextjs.org/)
 [![TypeScript 7](https://img.shields.io/badge/TypeScript-7.0-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -12,11 +12,11 @@
 
 [English](README.md) · **Português (Brasil)**
 
-[Experimente o playground](#execute-localmente) · [Leia o tutorial](tutorial/tutorial.md) · [Faça deploy na Vercel](#deploy-na-vercel) · [Contribua](CONTRIBUTING.md)
+[Experimente o playground](#execute-localmente) · [Explore a série de tutoriais](tutorial/README.md) · [Faça deploy na Vercel](#deploy-na-vercel) · [Contribua](CONTRIBUTING.md)
 
 </div>
 
-O OpenAI Voice Playground demonstra como desenvolver recursos de text-to-speech e speech-to-text sem expor credenciais do provedor nem esconder trade-offs de produção atrás de uma interface bem-acabada. A aplicação é deliberadamente pequena o bastante para ser compreendida e estruturada o bastante para evoluir com segurança.
+O OpenAI Voice Playground é uma série incremental sobre como desenvolver experiências de voz com o SDK da OpenAI sem expor credenciais do provedor nem esconder trade-offs de produção atrás de uma interface bem-acabada. Cada tutorial isola um modelo de interação para que engenheiros possam comparar arquiteturas em vez de tratar todo recurso de áudio como o mesmo problema.
 
 > Este é um projeto educacional independente, não um produto oficial da OpenAI. A interface identifica claramente que as vozes geradas são produzidas por inteligência artificial.
 
@@ -27,6 +27,15 @@ O OpenAI Voice Playground demonstra como desenvolver recursos de text-to-speech 
 - Observar o streaming dos bytes de TTS, IDs de requisição, envelopes de erro estáveis, validação e metadados de rate limit.
 - Entender por que a chave da API deve permanecer no servidor e por que uma transcrição delimitada não é automaticamente um caso de uso para Realtime.
 - Reproduzir o mesmo ciclo de qualidade usado na construção do repositório: tipos estritos, testes, lint, build, CI e decisões documentadas.
+
+## Série de tutoriais
+
+| Tutorial | Foco | Onde acompanhar |
+| --- | --- | --- |
+| **01 — Text to speech com padrão de produção** | TTS baseado em requisição, chave no servidor, bytes em streaming, acessibilidade, proteções, testes e Vercel | [`main`](https://github.com/glaucia86/openai-voice-playground/tree/main) · [guia em português](tutorial/tutorial-01.md) |
+| **02 — Agente de voz conversacional ao vivo** | Sessões Realtime speech-to-speech, WebRTC, credenciais efêmeras, interrupção, detecção de turnos e transcrições | [`feat/realtime-voice-agent`](https://github.com/glaucia86/openai-voice-playground/tree/feat/realtime-voice-agent) · em desenvolvimento |
+
+O Tutorial 01 ensina deliberadamente TTS. A tela de speech-to-text delimitado permanece no playground como experimento complementar, mas não é o assunto do primeiro artigo. O Tutorial 02 fica em uma branch separada porque sua arquitetura orientada a sessões e seu modelo de ameaças são materialmente diferentes.
 
 ## Arquitetura
 
@@ -137,14 +146,16 @@ src/
     ├── request-guard.ts
     └── schemas.ts
 
-tutorial/tutorial.md   # guia detalhado e incremental de construção
+tutorial/
+├── README.md           # índice da série e trilha de estudo
+└── tutorial-01.md      # Tutorial 01: TTS com padrão de produção
 tests/                 # testes unitários de contratos e proteções
 AGENTS.md              # instruções duráveis para Codex e contribuidores
 ```
 
 ## Aprenda o raciocínio, não apenas as chamadas de API
 
-O [tutorial completo em português](tutorial/tutorial.md) explica a implementação em fatias verticais, incluindo:
+O [Tutorial 01 completo em português](tutorial/tutorial-01.md) explica a implementação de TTS em fatias verticais, incluindo:
 
 - escolha entre APIs de áudio baseadas em requisição e Realtime;
 - construção da fronteira de servidor antes do refinamento visual;

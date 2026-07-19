@@ -132,7 +132,7 @@ export function VoicePlayground() {
             <Mic2 aria-hidden="true" />
             <span><strong>Speech to text</strong><small>Extract a useful transcript</small></span>
           </button>
-          <a className="tutorial-link" href="https://github.com/glaucia86/openai-voice-playground/blob/main/tutorial/tutorial.md" target="_blank" rel="noreferrer">
+          <a className="tutorial-link" href="https://github.com/glaucia86/openai-voice-playground/blob/main/tutorial/tutorial-01.md" target="_blank" rel="noreferrer">
             <BookOpen aria-hidden="true" /> Read the build guide
           </a>
         </div>

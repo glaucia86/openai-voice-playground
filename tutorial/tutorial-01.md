@@ -1,6 +1,6 @@
-# Da ideia ao deploy: construindo um Voice Playground com OpenAI, Next.js 15 e TypeScript 7
+# Tutorial 01 — Da ideia ao deploy: text to speech com OpenAI, Next.js 15 e TypeScript 7
 
-> Um guia incremental sobre APIs de voz, fronteiras de segurança, streaming, testes, Codex e as decisões que separam uma demonstração bonita de uma implementação responsável.
+> Um guia incremental e específico sobre TTS baseado em requisição, fronteiras de segurança, streaming, testes, Codex e as decisões que separam uma demonstração bonita de uma implementação responsável.
 
 **Autora:** Glaucia Lemos  
 **Projeto:** [OpenAI Voice Playground](https://github.com/glaucia86/openai-voice-playground)  
@@ -20,16 +20,16 @@ Este não é um artigo “copie quatro arquivos e diga que está pronto para pro
 - o que é registrado e o que jamais deve aparecer nos logs;
 - como outra pessoa — ou o Codex — consegue evoluir o código sem reaprender todas as decisões.
 
+Este é o primeiro artigo de uma série sobre diferentes formas de criar experiências de voz com o SDK da OpenAI. Aqui o recorte é propositalmente estreito: transformar texto em áudio com uma requisição delimitada. O [Tutorial 02](https://github.com/glaucia86/openai-voice-playground/tree/feat/realtime-voice-agent) tratará de outro problema — um agente conversacional speech-to-speech ao vivo com Realtime e WebRTC.
+
 O objetivo é construir uma aplicação pequena com um processo que poderia existir em um time real. Ao final teremos:
 
 1. texto para voz com `gpt-4o-mini-tts`;
-2. voz para texto com `gpt-4o-mini-transcribe` e `gpt-4o-transcribe`;
-3. gravação pelo navegador e upload de arquivos limitados;
-4. API key somente no servidor;
-5. validação, erros, rate limit, request IDs e logs sem conteúdo sensível;
-6. interface responsiva, acessível e honesta sobre voz gerada por IA;
-7. testes, CI, build e deploy na Vercel;
-8. um fluxo reprodutível para trabalhar com Codex.
+2. API key somente no servidor;
+3. validação, erros, rate limit, request IDs e logs sem conteúdo sensível;
+4. interface responsiva, acessível e honesta sobre voz gerada por IA;
+5. testes, CI, build e deploy na Vercel;
+6. um fluxo reprodutível para trabalhar com Codex.
 
 O código completo está no repositório, mas minha recomendação é seguir as fatias na ordem. O valor didático está justamente em ver o sistema ganhar capacidade e proteção ao mesmo tempo.
 
@@ -41,14 +41,12 @@ O código completo está no repositório, mas minha recomendação é seguir as 
 4. [Estabeleça a fronteira servidor–OpenAI](#4-estabeleça-a-fronteira-servidoropenai)
 5. [Implemente texto para voz com streaming](#5-implemente-texto-para-voz-com-streaming)
 6. [Consuma o stream no navegador sem mentir sobre a UX](#6-consuma-o-stream-no-navegador-sem-mentir-sobre-a-ux)
-7. [Implemente transcrição de áudio limitado](#7-implemente-transcrição-de-áudio-limitado)
-8. [Capture o microfone com a MediaRecorder API](#8-capture-o-microfone-com-a-mediarecorder-api)
-9. [Projete erros, observabilidade e privacidade](#9-projete-erros-observabilidade-e-privacidade)
-10. [Proteja custo e uso público](#10-proteja-custo-e-uso-público)
-11. [Teste as regras, não a OpenAI](#11-teste-as-regras-não-a-openai)
-12. [Use Codex como parte de um harness](#12-use-codex-como-parte-de-um-harness)
-13. [Faça deploy na Vercel](#13-faça-deploy-na-vercel)
-14. [O que ainda falta para o seu contexto de produção](#14-o-que-ainda-falta-para-o-seu-contexto-de-produção)
+7. [Projete erros, observabilidade e privacidade](#7-projete-erros-observabilidade-e-privacidade)
+8. [Proteja custo e uso público](#8-proteja-custo-e-uso-público)
+9. [Teste as regras, não a OpenAI](#9-teste-as-regras-não-a-openai)
+10. [Use Codex como parte de um harness](#10-use-codex-como-parte-de-um-harness)
+11. [Faça deploy na Vercel](#11-faça-deploy-na-vercel)
+12. [O que ainda falta para o seu contexto de produção](#12-o-que-ainda-falta-para-o-seu-contexto-de-produção)
 
 ---
 
@@ -67,23 +65,18 @@ A própria visão geral de [Audio and speech](https://developers.openai.com/api/
 
 ### Nossa decisão
 
-O playground trabalha com duas interações delimitadas:
+O recorte deste tutorial é uma interação delimitada: uma string de até 4.096 caracteres entra e um arquivo de áudio sai. Portanto, usaremos a Speech API. Não abriremos uma sessão Realtime somente para tornar o diagrama mais sofisticado.
 
-- uma string de até 4.096 caracteres para gerar voz;
-- um arquivo ou uma gravação finalizada de até 25 MB para transcrever.
-
-Portanto, usaremos a Speech API e a Transcriptions API. Não abriremos uma sessão Realtime somente para tornar o diagrama mais sofisticado.
-
-Essa decisão reduz estado, custo operacional, tratamento de reconexão e superfície de erro. Também torna explícito o próximo passo: se o requisito mudar para legendas enquanto a pessoa fala, não devemos “esticar” o upload atual; devemos criar uma fatia própria baseada em [Realtime transcription](https://developers.openai.com/api/docs/guides/realtime-transcription).
+Essa decisão reduz estado, custo operacional, tratamento de reconexão e superfície de erro. Ela também deixa explícito o próximo passo da série: quando o requisito é conversar por voz, com interrupções e turnos naturais, não devemos “esticar” TTS com gravações em loop; devemos adotar uma sessão Realtime. Essa será a arquitetura do Tutorial 02.
 
 ### A fronteira principal
 
 ```mermaid
 flowchart LR
-    UI["Browser"] -->|"JSON ou multipart"| API["Next.js Route Handler"]
+    UI["Browser"] -->|"JSON tipado"| API["Next.js Route Handler"]
     API --> G["Contrato + guardas"]
     G --> OA["OpenAI Audio API"]
-    OA -->|"stream ou JSON"| API
+    OA -->|"stream de áudio"| API
     API --> UI
 ```
 
@@ -96,7 +89,7 @@ O navegador não chama `api.openai.com` diretamente. Ele chama nossa aplicação
 5. chama a OpenAI com a chave do servidor;
 6. devolve um contrato estável para a interface.
 
-Essa camada não existe apenas para “esconder a chave”. Ela impede que o cliente transforme qualquer string em um nome de modelo, envie um arquivo arbitrariamente grande ou passe opções que o produto não decidiu suportar.
+Essa camada não existe apenas para “esconder a chave”. Ela impede que o cliente transforme qualquer string em um nome de modelo, envie texto arbitrariamente grande ou passe opções que o produto não decidiu suportar.
 
 ---
 
@@ -106,14 +99,14 @@ Antes de gerar arquivos, escreva uma definição curta de pronto.
 
 ### Objetivo
 
-Permitir que uma pessoa experimente geração e transcrição de voz, entenda o caminho da requisição e receba feedback acessível em todos os estados relevantes.
+Permitir que uma pessoa transforme texto em voz, entenda o caminho da requisição e receba feedback acessível em todos os estados relevantes.
 
 ### Restrições
 
 - Next.js 15 e App Router;
 - TypeScript 7 em modo estrito;
 - SDK oficial `openai` no servidor;
-- nenhuma credencial, transcrição ou gravação persistida;
+- nenhuma credencial, entrada de texto ou saída de áudio persistida;
 - voz sintética identificada como gerada por IA;
 - sem chamada paga em teste automatizado;
 - deploy compatível com Vercel Functions.
@@ -135,10 +128,8 @@ Em vez de “fazer todo o backend” e depois “fazer todo o frontend”, entre
 | 0. Base | Projeto sobe e `/api/health` informa configuração sem expor segredo | type-check + build |
 | 1. TTS mínimo | Texto validado retorna MP3 pelo servidor | teste de schema + chamada manual |
 | 2. TTS utilizável | Voz, instrução, formato, velocidade, stream e download | acessibilidade + cancelamento |
-| 3. STT mínimo | Arquivo válido retorna transcrição | limites e allowlist testados |
-| 4. Captura | Navegador grava WebM/MP4 e envia somente ao confirmar | teste em Chrome/Safari |
-| 5. Hardening | token opcional, origem, quota, request ID, logs sanitizados | testes de guardas |
-| 6. Entrega | README, tutorial, CI e Vercel | `npm run check` |
+| 3. Hardening | Token opcional, origem, quota, request ID e logs sanitizados | testes de guardas |
+| 4. Entrega | README, tutorial, CI e Vercel | `npm run check` |
 
 O ponto importante é que cada fatia atravessa interface, contrato, servidor e validação. Se o contexto acabar ou outra pessoa assumir, há um estado funcional e explicável para continuar.
 
@@ -454,119 +445,7 @@ O `aria-live` anuncia o progresso sem roubar foco. Animações respeitam `prefer
 
 ---
 
-## 7. Implemente transcrição de áudio limitado
-
-A documentação de [Speech to text](https://developers.openai.com/api/docs/guides/speech-to-text) informa:
-
-- uploads de até 25 MB;
-- formatos como MP3, MP4, MPEG, MPGA, M4A, WAV e WebM;
-- `gpt-4o-mini-transcribe` para menor custo;
-- `gpt-4o-transcribe` para maior precisão;
-- `prompt` como contexto útil para termos e acrônimos;
-- `language` em ISO-639-1 pode melhorar precisão e latência.
-
-### Validação antes da chamada paga
-
-Não confie no atributo `accept` do input. Ele só orienta o seletor do navegador.
-
-No servidor:
-
-```ts
-const formData = await request.formData();
-const file = formData.get("audio");
-
-if (!(file instanceof File)) {
-  throw new AppError(400, "audio_required", "Select or record an audio file first.");
-}
-
-if (file.size === 0) {
-  throw new AppError(400, "empty_audio", "The selected audio file is empty.");
-}
-
-if (file.size > MAX_AUDIO_BYTES) {
-  throw new AppError(413, "audio_too_large", "Audio files must be 25 MB or smaller.");
-}
-```
-
-Validamos `Content-Length` antes de chamar `request.formData()` quando o header existe. Depois validamos o tamanho real do `File`, porque o header pode faltar ou não ser confiável.
-
-MIME type também não é prova criptográfica do conteúdo. A allowlist de MIME + extensão reduz erros acidentais e payloads óbvios; um produto de maior risco deve inspecionar magic bytes, processar em ambiente isolado e considerar malware scanning.
-
-### Chamada ao SDK
-
-```ts
-const transcription = await openai.audio.transcriptions.create(
-  {
-    file,
-    model: fields.model,
-    response_format: "json",
-    ...(fields.language ? { language: fields.language } : {}),
-    ...(fields.prompt ? { prompt: fields.prompt } : {}),
-  },
-  { signal: request.signal },
-);
-```
-
-O prompt padrão sugere vocabulário como OpenAI, Codex, TypeScript e Next.js. Ele não instrui o modelo a “corrigir o que foi dito”. A finalidade é reduzir reconhecimento incorreto de nomes raros.
-
-### Por que a transcrição desta fatia não usa streaming?
-
-A API hoje permite streaming de eventos para um arquivo já concluído. Ainda assim, nossa entrada principal são notas curtas e o produto precisa do texto final antes de mostrar ações de cópia. O ganho percebido seria pequeno, e adicionaríamos parser SSE, reconciliação de deltas e mais estados de falha.
-
-Se o requisito for arquivo longo com texto parcial útil, a decisão muda. Se for microfone contínuo, a decisão muda ainda mais: use uma sessão Realtime, não vários uploads curtos em loop.
-
-O critério é valor para a interação, não a disponibilidade do parâmetro `stream: true`.
-
----
-
-## 8. Capture o microfone com a MediaRecorder API
-
-No navegador:
-
-```ts
-const stream = await navigator.mediaDevices.getUserMedia({
-  audio: {
-    echoCancellation: true,
-    noiseSuppression: true,
-  },
-});
-```
-
-Escolhemos um formato suportado dinamicamente:
-
-```ts
-function pickRecordingMimeType(): string {
-  const options = [
-    "audio/webm;codecs=opus",
-    "audio/mp4",
-    "audio/webm",
-  ];
-
-  return options.find((option) => MediaRecorder.isTypeSupported(option)) ?? "";
-}
-```
-
-Isso importa porque Safari e navegadores Chromium não têm exatamente a mesma preferência de container.
-
-### Ciclo de vida da gravação
-
-1. pedir permissão somente depois do clique;
-2. acumular `Blob` chunks localmente;
-3. parar automaticamente após dois minutos;
-4. encerrar todas as tracks do `MediaStream`;
-5. criar um `File` somente ao finalizar;
-6. exibir o arquivo selecionado antes de enviar;
-7. limpar timer, recorder e tracks ao desmontar.
-
-A interface informa: a gravação permanece no browser até a pessoa mandar transcrever. Depois do envio, o app encaminha o arquivo à OpenAI e não o salva localmente. “Não persistir” não significa “não transmitir”; essa distinção precisa estar clara na política do produto.
-
-### Erros de permissão são parte do fluxo
-
-`NotAllowedError` não deve virar “Something went wrong”. A mensagem orienta a liberar o microfone ou usar upload. A mesma tela continua útil quando gravação não é suportada.
-
----
-
-## 9. Projete erros, observabilidade e privacidade
+## 7. Projete erros, observabilidade e privacidade
 
 ### Envelope estável
 
@@ -575,8 +454,8 @@ O frontend recebe:
 ```json
 {
   "error": {
-    "code": "audio_too_large",
-    "message": "Audio files must be 25 MB or smaller.",
+    "code": "invalid_request",
+    "message": "Text must contain at most 4096 characters.",
     "requestId": "8d966daa-..."
   }
 }
@@ -590,8 +469,7 @@ Mapeamentos importantes:
 | --- | --- |
 | Zod | `400 invalid_request` |
 | JSON inválido | `400 invalid_json` |
-| arquivo grande | `413 audio_too_large` |
-| formato bloqueado | `415 unsupported_audio` |
+| corpo JSON grande | `413 payload_too_large` |
 | quota local | `429 rate_limit_exceeded` |
 | rate limit da OpenAI | `429 upstream_rate_limit` |
 | credencial upstream inválida | `503 upstream_authentication_error` |
@@ -599,7 +477,7 @@ Mapeamentos importantes:
 
 ### Request ID
 
-Cada rota gera um UUID, devolve `X-Request-Id` e inclui o mesmo valor no erro. Assim, suporte consegue correlacionar relato e log sem pedir ao usuário que publique o texto ou o áudio.
+Cada rota gera um UUID, devolve `X-Request-Id` e inclui o mesmo valor no erro. Assim, suporte consegue correlacionar relato e log sem pedir ao usuário que publique o texto ou as instruções de voz.
 
 ### Logue metadados, não conteúdo
 
@@ -608,14 +486,14 @@ Exemplo de evento:
 ```json
 {
   "timestamp": "2026-07-19T03:00:00.000Z",
-  "event": "transcription.completed",
+  "event": "speech.completed",
   "requestId": "8d966daa-...",
-  "route": "transcribe",
+  "route": "speech",
   "durationMs": 1840,
   "status": 200,
-  "model": "gpt-4o-mini-transcribe",
-  "inputSize": 381204,
-  "outputSize": 412
+  "model": "gpt-4o-mini-tts",
+  "inputSize": 187,
+  "outputSize": 49312
 }
 ```
 
@@ -623,8 +501,6 @@ Não entram:
 
 - texto enviado ao TTS;
 - instruções de voz;
-- nome do arquivo;
-- transcript;
 - bytes de áudio;
 - API key;
 - access token.
@@ -639,15 +515,15 @@ Um README não é DPIA, política de privacidade ou parecer jurídico.
 
 ---
 
-## 10. Proteja custo e uso público
+## 8. Proteja custo e uso público
 
 Uma chave escondida no servidor ainda pode ser consumida por uma rota pública. “A chave não vazou” e “ninguém consegue gastar minha quota” são problemas diferentes.
 
 ### Camadas incluídas
 
 1. **Same-origin check** — bloqueia requisições cross-site explícitas de browser.
-2. **Limite de corpo** — rejeita JSON e multipart grandes antes do trabalho caro, quando possível.
-3. **Allowlist** — modelo, voz, formato e idioma são enumerados.
+2. **Limite de corpo** — rejeita JSON grande antes do trabalho caro, quando possível.
+3. **Allowlist** — modelo, voz e formato são enumerados; velocidade e texto têm limites.
 4. **Rate limit local** — dez chamadas por minuto por rota/endereço em cada processo.
 5. **Token opcional** — `PLAYGROUND_ACCESS_TOKEN` protege workshops e demos privadas.
 6. **Timeout/retries limitados** — o SDK usa timeout de 45 segundos e duas tentativas.
@@ -672,19 +548,19 @@ Isso é suficiente para uma audiência conhecida em um workshop. Não oferece re
 
 ### Headers de segurança
 
-`next.config.mjs` adiciona CSP, `X-Content-Type-Options`, política de referrer, restrição de framing, COOP/CORP e uma `Permissions-Policy` que libera microfone somente para a própria origem.
+`next.config.mjs` adiciona CSP, `X-Content-Type-Options`, política de referrer, restrição de framing, COOP/CORP e uma `Permissions-Policy`. A tela complementar de STT libera microfone somente para a própria origem; o fluxo TTS não solicita essa permissão.
 
 Headers reduzem superfície, mas precisam ser testados junto com analytics, fontes, CDN e ferramentas reais do produto. Copiar uma CSP pronta e depois adicionar `*` quando algo quebra elimina seu valor.
 
 ---
 
-## 11. Teste as regras, não a OpenAI
+## 9. Teste as regras, não a OpenAI
 
 Testes automatizados deste repositório não consomem a API. Eles testam nossa responsabilidade:
 
 - defaults e limites do schema de TTS;
 - rejeição de voz e campos extras;
-- código de idioma;
+- formato, velocidade e instruções;
 - janela e headers do rate limiter;
 - origem e token de acesso;
 - parser do envelope de erro;
@@ -741,7 +617,6 @@ O CI usa `npm ci` e uma chave fictícia somente para o build. Nenhuma rota é ex
 Para um time com ambiente de staging e orçamento controlado, adicione poucos contract tests contra a API real:
 
 - TTS curto retorna content type e bytes válidos;
-- transcrição de fixture sintética conhecida mantém qualidade mínima;
 - modelo sem permissão produz erro mapeado;
 - latência e tamanho ficam abaixo de SLOs definidos.
 
@@ -749,7 +624,7 @@ Esses testes não devem rodar em todo pull request sem controle de custo e flaki
 
 ---
 
-## 12. Use Codex como parte de um harness
+## 10. Use Codex como parte de um harness
 
 Codex ajudou a acelerar implementação e validação, mas o processo não foi “crie um app bonito”. Um agente precisa de objetivo, contexto, restrições e definição de pronto. A documentação de [Codex best practices](https://developers.openai.com/codex/learn/best-practices) recomenda exatamente esses quatro elementos e orienta usar `AGENTS.md` como instrução durável do repositório.
 
@@ -794,7 +669,7 @@ O arquivo na raiz registra:
 - diferença entre streaming de TTS e Realtime;
 - definition of done.
 
-Isso evita repetir “nunca logue transcript” em toda tarefa e torna revisão humana mais objetiva. Se uma regra mudar, atualize o arquivo; não confie na memória de uma conversa antiga.
+Isso evita repetir “nunca logue texto ou instruções de voz” em toda tarefa e torna a revisão humana mais objetiva. Se uma regra mudar, atualize o arquivo; não confie na memória de uma conversa antiga.
 
 ### Context Engineering aplicado
 
@@ -833,10 +708,8 @@ Para este projeto, fontes de verdade incluem:
 
 - [Audio and speech](https://developers.openai.com/api/docs/guides/audio);
 - [Text to speech](https://developers.openai.com/api/docs/guides/text-to-speech);
-- [Speech to text](https://developers.openai.com/api/docs/guides/speech-to-text);
 - [TypeScript SDK reference](https://developers.openai.com/api/reference/typescript/);
-- [Create speech API reference](https://developers.openai.com/api/reference/resources/audio/subresources/speech/methods/create/);
-- [Create transcription API reference](https://developers.openai.com/api/reference/resources/audio/subresources/transcriptions/methods/create/).
+- [Create speech API reference](https://developers.openai.com/api/reference/resources/audio/subresources/speech/methods/create/).
 
 ### Handoff limpo
 
@@ -857,7 +730,7 @@ Validação:
 - npm test ✅
 
 Próxima fatia:
-- upload e transcrição limitados.
+- hardening, documentação e deploy.
 
 Riscos abertos:
 - rate limit ainda é process-local.
@@ -867,9 +740,9 @@ Esse resumo é mais útil que compactar toda a conversa automaticamente e torcer
 
 ---
 
-## 13. Faça deploy na Vercel
+## 11. Faça deploy na Vercel
 
-### 13.1 Importe o repositório
+### 11.1 Importe o repositório
 
 Na Vercel, crie um projeto a partir de:
 
@@ -879,7 +752,7 @@ https://github.com/glaucia86/openai-voice-playground
 
 O framework será detectado como Next.js.
 
-### 13.2 Configure variáveis
+### 11.2 Configure variáveis
 
 Em **Project Settings → Environment Variables**:
 
@@ -899,7 +772,7 @@ Escolha conscientemente os ambientes:
 
 Uma chave de produção não precisa estar disponível em todo preview criado por qualquer branch. Prefira projetos/chaves separados e permissões mínimas.
 
-### 13.3 Faça o deploy
+### 11.3 Faça o deploy
 
 O pipeline executa:
 
@@ -911,7 +784,7 @@ npm run test:coverage
 npm run build
 ```
 
-### 13.4 Valide sem expor segredo
+### 11.4 Valide sem expor segredo
 
 Abra:
 
@@ -932,13 +805,12 @@ Depois execute smoke tests curtos:
 
 1. TTS com uma frase sem dado pessoal;
 2. cancelamento durante geração;
-3. gravação curta com consentimento;
-4. arquivo maior que o limite rejeitado antes do upstream;
-5. token incorreto produz `401`;
-6. request ID aparece em falha;
-7. layout e teclado em viewport móvel.
+3. texto vazio e texto acima do limite são rejeitados antes do upstream;
+4. token incorreto produz `401`;
+5. request ID aparece em falha;
+6. player, download, layout e teclado funcionam em viewport móvel.
 
-### 13.5 Configure operação
+### 11.5 Configure operação
 
 Antes de divulgar a URL:
 
@@ -953,7 +825,7 @@ Antes de divulgar a URL:
 
 ---
 
-## 14. O que ainda falta para o seu contexto de produção
+## 12. O que ainda falta para o seu contexto de produção
 
 “Production-minded” descreve os padrões incorporados. “Pronto para a sua produção” depende de requisitos que nenhum template conhece.
 
@@ -961,9 +833,9 @@ Antes de divulgar a URL:
 
 #### Produto e UX
 
-- [ ] O usuário entende quando áudio é enviado?
+- [ ] O usuário entende quando o texto é enviado e quando o áudio é recebido?
 - [ ] A voz sintética é claramente identificada?
-- [ ] Existe consentimento para gravar terceiros?
+- [ ] O texto enviado está autorizado e livre de dados pessoais desnecessários?
 - [ ] Cancelamento e retry são compreensíveis?
 - [ ] Teclado, leitor de tela, contraste e reduced motion foram testados?
 
@@ -972,7 +844,7 @@ Antes de divulgar a URL:
 - [ ] Há autenticação individual?
 - [ ] A quota é por usuário/tenant e distribuída?
 - [ ] Existe limite financeiro no projeto OpenAI?
-- [ ] Upload passa por inspeção adequada ao risco?
+- [ ] Limites de entrada e saída são adequados ao risco e ao orçamento?
 - [ ] Chaves têm escopo, rotação e owner?
 - [ ] CSP e proxy headers foram validados no ambiente real?
 
@@ -998,9 +870,7 @@ Antes de divulgar a URL:
 | --- | --- | --- |
 | Route Handlers server-side | chave isolada e contrato controlado | servidor vira ponto de custo e latência |
 | modelo fixo para TTS | previsibilidade | menos experimentação arbitrária |
-| mini/full enumerados no STT | escolha simples de custo/qualidade | catálogo não é dinâmico |
 | stream no servidor + Blob no browser | memória menor no servidor e player compatível | playback só após completar |
-| upload request-based | implementação simples e robusta | sem deltas ao vivo |
 | rate limit em memória | zero infraestrutura para tutorial | não protege múltiplas instâncias |
 | access token compartilhado | protege workshop rapidamente | não substitui identidade |
 | Oxlint + `tsc` + config `.mjs` | compatibilidade com TS 7 | gates separados; build isolado não faz type-check |
@@ -1013,23 +883,22 @@ Antes de divulgar a URL:
 4. **Converter stream em Buffer no servidor.** Você perde o benefício antes de o cliente receber um byte.
 5. **Dizer “Realtime” porque existe uma animação.** Realtime envolve sessão e deltas, não um spinner.
 6. **Logar prompt para “debugar depois”.** Esse atalho vira incidente de privacidade.
-7. **Confundir MIME type com validação completa de arquivo.** Ele pode ser forjado.
-8. **Acreditar que serverless compartilha memória.** O rate limiter local não é global.
-9. **Não revogar Object URLs nem parar tracks.** A aba continua consumindo recursos.
-10. **Chamar erro bruto do provedor de mensagem amigável.** Ele pode vazar detalhes e acoplar o frontend.
-11. **Usar Codex sem definition of done.** Código gerado não é evidência de conclusão.
-12. **Congelar o artigo e atualizar apenas dependências.** Documentação divergente ensina o comportamento errado.
+7. **Acreditar que serverless compartilha memória.** O rate limiter local não é global.
+8. **Não revogar Object URLs.** A aba mantém áudio anterior na memória.
+9. **Chamar erro bruto do provedor de mensagem amigável.** Ele pode vazar detalhes e acoplar o frontend.
+10. **Usar Codex sem definition of done.** Código gerado não é evidência de conclusão.
+11. **Congelar o artigo e atualizar apenas dependências.** Documentação divergente ensina o comportamento errado.
 
 ### Exercícios para evoluir o projeto
 
 1. Adicione Media Source Extensions e compare time-to-first-audio por navegador.
-2. Crie uma fatia Realtime transcription com WebRTC e deltas acessíveis.
+2. Compare esta arquitetura com o agente Realtime do Tutorial 02 e documente as diferenças de estado, latência e segurança.
 3. Substitua o rate limiter local por Redis e teste concorrência.
 4. Adicione autenticação e budget por usuário.
-5. Crie um teste de contrato com áudio sintético e WER máximo aceitável.
+5. Crie um teste de contrato que valide assinatura do arquivo, duração e latência sem comparar áudio byte a byte.
 6. Instrumente OpenTelemetry sem registrar conteúdo.
 7. Faça um scorecard de acessibilidade com Playwright e axe.
-8. Implemente fila para arquivos próximos do limite e compare custo/latência.
+8. Adicione cache somente após definir uma política segura de chave, retenção e invalidação.
 
 ---
 
@@ -1042,7 +911,6 @@ Neste projeto:
 - a OpenAI fica atrás de uma fronteira server-side;
 - os contratos são menores que a capacidade total do provedor;
 - streaming é usado onde reduz buffer, com a limitação do player declarada;
-- transcrição request-based permanece simples porque a entrada é delimitada;
 - segurança, custo, acessibilidade e disclosure aparecem na experiência;
 - Codex participa de um loop com contexto, regras e gates;
 - documentação registra tanto as escolhas quanto o que ainda não foi resolvido.
@@ -1055,11 +923,8 @@ Esse é o padrão que vale carregar para outros projetos de IA: não demonstrar 
 
 - OpenAI — [Audio and speech](https://developers.openai.com/api/docs/guides/audio)
 - OpenAI — [Text to speech](https://developers.openai.com/api/docs/guides/text-to-speech)
-- OpenAI — [Speech to text](https://developers.openai.com/api/docs/guides/speech-to-text)
-- OpenAI — [Realtime transcription](https://developers.openai.com/api/docs/guides/realtime-transcription)
 - OpenAI — [TypeScript SDK reference](https://developers.openai.com/api/reference/typescript/)
 - OpenAI — [Create speech reference](https://developers.openai.com/api/reference/resources/audio/subresources/speech/methods/create/)
-- OpenAI — [Create transcription reference](https://developers.openai.com/api/reference/resources/audio/subresources/transcriptions/methods/create/)
 - OpenAI — [Codex best practices](https://developers.openai.com/codex/learn/best-practices)
 - OpenAI — [Enterprise privacy](https://openai.com/enterprise-privacy/)
 - TypeScript — [Installation](https://www.typescriptlang.org/download/)

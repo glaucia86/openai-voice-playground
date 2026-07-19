@@ -23,7 +23,7 @@ Run the narrowest relevant check while iterating and `npm run check` before decl
 - `src/components`: interactive client components. Do not import the OpenAI SDK here.
 - `src/lib`: shared contracts and server safeguards.
 - `tests`: focused unit tests. Do not make live OpenAI calls.
-- `tutorial/tutorial.md`: canonical Portuguese teaching article. Update it when a behavior or architectural decision changes.
+- `tutorial/tutorial-01.md`: canonical Portuguese article for Tutorial 01 (request-based TTS). Update it when that behavior or architectural decision changes.
 
 ## Security non-negotiables
 

@@ -2,7 +2,7 @@
 
 # OpenAI Voice Playground
 
-**A production-minded, educational lab for speech generation and transcription.**
+**A production-minded tutorial series for building with OpenAI voice technologies.**
 
 [![Next.js 15](https://img.shields.io/badge/Next.js-15.5-000000?logo=nextdotjs)](https://nextjs.org/)
 [![TypeScript 7](https://img.shields.io/badge/TypeScript-7.0-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -12,11 +12,11 @@
 
 **English** · [Português (Brasil)](README-PT-BR.md)
 
-[Try the playground](#run-locally) · [Read the tutorial](tutorial/tutorial.md) · [Deploy to Vercel](#deploy-to-vercel) · [Contribute](CONTRIBUTING.md)
+[Try the playground](#run-locally) · [Explore the tutorial series](tutorial/README.md) · [Deploy to Vercel](#deploy-to-vercel) · [Contribute](CONTRIBUTING.md)
 
 </div>
 
-OpenAI Voice Playground demonstrates how to build text-to-speech and speech-to-text features without leaking provider credentials or hiding production trade-offs behind a polished UI. The app is deliberately small enough to understand and structured enough to extend safely.
+OpenAI Voice Playground is an incremental series about building voice experiences with the OpenAI SDK without leaking provider credentials or hiding production trade-offs behind a polished UI. Each tutorial isolates one interaction model so engineers can compare architectures instead of treating every audio feature as the same problem.
 
 > This is an independent educational project, not an official OpenAI product. Generated voices are identified as AI-generated in the interface.
 
@@ -27,6 +27,15 @@ OpenAI Voice Playground demonstrates how to build text-to-speech and speech-to-t
 - Observe streamed TTS bytes, request IDs, stable error envelopes, validation, and rate-limit metadata.
 - Learn why the API key belongs on the server and why bounded transcription is not automatically a Realtime use case.
 - Follow the same quality loop used to build the repository: strict types, tests, lint, build, CI, and documented decisions.
+
+## Tutorial series
+
+| Tutorial | Focus | Where to follow it |
+| --- | --- | --- |
+| **01 — Production-minded text to speech** | Request-based TTS, server-side keys, streamed bytes, accessibility, safeguards, tests, and Vercel | [`main`](https://github.com/glaucia86/openai-voice-playground/tree/main) · [Portuguese guide](tutorial/tutorial-01.md) |
+| **02 — Live conversational voice agent** | Speech-to-speech Realtime sessions, WebRTC, ephemeral credentials, interruption, turn detection, and transcripts | [`feat/realtime-voice-agent`](https://github.com/glaucia86/openai-voice-playground/tree/feat/realtime-voice-agent) · in development |
+
+Tutorial 01 deliberately teaches TTS. The bounded speech-to-text screen remains in the playground as a companion experiment, but it is not the subject of the first article. Tutorial 02 uses a separate branch because its session-oriented architecture and threat model are materially different.
 
 ## Architecture
 
@@ -137,14 +146,16 @@ src/
     ├── request-guard.ts
     └── schemas.ts
 
-tutorial/tutorial.md   # the detailed, incremental build guide
+tutorial/
+├── README.md           # series index and learning path
+└── tutorial-01.md      # Tutorial 01: production-minded TTS
 tests/                 # unit tests for contracts and guards
 AGENTS.md              # durable instructions for Codex and contributors
 ```
 
 ## Learn the reasoning, not only the API calls
 
-The long-form [Portuguese tutorial](tutorial/tutorial.md) explains the implementation as vertical slices, including:
+The long-form [Tutorial 01 in Portuguese](tutorial/tutorial-01.md) explains the TTS implementation as vertical slices, including:
 
 - choosing request-based Audio APIs versus Realtime;
 - building a server boundary before adding polish;

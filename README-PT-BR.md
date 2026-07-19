@@ -2,11 +2,11 @@
 
 <div align="center">
 
-# 🎙️ OpenAI Voice Labs
+<h1>🎙️ OpenAI Voice Labs</h1>
 
-### Workshops open source para construir experiências de voz com padrão de produção
+<h3>Workshops open source para construir experiências de voz com padrão de produção</h3>
 
-Aprenda OpenAI Voice, TTS, Realtime, WebRTC e Agents SDK construindo aplicações completas — com segurança, acessibilidade, testes e decisões de arquitetura explicadas.
+<p>Aprenda OpenAI Voice, TTS, Realtime, WebRTC e Agents SDK construindo aplicações completas — com segurança, acessibilidade, testes e decisões de arquitetura explicadas.</p>
 
 <p>
   <a href="README.md">English</a>
@@ -46,7 +46,7 @@ Aprenda OpenAI Voice, TTS, Realtime, WebRTC e Agents SDK construindo aplicaçõe
   <img alt="Vercel" src="https://img.shields.io/badge/Deploy-Vercel-000000?logo=vercel&logoColor=white">
 </p>
 
-> Projeto educacional independente. Não é um produto oficial da OpenAI.
+<p><em>Projeto educacional independente. Não é um produto oficial da OpenAI.</em></p>
 
 </div>
 
@@ -322,11 +322,11 @@ Se este projeto ajudou você, considere deixar uma ⭐. Isso ajuda outras pessoa
   <img src="https://avatars.githubusercontent.com/u/1631477?v=4" width="170" alt="Foto de Glaucia Lemos">
 </a>
 
-### Glaucia Lemos
+<h3>Glaucia Lemos</h3>
 
-**Principal Software Engineer · Forward Deployed Engineering Manager**
+<p><strong>Principal Software Engineer · Forward Deployed Engineering Manager</strong></p>
 
-Engenheira de software, educadora e criadora de conteúdo apaixonada por JavaScript, TypeScript, Node.js, Cloud, Inteligência Artificial e comunidades open source.
+<p>Engenheira de software, educadora e criadora de conteúdo apaixonada por JavaScript, TypeScript, Node.js, Cloud, Inteligência Artificial e comunidades open source.</p>
 
 <p>
   <a href="https://github.com/glaucia86">
@@ -349,7 +349,7 @@ Engenheira de software, educadora e criadora de conteúdo apaixonada por JavaScr
   </a>
 </p>
 
-_“Compartilhar conhecimento é multiplicar possibilidades.”_
+<p><em>“Compartilhar conhecimento é multiplicar possibilidades.”</em></p>
 
 </div>
 
@@ -357,8 +357,8 @@ _“Compartilhar conhecimento é multiplicar possibilidades.”_
 
 <div align="center">
 
-Feito com 💚, TypeScript e muita curiosidade por [Glaucia Lemos](https://github.com/glaucia86).
+<p>Feito com 💚, TypeScript e muita curiosidade por <a href="https://github.com/glaucia86">Glaucia Lemos</a>.</p>
 
-[Licença MIT](LICENSE) · [Reportar vulnerabilidade](SECURITY.md) · [Voltar ao topo](#readme-top)
+<p><a href="LICENSE">Licença MIT</a> · <a href="SECURITY.md">Reportar vulnerabilidade</a> · <a href="#readme-top">Voltar ao topo</a></p>
 
 </div>

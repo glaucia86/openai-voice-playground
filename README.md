@@ -2,11 +2,11 @@
 
 <div align="center">
 
-# 🎙️ OpenAI Voice Labs
+<h1>🎙️ OpenAI Voice Labs</h1>
 
-### Open-source workshops for building production-minded voice experiences
+<h3>Open-source workshops for building production-minded voice experiences</h3>
 
-Learn OpenAI Voice, TTS, Realtime, WebRTC, and the Agents SDK by building complete applications with security, accessibility, tests, and architectural decisions explained.
+<p>Learn OpenAI Voice, TTS, Realtime, WebRTC, and the Agents SDK by building complete applications with security, accessibility, tests, and architectural decisions explained.</p>
 
 <p>
   <a href="README-PT-BR.md">Português</a>
@@ -40,7 +40,7 @@ Learn OpenAI Voice, TTS, Realtime, WebRTC, and the Agents SDK by building comple
   <img alt="Vercel" src="https://img.shields.io/badge/Deploy-Vercel-000000?logo=vercel&logoColor=white">
 </p>
 
-> Independent educational project. It is not an official OpenAI product.
+<p><em>Independent educational project. It is not an official OpenAI product.</em></p>
 
 </div>
 
@@ -253,11 +253,11 @@ If this project helped you, consider leaving a ⭐ so other engineers can find t
   <img src="https://avatars.githubusercontent.com/u/1631477?v=4" width="170" alt="Glaucia Lemos">
 </a>
 
-### Glaucia Lemos
+<h3>Glaucia Lemos</h3>
 
-**Principal Software Engineer · Forward Deployed Engineering Manager**
+<p><strong>Principal Software Engineer · Forward Deployed Engineering Manager</strong></p>
 
-Software engineer, educator, and content creator passionate about JavaScript, TypeScript, Node.js, Cloud, Artificial Intelligence, and open-source communities.
+<p>Software engineer, educator, and content creator passionate about JavaScript, TypeScript, Node.js, Cloud, Artificial Intelligence, and open-source communities.</p>
 
 <p>
   <a href="https://github.com/glaucia86"><img alt="GitHub" src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></a>
@@ -268,7 +268,7 @@ Software engineer, educator, and content creator passionate about JavaScript, Ty
   <a href="https://dev.to/glaucia86"><img alt="DEV Community" src="https://img.shields.io/badge/DEV_Community-0A0A0A?style=for-the-badge&logo=devdotto&logoColor=white"></a>
 </p>
 
-_“Sharing knowledge multiplies possibilities.”_
+<p><em>“Sharing knowledge multiplies possibilities.”</em></p>
 
 </div>
 
@@ -276,8 +276,8 @@ _“Sharing knowledge multiplies possibilities.”_
 
 <div align="center">
 
-Made with 💚, TypeScript, and curiosity by [Glaucia Lemos](https://github.com/glaucia86).
+<p>Made with 💚, TypeScript, and curiosity by <a href="https://github.com/glaucia86">Glaucia Lemos</a>.</p>
 
-[MIT License](LICENSE) · [Report a vulnerability](SECURITY.md) · [Back to top](#readme-top)
+<p><a href="LICENSE">MIT License</a> · <a href="SECURITY.md">Report a vulnerability</a> · <a href="#readme-top">Back to top</a></p>
 
 </div>

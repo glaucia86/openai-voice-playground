@@ -1,23 +1,143 @@
-# OpenAI Voice Labs
+<a id="readme-top"></a>
 
-Production-minded, open-source workshops for learning how to build voice experiences with OpenAI. Each lab is a complete Next.js application with its own dependencies, tests, deployment instructions, and detailed Portuguese workshop guide.
+<div align="center">
 
-> Educational project maintained by [Glaucia Lemos](https://github.com/glaucia86). It is not an official OpenAI product.
+# 🎙️ OpenAI Voice Labs
 
-[Leia em português](README-PT-BR.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
+### Open-source workshops for building production-minded voice experiences
 
-## Labs
+Learn OpenAI Voice, TTS, Realtime, WebRTC, and the Agents SDK by building complete applications with security, accessibility, tests, and architectural decisions explained.
 
-| Lab | What you build | Architecture | Guide |
-| --- | --- | --- | --- |
-| [01 — Text to speech](labs/lab-01-text-to-speech) | An accessible interface that turns text into expressive, downloadable audio | Bounded HTTP request with a streamed audio response | [Portuguese workshop](labs/lab-01-text-to-speech/tutorial/tutorial.md) |
-| [02 — Realtime voice agent](labs/lab-02-realtime-voice-agent) | A fluid, interruptible speech-to-speech conversational agent | Stateful Realtime session over WebRTC with an ephemeral client secret | [Portuguese workshop](labs/lab-02-realtime-voice-agent/tutorial/tutorial.md) |
+<p>
+  <a href="README-PT-BR.md">Português</a>
+  ·
+  <a href="#-labs">Labs</a>
+  ·
+  <a href="#-quick-start">Run</a>
+  ·
+  <a href="#-deploy-to-vercel">Deploy</a>
+  ·
+  <a href="#-about-the-author">About</a>
+</p>
 
-The projects intentionally do not share a runtime package. Independent lockfiles make each workshop easier to teach, clone, test, and deploy in isolation.
+<p>
+  <a href="https://github.com/glaucia86/openai-voice-playground/actions/workflows/ci.yml">
+    <img alt="CI" src="https://github.com/glaucia86/openai-voice-playground/actions/workflows/ci.yml/badge.svg?branch=main">
+  </a>
+  <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-8BFFCC.svg"></a>
+  <a href="https://github.com/glaucia86/openai-voice-playground/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/glaucia86/openai-voice-playground?style=flat&logo=github&color=8BFFCC"></a>
+  <a href="https://github.com/glaucia86/openai-voice-playground/network/members"><img alt="GitHub forks" src="https://img.shields.io/github/forks/glaucia86/openai-voice-playground?style=flat&logo=github&color=8DA7FF"></a>
+</p>
 
-## Quick start
+<p>
+  <img alt="Next.js 15" src="https://img.shields.io/badge/Next.js-15.5.20-000000?logo=nextdotjs&logoColor=white">
+  <img alt="React 19" src="https://img.shields.io/badge/React-19.2-20232A?logo=react&logoColor=61DAFB">
+  <img alt="TypeScript 7" src="https://img.shields.io/badge/TypeScript-7.0-3178C6?logo=typescript&logoColor=white">
+  <img alt="Node.js 20+" src="https://img.shields.io/badge/Node.js-%E2%89%A520-339933?logo=nodedotjs&logoColor=white">
+  <img alt="OpenAI SDK" src="https://img.shields.io/badge/OpenAI-SDK-412991?logo=openai&logoColor=white">
+  <img alt="Agents SDK" src="https://img.shields.io/badge/OpenAI-Agents_SDK-412991?logo=openai&logoColor=white">
+  <img alt="WebRTC" src="https://img.shields.io/badge/WebRTC-Realtime-333333?logo=webrtc&logoColor=white">
+  <img alt="Vercel" src="https://img.shields.io/badge/Deploy-Vercel-000000?logo=vercel&logoColor=white">
+</p>
 
-Requirements: Node.js 20 or newer, npm, an OpenAI project API key, and a browser with microphone support for Lab 02.
+> Independent educational project. It is not an official OpenAI product.
+
+</div>
+
+---
+
+## ✨ See the labs in action
+
+<div align="center">
+  <img src="docs/assets/openai-voice-labs-demo.gif" width="960" alt="Animated demonstration of the Text to Speech and Realtime voice-agent labs">
+  <br>
+  <sub>Real captures of the Lab 01 and Lab 02 front ends. No OpenAI API call was made while recording.</sub>
+</div>
+
+---
+
+## 🧭 Contents
+
+- [Why this repository exists](#-why-this-repository-exists)
+- [Labs](#-labs)
+- [Repository architecture](#%EF%B8%8F-repository-architecture)
+- [Prerequisites](#-prerequisites)
+- [Quick start](#-quick-start)
+- [Command summary](#%EF%B8%8F-command-summary)
+- [Environment variables](#-environment-variables)
+- [Quality and CI/CD](#-quality-and-cicd)
+- [Deploy to Vercel](#-deploy-to-vercel)
+- [Responsible use](#%EF%B8%8F-responsible-use)
+- [Contributing](#-contributing)
+- [About the author](#-about-the-author)
+
+## 💡 Why this repository exists
+
+A voice API call can fit in a few lines. A trustworthy application requires considerably more.
+
+**OpenAI Voice Labs** is an incremental collection of workshops for engineers who want to understand not only _which endpoint to call_, but how to design a solution that a real team can explain, test, deploy, and evolve.
+
+Every lab provides:
+
+- a complete, independent Next.js application;
+- server Route Handlers that protect the standard OpenAI key;
+- strict contracts, Zod validation, and sanitized errors;
+- responsive, accessible UI with explicit operational states;
+- automated tests that make no paid OpenAI calls;
+- CI/CD, Vercel instructions, and documented production boundaries;
+- a detailed Portuguese workshop starting from an empty folder;
+- decisions, trade-offs, pitfalls, and extension exercises.
+
+## 🧪 Labs
+
+| Lab | What you build | Model and transport | Workshop | Status |
+| --- | --- | --- | --- | :---: |
+| **[Lab 01 — Text to Speech](labs/lab-01-text-to-speech)** | An accessible interface that turns text into expressive, downloadable audio | `gpt-4o-mini-tts` · HTTP · streamed audio | **[Step-by-step guide](labs/lab-01-text-to-speech/tutorial/tutorial.md)** | ✅ |
+| **[Lab 02 — Realtime Voice Agent](labs/lab-02-realtime-voice-agent)** | A fluid speech-to-speech agent with semantic turns, mute, interruption, and text fallback | `gpt-realtime-2.1` · WebRTC · Agents SDK | **[Step-by-step guide](labs/lab-02-realtime-voice-agent/tutorial/tutorial.md)** | ✅ |
+
+### Lab 01 — Text to Speech
+
+Treat TTS as a bounded request, keep credentials on the server, validate a small product contract, and forward the upstream audio stream without buffering the entire file in the Route Handler.
+
+**Topics:** streaming, cancellation, voices, delivery instructions, formats, speed, playback, download, AI disclosure, quotas, and accessible errors.
+
+### Lab 02 — Realtime Voice Agent
+
+Understand why a live conversation is a stateful session and separate the authorization path from the media path. The server mints a short-lived client secret; the browser negotiates WebRTC without receiving the standard key.
+
+**Topics:** Realtime, Agents SDK, WebRTC, ephemeral client secrets, semantic VAD, barge-in, mute, in-memory transcripts, consent, and cleanup.
+
+## 🏗️ Repository architecture
+
+```text
+openai-voice-playground/
+├── labs/
+│   ├── lab-01-text-to-speech/
+│   │   ├── src/                  # TTS application
+│   │   ├── tests/                # contracts and safeguards
+│   │   └── tutorial/tutorial.md  # empty folder to deployment
+│   └── lab-02-realtime-voice-agent/
+│       ├── src/                  # Realtime agent
+│       ├── tests/                # session contracts and safeguards
+│       └── tutorial/tutorial.md  # empty folder to deployment
+├── docs/assets/                  # documentation media
+├── .github/workflows/ci.yml      # CI matrix for both labs
+├── AGENTS.md                     # durable rules for people and Codex
+└── package.json                  # repository orchestration commands
+```
+
+Each lab owns its package manifest and lockfile. This is intentional: every workshop can be installed, taught, tested, and deployed without depending on the other lab's runtime.
+
+## 📋 Prerequisites
+
+- Node.js 20 or newer;
+- npm and Git;
+- an OpenAI project API key;
+- a modern browser;
+- microphone and WebRTC support for Lab 02;
+- headphones recommended for the Realtime agent.
+
+## 🚀 Quick start
 
 ```bash
 git clone https://github.com/glaucia86/openai-voice-playground.git
@@ -25,49 +145,139 @@ cd openai-voice-playground
 npm run install:labs
 ```
 
-Choose one lab, create its local environment file, and start it:
+Create the selected lab's local configuration:
 
 ```bash
-cd labs/lab-01-text-to-speech
-cp .env.example .env.local
-npm run dev
+cp labs/lab-01-text-to-speech/.env.example \
+   labs/lab-01-text-to-speech/.env.local
 ```
 
-Add `OPENAI_API_KEY` only to that untracked `.env.local`. Never commit an environment file. For Lab 02, replace the directory name with `lab-02-realtime-voice-agent`.
+Add your project key to that untracked file:
 
-## Repository commands
+```dotenv
+OPENAI_API_KEY=your_project_key
+```
 
-From the root:
+Start Lab 01:
 
 ```bash
 npm run dev:lab01
-npm run dev:lab02
-npm run check:lab01
-npm run check:lab02
+```
+
+Open <http://localhost:3000>. For Lab 02, create `.env.local` inside `labs/lab-02-realtime-voice-agent` and run `npm run dev:lab02`.
+
+## ▶️ Command summary
+
+Run these commands from the repository root:
+
+| Goal | Command |
+| --- | --- |
+| Install every lab | `npm run install:labs` |
+| Run Lab 01 | `npm run dev:lab01` |
+| Run Lab 02 | `npm run dev:lab02` |
+| Check Lab 01 | `npm run check:lab01` |
+| Check Lab 02 | `npm run check:lab02` |
+| Check the repository | `npm run check` |
+
+Run one development server at a time unless you explicitly assign different ports.
+
+## 🔐 Environment variables
+
+```dotenv
+# Required and server-only
+OPENAI_API_KEY=
+
+# Optional shared protection for a demonstration
+PLAYGROUND_ACCESS_TOKEN=
+
+# Optional canonical deployment origin
+APP_ORIGIN=
+```
+
+Never commit `.env` or `.env.local`, expose a key through `NEXT_PUBLIC_`, or put a real value in `.env.example`. Verify the ignore rule with `git check-ignore -v path/.env.local`.
+
+## ✅ Quality and CI/CD
+
+The [CI workflow](.github/workflows/ci.yml) runs an independent matrix for both labs on every push to `main` and every pull request:
+
+```text
+npm ci
+  ├── Oxlint
+  ├── TypeScript 7 type-check
+  ├── tests with coverage
+  └── Next.js 15 production build
+```
+
+Run the same gate locally:
+
+```bash
 npm run check
 ```
 
-Run only one development server at a time unless you explicitly assign different ports.
+[![CI](https://github.com/glaucia86/openai-voice-playground/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/glaucia86/openai-voice-playground/actions/workflows/ci.yml)
 
-## Deploy to Vercel
+## ▲ Deploy to Vercel
 
-Import this repository as a separate Vercel project for each lab. Set the project’s **Root Directory** to the selected directory:
+Create a separate Vercel project for each lab and select its **Root Directory**:
 
-- `labs/lab-01-text-to-speech`
-- `labs/lab-02-realtime-voice-agent`
+| Project | Root Directory |
+| --- | --- |
+| Lab 01 — TTS | `labs/lab-01-text-to-speech` |
+| Lab 02 — Realtime | `labs/lab-02-realtime-voice-agent` |
 
-Add `OPENAI_API_KEY` in Vercel’s encrypted environment settings, optionally add `PLAYGROUND_ACCESS_TOKEN`, and deploy from `main`. Do not upload `.env.local`.
+Keep `main` as the production branch, add `OPENAI_API_KEY` through encrypted Environment Variables, optionally protect the demo with `PLAYGROUND_ACCESS_TOKEN`, and configure `APP_ORIGIN`. Lab 02 requires HTTPS for microphone use outside localhost.
 
-## Security boundary
+## 🛡️ Responsible use
 
-- The standard OpenAI API key is server-only.
-- Lab 01 proxies a bounded TTS request and streams audio through a Route Handler.
-- Lab 02 mints a short-lived Realtime client secret; the standard key never reaches browser code.
-- Application logs contain request metadata, not prompts, transcripts, credentials, or audio.
-- Local rate limits are teaching-oriented defense in depth, not a complete public SaaS perimeter.
+- Synthetic voices are clearly disclosed as AI-generated.
+- Do not impersonate real people or mislead listeners.
+- Prompts, instructions, audio, transcripts, and credentials do not belong in application logs.
+- Realtime client secrets reduce exposure but remain bearer credentials.
+- Process-local limits and shared tokens are educational safeguards, not a complete public SaaS perimeter.
 
-Read each workshop before reusing these patterns in production. The guides document the assumptions and missing operational controls rather than hiding them behind a “production-ready” label.
+Before production, define identity, authorization, distributed quotas, budgets, consent, retention, observability, abuse response, and human approval for consequential tools. Read [SECURITY.md](SECURITY.md).
 
-## License
+## 🤝 Contributing
 
-[MIT](LICENSE)
+Contributions that improve clarity, security, accessibility, tests, or educational value are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md), update code and workshop together, run `npm run check`, and explain the decision and validation in your pull request.
+
+If this project helped you, consider leaving a ⭐ so other engineers can find the labs.
+
+---
+
+## 👩🏽‍💻 About the author
+
+<div align="center">
+
+<a href="https://github.com/glaucia86">
+  <img src="https://avatars.githubusercontent.com/u/1631477?v=4" width="170" alt="Glaucia Lemos">
+</a>
+
+### Glaucia Lemos
+
+**Principal Software Engineer · Forward Deployed Engineering Manager**
+
+Software engineer, educator, and content creator passionate about JavaScript, TypeScript, Node.js, Cloud, Artificial Intelligence, and open-source communities.
+
+<p>
+  <a href="https://github.com/glaucia86"><img alt="GitHub" src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></a>
+  <a href="https://www.linkedin.com/in/glaucialemos/"><img alt="LinkedIn" src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white"></a>
+  <a href="https://twitter.com/glaucia_lemos86"><img alt="X / Twitter" src="https://img.shields.io/badge/X_/_Twitter-000000?style=for-the-badge&logo=x&logoColor=white"></a>
+  <a href="https://www.youtube.com/user/l32759"><img alt="YouTube" src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white"></a>
+  <a href="https://www.twitch.tv/glaucia_lemos86"><img alt="Twitch" src="https://img.shields.io/badge/Twitch-9146FF?style=for-the-badge&logo=twitch&logoColor=white"></a>
+  <a href="https://dev.to/glaucia86"><img alt="DEV Community" src="https://img.shields.io/badge/DEV_Community-0A0A0A?style=for-the-badge&logo=devdotto&logoColor=white"></a>
+</p>
+
+_“Sharing knowledge multiplies possibilities.”_
+
+</div>
+
+---
+
+<div align="center">
+
+Made with 💚, TypeScript, and curiosity by [Glaucia Lemos](https://github.com/glaucia86).
+
+[MIT License](LICENSE) · [Report a vulnerability](SECURITY.md) · [Back to top](#readme-top)
+
+</div>

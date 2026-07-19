@@ -7,12 +7,14 @@
 **Código deste lab:** [`labs/lab-01-text-to-speech`](https://github.com/glaucia86/openai-voice-playground/tree/main/labs/lab-01-text-to-speech)  
 **Última validação técnica:** 19 de julho de 2026
 
+**Idioma:** Português · [Read in English](tutorial-en.md)
+
 - **Trilha:** Módulo 01 de 02
 - **Tempo estimado:** 2–3 horas
-- **Pré-requisito:** [Módulo 00 — configuração do ambiente e da API](../../../docs/00-configuracao-do-ambiente.md)
+- **Pré-requisito:** nenhum módulo anterior; este tutorial contém toda a preparação necessária
 - **Evidência de conclusão:** aplicação executada e `npm run check:lab01` aprovado na raiz
 
-[← Módulo 00](../../../docs/00-configuracao-do-ambiente.md) · [Índice do workshop](../../../docs/README.md) · [Módulo 02 — Realtime →](../../lab-02-realtime-voice-agent/tutorial/tutorial.md)
+[English version](tutorial-en.md) · [Módulo 00 opcional](../../../docs/00-configuracao-do-ambiente.md) · [Índice do workshop](../../../docs/README.md) · [Módulo 02 — Realtime →](../../lab-02-realtime-voice-agent/tutorial/tutorial.md)
 
 ---
 
@@ -40,6 +42,32 @@ O objetivo é construir uma aplicação pequena com um processo que poderia exis
 6. um fluxo reprodutível para trabalhar com Codex.
 
 O código completo está no repositório, mas minha recomendação é seguir as fatias na ordem. O valor didático está justamente em ver o sistema ganhar capacidade e proteção ao mesmo tempo.
+
+### Como este tutorial se sustenta sozinho
+
+Você não precisa ler outro documento para concluir o laboratório. O Módulo 00 continua existindo como uma referência compartilhada para quem fará a série inteira, mas tudo que é indispensável aparece novamente aqui: diferença entre ChatGPT e API, cobrança, projeto, API key, instalação, execução, código, testes, deploy e diagnóstico.
+
+Cada etapa responde a cinco perguntas:
+
+1. **O que estamos construindo?** O comportamento observável daquela fatia.
+2. **Por que existe?** A decisão de arquitetura ou produto por trás do código.
+3. **Onde editar?** O caminho exato do arquivo e do terminal.
+4. **Como validar?** Um checkpoint com comando e resultado esperado.
+5. **O que pode dar errado?** Falhas comuns antes de avançar.
+
+Se você optar por reconstruir o projeto, não precisa adivinhar arquivos intermediários. Os blocos essenciais aparecem no momento em que passam a fazer sentido; o código final permanece disponível para comparação no link do início do artigo.
+
+### Mapa mental do laboratório
+
+| Conceito | Neste projeto significa |
+| --- | --- |
+| Text to speech (TTS) | converter uma entrada textual delimitada em áudio sintetizado |
+| Speech API | endpoint request-based usado para gerar o áudio |
+| Route Handler | backend do Next.js que valida a entrada e chama a OpenAI |
+| Streaming | encaminhar bytes de áudio sem montar o arquivo inteiro no servidor |
+| Contrato | conjunto pequeno e tipado de valores que o cliente pode enviar |
+| Guardas | verificações de origem, acesso, tamanho e quota antes da chamada faturável |
+| Harness | regras, testes e comandos que tornam a implementação verificável por pessoas e agentes |
 
 ## Sumário
 
@@ -89,6 +117,41 @@ Resultado esperado:
 Se `node` não for reconhecido, instale uma versão LTS pelo site do Node.js e **feche e reabra o terminal**. Não continue enquanto os três comandos falharem.
 
 > A API key é um segredo. Este guia nunca pede para colá-la no código, no tutorial, no GitHub ou em `.env.example`.
+
+#### 0.1.1 Entenda conta, cobrança e projeto antes de criar a chave
+
+Uma assinatura ChatGPT Free, Plus, Pro, Business ou Enterprise não inclui automaticamente créditos da API. ChatGPT e [OpenAI API Platform](https://platform.openai.com/) são produtos com cobrança separada. Este laboratório faz chamadas pela API e, portanto, depende de faturamento ou créditos configurados na Platform.
+
+Use esta sequência:
+
+1. Entre em [platform.openai.com](https://platform.openai.com/) com a conta que será responsável pelo laboratório.
+2. Abra o seletor de projeto. Use um projeto de estudo existente ou crie um chamado, por exemplo, `openai-voice-labs`.
+3. Abra as configurações de cobrança da API e confirme que há um meio de pagamento ou saldo disponível.
+4. No projeto, configure alertas de orçamento e confira quais modelos estão permitidos.
+
+Um orçamento de projeto é um mecanismo de visibilidade e alerta; não trate a notificação como a única barreira contra gasto. O próprio app continuará precisando de autenticação, validação, rate limit e limites de sessão.
+
+> Se você participa de mais de uma organização, confirme o nome da organização e do projeto antes de gerar a chave. Uso, permissões e orçamento são atribuídos a esse escopo.
+
+#### 0.1.2 Crie uma chave específica e guarde-a uma única vez
+
+Dentro do projeto escolhido, abra **API Keys** e selecione **Create new secret key**. Dê um nome identificável, como `voice-labs-local`, e use as permissões mínimas compatíveis com o exercício.
+
+A chave completa é exibida somente na criação. Copie-a para um gerenciador de segredos ou diretamente para o arquivo local descrito na próxima etapa. Não envie a chave por chat, e-mail ou print; não a compartilhe com colegas; não a reutilize em aplicações públicas.
+
+Se uma chave aparecer em um commit, log, gravação ou mensagem, considere-a comprometida: revogue-a na Platform, crie outra e atualize o ambiente. Apagar apenas o arquivo ou o commit não revoga a credencial.
+
+#### 0.1.3 Saiba o que o navegador nunca deve receber
+
+`OPENAI_API_KEY` é uma credencial de servidor. Neste projeto:
+
+- ela fica em `.env.local` durante o desenvolvimento;
+- entra como variável protegida no provedor de deploy;
+- nunca recebe prefixo `NEXT_PUBLIC_`;
+- nunca aparece em componente React, resposta de health check ou log;
+- nunca é enviada ao navegador.
+
+O browser chama `/api/speech`; essa rota chama a OpenAI. Esse limite será implementado e testado ao longo do artigo.
 
 ### 0.2 Caminho A: clone e execute o laboratório pronto
 
@@ -1265,12 +1328,31 @@ Esse é o padrão que vale carregar para outros projetos de IA: não demonstrar 
 
 ---
 
+## Glossário rápido
+
+| Termo | Explicação prática |
+| --- | --- |
+| API key | segredo que autoriza e atribui custo às chamadas do projeto OpenAI |
+| Backend for Frontend | camada server-side específica para proteger e limitar o que a interface pode fazer |
+| CSP | política de navegador que limita de onde scripts, mídia e conexões podem ser carregados |
+| Object URL | URL temporária criada pelo navegador para reproduzir ou baixar o áudio em memória |
+| Rate limit | regra que limita requisições por identidade ou sinal técnico em uma janela de tempo |
+| Request ID | identificador seguro para correlacionar uma falha sem registrar o conteúdo do usuário |
+| Schema | contrato executável que valida forma, tipo e limites da entrada |
+| Server-only | código ou segredo que não pode entrar no bundle enviado ao navegador |
+| Vertical slice | incremento pequeno que atravessa contrato, backend, interface e validação |
+
+---
+
 ## Referências oficiais
 
 - OpenAI — [Audio and speech](https://developers.openai.com/api/docs/guides/audio)
 - OpenAI — [Text to speech](https://developers.openai.com/api/docs/guides/text-to-speech)
 - OpenAI — [TypeScript SDK reference](https://developers.openai.com/api/reference/typescript/)
 - OpenAI — [Create speech reference](https://developers.openai.com/api/reference/resources/audio/subresources/speech/methods/create/)
+- OpenAI — [Managing projects in the API Platform](https://help.openai.com/en/articles/9186755-managing-projects-in-the-api-platform)
+- OpenAI — [API key safety](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety)
+- OpenAI — [ChatGPT and API billing are separate](https://help.openai.com/en/articles/8156019-i-want-to-move-my-chatgpt-subscription-to-the-api)
 - OpenAI — [Codex best practices](https://developers.openai.com/codex/learn/best-practices)
 - OpenAI — [Enterprise privacy](https://openai.com/enterprise-privacy/)
 - TypeScript — [Installation](https://www.typescriptlang.org/download/)
@@ -1278,4 +1360,4 @@ Esse é o padrão que vale carregar para outros projetos de IA: não demonstrar 
 
 ---
 
-[← Módulo 00](../../../docs/00-configuracao-do-ambiente.md) · [Índice do workshop](../../../docs/README.md) · [Módulo 02 — Realtime →](../../lab-02-realtime-voice-agent/tutorial/tutorial.md)
+[English version](tutorial-en.md) · [Módulo 00 opcional](../../../docs/00-configuracao-do-ambiente.md) · [Índice do workshop](../../../docs/README.md) · [Módulo 02 — Realtime →](../../lab-02-realtime-voice-agent/tutorial/tutorial.md)

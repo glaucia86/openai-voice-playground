@@ -92,7 +92,7 @@ Every lab provides:
 - responsive, accessible UI with explicit operational states;
 - automated tests that make no paid OpenAI calls;
 - CI/CD, Vercel instructions, and documented production boundaries;
-- a detailed Portuguese workshop starting from an empty folder;
+- standalone workshops in English and Portuguese, each starting from an empty folder;
 - decisions, trade-offs, pitfalls, and extension exercises.
 
 ## 🧭 Workshop path
@@ -101,18 +101,18 @@ New to the OpenAI API or running the repository for the first time? Start with t
 
 | Module | Start here | Result |
 | --- | --- | --- |
-| **00 — Environment and API setup** | **[Setup guide](docs/00-configuracao-do-ambiente.md)** | Tools, OpenAI API project, local secret, health check, and quality gate validated |
-| **01 — Text to Speech** | **[TTS workshop](labs/lab-01-text-to-speech/tutorial/tutorial.md)** | A bounded, streamed, and protected speech-generation application |
-| **02 — Realtime voice agent** | **[Realtime workshop](labs/lab-02-realtime-voice-agent/tutorial/tutorial.md)** | A live WebRTC conversation with explicit session and security states |
+| **00 — Shared environment and API setup** | **[Optional Portuguese setup guide](docs/00-configuracao-do-ambiente.md)** | Tools, OpenAI API project, local secret, health check, and quality gate validated |
+| **01 — Text to Speech** | **[TTS workshop](labs/lab-01-text-to-speech/tutorial/tutorial-en.md)** | A bounded, streamed, and protected speech-generation application |
+| **02 — Realtime voice agent** | **[Realtime workshop](labs/lab-02-realtime-voice-agent/tutorial/tutorial-en.md)** | A live WebRTC conversation with explicit session and security states |
 
-The modules are written in Portuguese and support two routes: run and study the completed lab, or reconstruct it from an empty folder. The README below remains the concise operational reference.
+Both labs have standalone English and Portuguese tutorials. Each supports two routes: run and study the completed lab, or reconstruct it from an empty folder. The README below remains the concise operational reference.
 
 ## 🧪 Labs
 
 | Lab | What you build | Model and transport | Workshop | Status |
 | --- | --- | --- | --- | :---: |
-| **[Lab 01 — Text to Speech](labs/lab-01-text-to-speech)** | An accessible interface that turns text into expressive, downloadable audio | `gpt-4o-mini-tts` · HTTP · streamed audio | **[Step-by-step guide](labs/lab-01-text-to-speech/tutorial/tutorial.md)** | ✅ |
-| **[Lab 02 — Realtime Voice Agent](labs/lab-02-realtime-voice-agent)** | A fluid speech-to-speech agent with semantic turns, mute, interruption, and text fallback | `gpt-realtime-2.1` · WebRTC · Agents SDK | **[Step-by-step guide](labs/lab-02-realtime-voice-agent/tutorial/tutorial.md)** | ✅ |
+| **[Lab 01 — Text to Speech](labs/lab-01-text-to-speech)** | An accessible interface that turns text into expressive, downloadable audio | `gpt-4o-mini-tts` · HTTP · streamed audio | **[English](labs/lab-01-text-to-speech/tutorial/tutorial-en.md)** · [Português](labs/lab-01-text-to-speech/tutorial/tutorial.md) | ✅ |
+| **[Lab 02 — Realtime Voice Agent](labs/lab-02-realtime-voice-agent)** | A fluid speech-to-speech agent with semantic turns, mute, interruption, and text fallback | `gpt-realtime-2.1` · WebRTC · Agents SDK | **[English](labs/lab-02-realtime-voice-agent/tutorial/tutorial-en.md)** · [Português](labs/lab-02-realtime-voice-agent/tutorial/tutorial.md) | ✅ |
 
 ### Lab 01 — Text to Speech
 
@@ -134,11 +134,15 @@ openai-voice-playground/
 │   ├── lab-01-text-to-speech/
 │   │   ├── src/                  # TTS application
 │   │   ├── tests/                # contracts and safeguards
-│   │   └── tutorial/tutorial.md  # empty folder to deployment
+│   │   └── tutorial/
+│   │       ├── tutorial.md       # Portuguese: empty folder to deployment
+│   │       └── tutorial-en.md    # English: standalone equivalent
 │   └── lab-02-realtime-voice-agent/
 │       ├── src/                  # Realtime agent
 │       ├── tests/                # session contracts and safeguards
-│       └── tutorial/tutorial.md  # empty folder to deployment
+│       └── tutorial/
+│           ├── tutorial.md       # Portuguese: empty folder to deployment
+│           └── tutorial-en.md    # English: standalone equivalent
 ├── docs/
 │   ├── README.md                 # workshop index and learning paths
 │   ├── 00-configuracao-do-ambiente.md

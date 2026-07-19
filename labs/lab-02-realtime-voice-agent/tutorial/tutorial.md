@@ -7,12 +7,14 @@
 **Código deste lab:** [`labs/lab-02-realtime-voice-agent`](https://github.com/glaucia86/openai-voice-playground/tree/main/labs/lab-02-realtime-voice-agent)  
 **Última validação técnica:** 19 de julho de 2026
 
+**Idioma:** Português · [Read in English](tutorial-en.md)
+
 - **Trilha:** Módulo 02 de 02
 - **Tempo estimado:** 3–4 horas
-- **Pré-requisito:** [Módulo 00 — configuração do ambiente e da API](../../../docs/00-configuracao-do-ambiente.md); o Módulo 01 é recomendado, mas não obrigatório
+- **Pré-requisito:** nenhum módulo anterior; o Módulo 01 é recomendado, mas não obrigatório
 - **Evidência de conclusão:** aplicação executada e `npm run check:lab02` aprovado na raiz
 
-[← Módulo 01 — TTS](../../lab-01-text-to-speech/tutorial/tutorial.md) · [Índice do workshop](../../../docs/README.md) · [Módulo 00](../../../docs/00-configuracao-do-ambiente.md)
+[English version](tutorial-en.md) · [← Módulo 01 — TTS](../../lab-01-text-to-speech/tutorial/tutorial.md) · [Índice do workshop](../../../docs/README.md) · [Módulo 00 opcional](../../../docs/00-configuracao-do-ambiente.md)
 
 ---
 
@@ -47,6 +49,33 @@ Portanto, este tutorial não adiciona um botão de gravação ao projeto anterio
 O modelo usado nesta validação é `gpt-realtime-2.1`. O navegador usa o pacote `@openai/agents` e WebRTC. O servidor Next.js usa o SDK `openai` apenas para criar uma credencial efêmera.
 
 Modelos e versões mudam. Consulte as referências oficiais ao final antes de copiar uma escolha para outro projeto.
+
+### Como este tutorial se sustenta sozinho
+
+Você pode chegar aqui sem ter lido o Módulo 00 ou o Laboratório 01. O artigo inclui a preparação da API, os conceitos de Realtime e WebRTC, a criação do projeto, o caminho da credencial, a construção da sessão, os testes, o deploy e o diagnóstico.
+
+Cada etapa explicita:
+
+1. o comportamento que será acrescentado;
+2. a razão de arquitetura para ele existir;
+3. o arquivo e o terminal corretos;
+4. o checkpoint que prova a fatia;
+5. os limites que permanecem depois do happy path.
+
+O objetivo não é apenas reproduzir a interface final. É permitir que você explique por que há dois caminhos de rede, por que um client secret curto não é a API key, por que uma sessão é uma máquina de estados e por que “não persistir” não significa “o áudio nunca trafega”.
+
+### Mapa mental do laboratório
+
+| Conceito | Neste projeto significa |
+| --- | --- |
+| Realtime API | sessão bidirecional de baixa latência para eventos, texto e áudio |
+| WebRTC | transporte do navegador para mídia e dados em tempo real |
+| Client secret | credencial efêmera concedida pelo servidor para iniciar a sessão |
+| Agents SDK | abstração que organiza agente, sessão, histórico e eventos no cliente |
+| Turn detection | regra usada para inferir quando a pessoa começou ou terminou um turno |
+| Barge-in | capacidade de interromper a resposta do agente falando por cima dela |
+| Transcript | representação textual de apoio; não é a fonte primária da conversa speech-to-speech |
+| Session lifecycle | sequência explícita de conexão, atividade, falha, encerramento e limpeza |
 
 ## Sumário
 
@@ -98,6 +127,37 @@ Você precisa de:
 - HTTPS no deploy; `localhost` é a exceção aceita pelos navegadores para desenvolvimento.
 
 Se o navegador não oferecer microfone, verifique primeiro o sistema operacional e a permissão do site. Trocar código não corrige uma permissão negada pelo sistema.
+
+#### 0.1.1 Diferencie ChatGPT, API e cobrança
+
+Este app usa a [OpenAI API Platform](https://platform.openai.com/), não a assinatura do ChatGPT. Uma assinatura ChatGPT Free, Plus, Pro, Business ou Enterprise não adiciona automaticamente saldo à API; os dois produtos têm cobrança separada.
+
+Antes de criar a chave:
+
+1. entre em [platform.openai.com](https://platform.openai.com/);
+2. selecione um projeto de estudo ou crie `openai-voice-labs`;
+3. confirme faturamento ou créditos na conta da API;
+4. verifique se `gpt-realtime-2.1` está permitido no projeto;
+5. configure alertas de orçamento e acompanhe a página de uso durante os testes.
+
+Sessões de áudio geram consumo enquanto estão ativas. O alerta de orçamento ajuda a observar o gasto, mas não substitui encerramento explícito, limite de duração, autenticação ou rate limit.
+
+#### 0.1.2 Crie uma API key específica do projeto
+
+No projeto selecionado, abra **API Keys**, escolha **Create new secret key** e use um nome como `voice-labs-local`. A chave completa aparece somente nesse momento. Guarde-a em um gerenciador de segredos ou diretamente no `.env.local` criado na próxima etapa.
+
+Não envie a chave por mensagem, não a coloque em print e não a compartilhe com outra pessoa. Cada integrante ou ambiente deve ter sua própria credencial e seu próprio rastro de uso. Se houver exposição, revogue a chave imediatamente; remover o texto do Git não invalida uma credencial já copiada.
+
+#### 0.1.3 Entenda as duas credenciais antes do código
+
+Este laboratório usa duas credenciais com riscos diferentes:
+
+| Credencial | Onde nasce | Onde pode existir | Vida útil |
+| --- | --- | --- | --- |
+| `OPENAI_API_KEY` | API Platform | servidor e secret store | até rotação ou revogação |
+| client secret `ek_…` | rota server-side via OpenAI | memória do browser | curta, 60 segundos para iniciar |
+
+O client secret não torna a API key “segura no frontend”; ele substitui a necessidade de enviá-la. Mesmo efêmero, continua sendo bearer credential: a rota usa `no-store`, não registra o valor e impõe guardas antes de emiti-lo.
 
 ### 0.2 Caminho A: execute o laboratório pronto
 
@@ -1455,6 +1515,23 @@ Essa é a diferença central entre uma demo de voz e uma base de engenharia: a d
 
 ---
 
+## Glossário rápido
+
+| Termo | Explicação prática |
+| --- | --- |
+| Bearer credential | segredo utilizável por quem o possuir durante sua validade |
+| Client secret | concessão curta usada pelo browser para iniciar uma sessão Realtime |
+| Data channel | canal WebRTC usado para eventos e mensagens além da mídia |
+| Ephemeral | criado para uma finalidade curta e com expiração próxima |
+| ICE | mecanismos usados pelo WebRTC para encontrar um caminho de rede entre participantes |
+| Media track | fluxo de áudio capturado ou reproduzido pelo navegador |
+| Semantic VAD | detecção de turno que considera sinais semânticos, não apenas silêncio fixo |
+| Session | conexão stateful que mantém contexto e eventos entre vários turnos |
+| Snapshot reconciliation | substituir o estado visual pelo histórico canônico em vez de anexar deltas cegamente |
+| WebRTC | conjunto de protocolos e APIs para mídia de baixa latência no navegador |
+
+---
+
 ## Referências oficiais
 
 - OpenAI — [Realtime API](https://developers.openai.com/api/docs/guides/realtime)
@@ -1464,6 +1541,9 @@ Essa é a diferença central entre uma demo de voz e uma base de engenharia: a d
 - OpenAI Agents SDK — [Realtime agents](https://openai.github.io/openai-agents-js/openai/agents-realtime/classes/realtimeagent/)
 - OpenAI Agents SDK — [Realtime sessions](https://openai.github.io/openai-agents-js/openai/agents-realtime/classes/realtimesession/)
 - OpenAI — [Models](https://developers.openai.com/api/docs/models)
+- OpenAI — [Managing projects in the API Platform](https://help.openai.com/en/articles/9186755-managing-projects-in-the-api-platform)
+- OpenAI — [API key safety](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety)
+- OpenAI — [ChatGPT and API billing are separate](https://help.openai.com/en/articles/8156019-i-want-to-move-my-chatgpt-subscription-to-the-api)
 - OpenAI — [Safety best practices](https://developers.openai.com/api/docs/guides/safety-best-practices)
 - OpenAI — [Enterprise privacy](https://openai.com/enterprise-privacy/)
 - OpenAI — [Codex best practices](https://developers.openai.com/codex/learn/best-practices)
@@ -1474,4 +1554,4 @@ Essa é a diferença central entre uma demo de voz e uma base de engenharia: a d
 
 ---
 
-[← Módulo 01 — TTS](../../lab-01-text-to-speech/tutorial/tutorial.md) · [Índice do workshop](../../../docs/README.md) · [Revisar o Módulo 00](../../../docs/00-configuracao-do-ambiente.md)
+[English version](tutorial-en.md) · [← Módulo 01 — TTS](../../lab-01-text-to-speech/tutorial/tutorial.md) · [Índice do workshop](../../../docs/README.md) · [Módulo 00 opcional](../../../docs/00-configuracao-do-ambiente.md)

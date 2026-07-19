@@ -98,7 +98,7 @@ Cada laboratório inclui:
 - interface responsiva, acessível e com estados de operação explícitos;
 - testes sem chamadas pagas à OpenAI;
 - CI/CD, instruções de deploy e fronteiras de produção documentadas;
-- workshop em português começando numa pasta vazia;
+- workshops autossuficientes em português e inglês, começando numa pasta vazia;
 - decisões, trade-offs, armadilhas e exercícios de evolução.
 
 ## 🧭 Trilha de workshop
@@ -117,8 +117,8 @@ Você pode seguir pelo caminho “executar e estudar” ou reconstruir cada apli
 
 | Laboratório | O que você constrói | Modelo e transporte | Tutorial | Estado |
 | --- | --- | --- | --- | :---: |
-| **[Lab 01 — Text to Speech](labs/lab-01-text-to-speech)** | Interface acessível que transforma texto em áudio expressivo, com player e download | `gpt-4o-mini-tts` · HTTP · áudio em streaming | **[Workshop passo a passo](labs/lab-01-text-to-speech/tutorial/tutorial.md)** | ✅ |
-| **[Lab 02 — Agente de Voz Realtime](labs/lab-02-realtime-voice-agent)** | Agente speech-to-speech fluido, com turnos semânticos, mute, interrupção e alternativa por texto | `gpt-realtime-2.1` · WebRTC · Agents SDK | **[Workshop passo a passo](labs/lab-02-realtime-voice-agent/tutorial/tutorial.md)** | ✅ |
+| **[Lab 01 — Text to Speech](labs/lab-01-text-to-speech)** | Interface acessível que transforma texto em áudio expressivo, com player e download | `gpt-4o-mini-tts` · HTTP · áudio em streaming | **[Português](labs/lab-01-text-to-speech/tutorial/tutorial.md)** · [English](labs/lab-01-text-to-speech/tutorial/tutorial-en.md) | ✅ |
+| **[Lab 02 — Agente de Voz Realtime](labs/lab-02-realtime-voice-agent)** | Agente speech-to-speech fluido, com turnos semânticos, mute, interrupção e alternativa por texto | `gpt-realtime-2.1` · WebRTC · Agents SDK | **[Português](labs/lab-02-realtime-voice-agent/tutorial/tutorial.md)** · [English](labs/lab-02-realtime-voice-agent/tutorial/tutorial-en.md) | ✅ |
 
 ### Lab 01 — Text to Speech
 
@@ -140,11 +140,15 @@ openai-voice-playground/
 │   ├── lab-01-text-to-speech/
 │   │   ├── src/                  # aplicação TTS
 │   │   ├── tests/                # contratos e proteções
-│   │   └── tutorial/tutorial.md  # workshop do zero ao deploy
+│   │   └── tutorial/
+│   │       ├── tutorial.md       # português: do zero ao deploy
+│   │       └── tutorial-en.md    # inglês: versão autossuficiente
 │   └── lab-02-realtime-voice-agent/
 │       ├── src/                  # agente Realtime
 │       ├── tests/                # sessão, schemas e proteções
-│       └── tutorial/tutorial.md  # workshop do zero ao deploy
+│       └── tutorial/
+│           ├── tutorial.md       # português: do zero ao deploy
+│           └── tutorial-en.md    # inglês: versão autossuficiente
 ├── docs/
 │   ├── README.md                 # índice e trilhas do workshop
 │   ├── 00-configuracao-do-ambiente.md

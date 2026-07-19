@@ -2,7 +2,9 @@
 
 Este é o índice didático do repositório. Ele organiza o conteúdo em módulos numerados, no estilo de workshops práticos: cada módulo declara pré-requisitos, resultado esperado, passos executáveis, checkpoints e a próxima etapa.
 
-> Se você quer apenas conhecer o projeto, volte ao [README principal](../README-PT-BR.md). Se quer construir, comece pelo Módulo 00 abaixo.
+Os laboratórios 01 e 02 são autossuficientes e estão disponíveis integralmente em português e inglês.
+
+> Se você quer apenas conhecer o projeto, volte ao [README principal](../README-PT-BR.md). Se quer construir, escolha o Módulo 00 compartilhado ou entre diretamente em um dos tutoriais autossuficientes.
 
 ## Como usar esta trilha
 
@@ -11,15 +13,15 @@ Você pode seguir por dois caminhos:
 - **Participante — executar e investigar:** prepara o ambiente uma vez, executa a solução pronta e estuda as decisões no código.
 - **Instrutor ou estudo aprofundado — reconstruir do zero:** usa o Caminho B de cada laboratório, criando pastas e arquivos na ordem indicada.
 
-Não pule o Módulo 00 se esta é a sua primeira aplicação com a API da OpenAI. Ele separa claramente conta do ChatGPT, projeto da API, credencial, API da aplicação e comandos do repositório.
+Se esta é sua primeira aplicação com a API da OpenAI, você pode começar pelo Módulo 00 ou diretamente por um dos tutoriais autossuficientes. Ambos repetem o contexto indispensável: conta do ChatGPT, projeto da API, cobrança, credencial, instalação e proteção do segredo.
 
 ## Módulos
 
-| Módulo | O que você fará | Tempo estimado | Resultado verificável |
-| --- | --- | ---: | --- |
-| **[00 — Configuração do ambiente](00-configuracao-do-ambiente.md)** | Preparar Node.js, projeto da API OpenAI, chave local, dependências e health check | 30–45 min | Um laboratório abre localmente sem expor segredo |
-| **[01 — Text to Speech](../labs/lab-01-text-to-speech/tutorial/tutorial.md)** | Construir uma API de TTS protegida e uma interface acessível com áudio em streaming | 2–3 h | Texto validado retorna áudio reproduzível e baixável |
-| **[02 — Agente de voz Realtime](../labs/lab-02-realtime-voice-agent/tutorial/tutorial.md)** | Construir autorização efêmera e uma conversa speech-to-speech por WebRTC | 3–4 h | Conversa ao vivo permite turnos, mute e interrupção |
+| Módulo | Português | English | Tempo | Resultado verificável |
+| --- | --- | --- | ---: | --- |
+| **00 — Configuração do ambiente** | **[Guia compartilhado](00-configuracao-do-ambiente.md)** | Incluído nos labs autossuficientes | 30–45 min | Um laboratório abre localmente sem expor segredo |
+| **01 — Text to Speech** | **[Tutorial completo](../labs/lab-01-text-to-speech/tutorial/tutorial.md)** | **[Standalone tutorial](../labs/lab-01-text-to-speech/tutorial/tutorial-en.md)** | 2–3 h | Texto validado retorna áudio reproduzível e baixável |
+| **02 — Agente de voz Realtime** | **[Tutorial completo](../labs/lab-02-realtime-voice-agent/tutorial/tutorial.md)** | **[Standalone tutorial](../labs/lab-02-realtime-voice-agent/tutorial/tutorial-en.md)** | 3–4 h | Conversa ao vivo permite turnos, mute e interrupção |
 
 O Módulo 02 pode ser feito sem concluir o 01, mas comparar os dois ajuda a entender por que uma chamada TTS delimitada e uma sessão Realtime exigem arquiteturas diferentes.
 
@@ -58,4 +60,8 @@ Você encontrará estes blocos ao longo da trilha:
 
 ## Comece agora
 
-Siga para **[Módulo 00 — Configuração do ambiente, da API e execução local](00-configuracao-do-ambiente.md)**.
+- Primeira configuração compartilhada: **[Módulo 00 — ambiente, API e execução local](00-configuracao-do-ambiente.md)**.
+- Lab 01 em português: **[Text to Speech do zero ao deploy](../labs/lab-01-text-to-speech/tutorial/tutorial.md)**.
+- Lab 01 em inglês: **[Standalone Text to Speech tutorial](../labs/lab-01-text-to-speech/tutorial/tutorial-en.md)**.
+- Lab 02 em português: **[Agente Realtime do zero ao deploy](../labs/lab-02-realtime-voice-agent/tutorial/tutorial.md)**.
+- Lab 02 em inglês: **[Standalone Realtime Voice Agent tutorial](../labs/lab-02-realtime-voice-agent/tutorial/tutorial-en.md)**.

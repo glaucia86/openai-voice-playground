@@ -52,9 +52,9 @@ Run the narrowest relevant check while iterating and the complete check for ever
 
 ## Documentation convention
 
-Treat `tutorial/tutorial.md` in each lab as the canonical workshop module. Every module must include exact prerequisites, terminal location, commands, folders, files, checkpoints, expected output, common failures, cleanup, tests, deploy, production limitations, and previous/index/next navigation.
+Treat `tutorial/tutorial.md` as the canonical Portuguese workshop and `tutorial/tutorial-en.md` as its standalone English companion. Both must include exact prerequisites, terminal location, commands, folders, files, checkpoints, expected output, common failures, cleanup, tests, deploy, production limitations, language switching, and previous/index/next navigation.
 
-Keep shared onboarding in Module 00 and link to it instead of allowing duplicated setup instructions to diverge. A lab module may repeat the minimum commands needed to remain usable on its own. Update the root catalog, workshop index, lab README, and tutorial whenever behavior or architecture changes.
+Module 00 remains the shared onboarding reference, but each lab tutorial must also include the minimum complete account, API billing, key-safety, installation, and first-run path required to work on its own. Keep repeated guidance semantically aligned across Portuguese, English, Module 00, root catalogs, and lab READMEs whenever behavior or architecture changes.
 
 ## Definition of done
 

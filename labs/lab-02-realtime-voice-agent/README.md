@@ -2,7 +2,7 @@
 
 Build a fluid, interruptible speech-to-speech conversational agent with Next.js 15, TypeScript 7, OpenAI Realtime, WebRTC, and the OpenAI Agents SDK.
 
-[Versão em português](README-PT-BR.md) · [Workshop index](../../docs/README.md) · [Environment setup](../../docs/00-configuracao-do-ambiente.md) · [Detailed Portuguese workshop](tutorial/tutorial.md) · [Back to all labs](../../README.md)
+[Versão em português](README-PT-BR.md) · [Workshop index](../../docs/README.md) · [Standalone English tutorial](tutorial/tutorial-en.md) · [Tutorial em português](tutorial/tutorial.md) · [Back to all labs](../../README.md)
 
 ## What this lab teaches
 
@@ -60,7 +60,7 @@ Automated tests validate local contracts without starting a paid Realtime sessio
 
 ## Deploy to Vercel
 
-Import the repository and set **Root Directory** to `labs/lab-02-realtime-voice-agent`. Add `OPENAI_API_KEY`, `PLAYGROUND_ACCESS_TOKEN`, `APP_ORIGIN`, `UPSTASH_REDIS_REST_URL`, and `UPSTASH_REDIS_REST_TOKEN` in Vercel Environment Variables, then deploy from `main`. HTTPS is required for microphone use outside localhost. See the [workshop deployment chapter](tutorial/tutorial.md#13-faça-deploy-na-vercel-e-valide-a-sessão-real).
+Import the repository and set **Root Directory** to `labs/lab-02-realtime-voice-agent`. Add `OPENAI_API_KEY`, `PLAYGROUND_ACCESS_TOKEN`, `APP_ORIGIN`, `UPSTASH_REDIS_REST_URL`, and `UPSTASH_REDIS_REST_TOKEN` in Vercel Environment Variables, then deploy from `main`. HTTPS is required for microphone use outside localhost. See the [English deployment chapter](tutorial/tutorial-en.md#13-deploy-and-validate-a-real-session).
 
 ## Production boundary
 

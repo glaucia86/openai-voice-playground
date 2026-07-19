@@ -1,43 +1,56 @@
 # Contributing
 
-Thanks for helping make OpenAI Voice Playground clearer, safer, or more useful.
+Obrigado por ajudar a tornar o OpenAI Voice Labs mais claro, seguro e útil.
 
-## Before you start
+## Antes de começar
 
-1. Read [AGENTS.md](AGENTS.md) for repository constraints and validation commands.
-2. Open an issue for a significant feature or architectural change.
-3. Never attach real API keys, customer audio, private recordings, or transcripts.
+1. Leia [AGENTS.md](AGENTS.md).
+2. Escolha um laboratório e leia seu `README` e `tutorial/tutorial.md`.
+3. Abra uma issue antes de uma mudança arquitetural ou de um novo laboratório.
+4. Nunca anexe API keys, client secrets, tokens, áudio privado ou transcripts reais.
 
-## Local workflow
+## Fluxo local
+
+Instale apenas o laboratório que será alterado:
 
 ```bash
-npm install
+cd labs/lab-01-text-to-speech
+npm ci
 cp .env.example .env.local
 npm run dev
 ```
 
-Unit tests must not call the live OpenAI API. Mock the narrow SDK boundary when route behavior needs coverage.
+Troque a pasta por `lab-02-realtime-voice-agent` quando necessário. O `.env.local` é exclusivamente local e nunca deve entrar num commit.
 
-Before opening a pull request:
+Antes do pull request, execute dentro de cada lab alterado:
 
 ```bash
 npm run check
 ```
 
+Os testes unitários não podem chamar a API real. Faça mock somente na fronteira estreita do SDK.
+
 ## Pull requests
 
-Keep pull requests focused. Explain:
+Mantenha o PR focado e explique:
 
-- the user or educational problem being solved;
-- the important decision and its trade-off;
-- how you validated success and failure paths;
-- whether README, tutorial, deployment, privacy, cost, or accessibility behavior changed.
+- o problema do usuário ou do aprendizado;
+- a decisão principal e seu trade-off;
+- os caminhos de sucesso e falha validados;
+- os labs afetados;
+- impactos em segurança, privacidade, custo, deploy e acessibilidade;
+- documentos atualizados.
 
-Use a Conventional Commit-style summary when practical, for example `feat: add transcription vocabulary hints`.
+Use um resumo no estilo Conventional Commits quando fizer sentido, por exemplo `feat(lab-02): expose reconnect state`.
 
-## Design principles
+## Novo laboratório
 
-- A polished screen does not excuse a weak server boundary.
-- A clever abstraction is not automatically easier to teach.
-- Streaming is an architectural choice, not a visual loading effect.
-- “Production-ready” claims must name the deployment assumptions that make them true.
+Um novo diretório em `labs/` precisa ser executável isoladamente e incluir:
+
+- `package.json` e `package-lock.json` próprios;
+- `.env.example` sem valores secretos;
+- README em inglês e `README-PT-BR.md`;
+- `tutorial/tutorial.md` realmente passo a passo;
+- testes sem cobrança de API;
+- suporte na matriz do CI;
+- entrada no catálogo raiz.

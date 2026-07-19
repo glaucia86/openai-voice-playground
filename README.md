@@ -1,174 +1,73 @@
-<div align="center">
+# OpenAI Voice Labs
 
-# OpenAI Voice Playground
+Production-minded, open-source workshops for learning how to build voice experiences with OpenAI. Each lab is a complete Next.js application with its own dependencies, tests, deployment instructions, and detailed Portuguese workshop guide.
 
-**A production-minded tutorial series for building with OpenAI voice technologies.**
+> Educational project maintained by [Glaucia Lemos](https://github.com/glaucia86). It is not an official OpenAI product.
 
-[![Next.js 15](https://img.shields.io/badge/Next.js-15.5-000000?logo=nextdotjs)](https://nextjs.org/)
-[![TypeScript 7](https://img.shields.io/badge/TypeScript-7.0-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![OpenAI SDK](https://img.shields.io/badge/OpenAI_SDK-6.x-412991?logo=openai&logoColor=white)](https://github.com/openai/openai-node)
-[![CI](https://github.com/glaucia86/openai-voice-playground/actions/workflows/ci.yml/badge.svg)](https://github.com/glaucia86/openai-voice-playground/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-8bffcc.svg)](LICENSE)
+[Leia em português](README-PT-BR.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
 
-**English** · [Português (Brasil)](README-PT-BR.md)
+## Labs
 
-[Try the playground](#run-locally) · [Explore the tutorial series](tutorial/README.md) · [Deploy to Vercel](#deploy-to-vercel) · [Contribute](CONTRIBUTING.md)
+| Lab | What you build | Architecture | Guide |
+| --- | --- | --- | --- |
+| [01 — Text to speech](labs/lab-01-text-to-speech) | An accessible interface that turns text into expressive, downloadable audio | Bounded HTTP request with a streamed audio response | [Portuguese workshop](labs/lab-01-text-to-speech/tutorial/tutorial.md) |
+| [02 — Realtime voice agent](labs/lab-02-realtime-voice-agent) | A fluid, interruptible speech-to-speech conversational agent | Stateful Realtime session over WebRTC with an ephemeral client secret | [Portuguese workshop](labs/lab-02-realtime-voice-agent/tutorial/tutorial.md) |
 
-</div>
+The projects intentionally do not share a runtime package. Independent lockfiles make each workshop easier to teach, clone, test, and deploy in isolation.
 
-OpenAI Voice Playground is an incremental series about building voice experiences with the OpenAI SDK without leaking provider credentials or hiding production trade-offs behind a polished UI. Each tutorial isolates one interaction model so engineers can compare architectures instead of treating every audio feature as the same problem.
+## Quick start
 
-> This is an independent educational project, not an official OpenAI product. Generated voices are identified as AI-generated in the interface.
-
-## What you can explore
-
-- Generate expressive speech with `gpt-4o-mini-tts`, 13 built-in voices, voice direction, speed, and MP3/WAV/Opus output.
-- Record or upload bounded audio and transcribe it with `gpt-4o-mini-transcribe` or `gpt-4o-transcribe`.
-- Observe streamed TTS bytes, request IDs, stable error envelopes, validation, and rate-limit metadata.
-- Learn why the API key belongs on the server and why bounded transcription is not automatically a Realtime use case.
-- Follow the same quality loop used to build the repository: strict types, tests, lint, build, CI, and documented decisions.
-
-## Tutorial series
-
-| Tutorial | Focus | Where to follow it |
-| --- | --- | --- |
-| **01 — Production-minded text to speech** | Request-based TTS, server-side keys, streamed bytes, accessibility, safeguards, tests, and Vercel | [`main`](https://github.com/glaucia86/openai-voice-playground/tree/main) · [Portuguese guide](tutorial/tutorial-01.md) |
-| **02 — Live conversational voice agent** | Speech-to-speech Realtime sessions, WebRTC, ephemeral credentials, interruption, turn detection, and transcripts | [`feat/realtime-voice-agent`](https://github.com/glaucia86/openai-voice-playground/tree/feat/realtime-voice-agent) · in development |
-
-Tutorial 01 deliberately teaches TTS. The bounded speech-to-text screen remains in the playground as a companion experiment, but it is not the subject of the first article. Tutorial 02 uses a separate branch because its session-oriented architecture and threat model are materially different.
-
-## Architecture
-
-```mermaid
-flowchart LR
-    B["Browser UI"] -->|"typed request"| N["Next.js Route Handler"]
-    N --> V["validation + guards"]
-    V --> O["OpenAI Audio API"]
-    O -->|"audio stream / transcript"| N
-    N --> B
-```
-
-The browser never receives `OPENAI_API_KEY`. Both provider calls run in Node.js Route Handlers under `src/app/api`. The boundary adds schema validation, input limits, same-origin checks, an optional shared access token, lightweight rate limiting, request IDs, and content-free structured logs.
-
-## Run locally
-
-### Prerequisites
-
-- Node.js 20 or newer
-- npm 10 or newer
-- An OpenAI Platform project with API access
-
-### Setup
+Requirements: Node.js 20 or newer, npm, an OpenAI project API key, and a browser with microphone support for Lab 02.
 
 ```bash
 git clone https://github.com/glaucia86/openai-voice-playground.git
 cd openai-voice-playground
-npm install
-cp .env.example .env.local
+npm run install:labs
 ```
 
-Add your key to `.env.local`:
-
-```dotenv
-OPENAI_API_KEY=your_project_key
-```
-
-`.env.local` is ignored by Git. Never rename the variable to `NEXT_PUBLIC_OPENAI_API_KEY`: that prefix would expose it to browser code.
-
-Start the app:
+Choose one lab, create its local environment file, and start it:
 
 ```bash
+cd labs/lab-01-text-to-speech
+cp .env.example .env.local
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Add `OPENAI_API_KEY` only to that untracked `.env.local`. Never commit an environment file. For Lab 02, replace the directory name with `lab-02-realtime-voice-agent`.
 
-## Environment variables
+## Repository commands
 
-| Variable | Required | Purpose |
-| --- | --- | --- |
-| `OPENAI_API_KEY` | Yes | Server-only OpenAI Platform credential. |
-| `PLAYGROUND_ACCESS_TOKEN` | No | Protects public API routes with a shared bearer token entered by the visitor. |
-| `APP_ORIGIN` | No | Pins the canonical origin used by the same-origin guard. Useful behind proxies or custom domains. |
-
-The optional access token is a useful guard for a workshop or private demo, not a complete identity system. A public, multi-user product should add real authentication, per-user quotas, and a distributed rate limiter.
-
-## Quality commands
+From the root:
 
 ```bash
-npm run lint           # Oxlint; chosen because the Next 15 ESLint preset predates TypeScript 7
-npm run typecheck      # TypeScript 7 strict checks
-npm test               # focused unit tests
-npm run test:coverage  # coverage thresholds
-npm run build          # production bundle; run typecheck first (see note below)
-npm run check          # all gates, in order
+npm run dev:lab01
+npm run dev:lab02
+npm run check:lab01
+npm run check:lab02
+npm run check
 ```
 
-Next.js 15's build bootstrap still imports the JavaScript API from the package literally named `typescript`, an API surface changed in TypeScript 7. The repository therefore keeps TypeScript 5.8 under that canonical name **only as a Next.js compatibility adapter** and installs TypeScript 7 as the `typescript7` npm alias. `scripts/typecheck.mjs` invokes 7.0.2 directly; application code is never type-checked by 5.8. `next.config.mjs` skips Next's duplicated type-check/lint passes, while `npm run check` and CI require Oxlint and TypeScript 7 before bundling. A standalone `npm run build` is not the complete quality gate.
+Run only one development server at a time unless you explicitly assign different ports.
 
 ## Deploy to Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fglaucia86%2Fopenai-voice-playground&env=OPENAI_API_KEY&envDescription=Server-only%20OpenAI%20Platform%20credential)
+Import this repository as a separate Vercel project for each lab. Set the project’s **Root Directory** to the selected directory:
 
-1. Import the repository into Vercel.
-2. Add `OPENAI_API_KEY` in **Project Settings → Environment Variables** for Production, Preview, and Development as appropriate.
-3. For a public URL, also set a strong `PLAYGROUND_ACCESS_TOKEN` or enable Vercel Deployment Protection.
-4. Optionally set `APP_ORIGIN` to the final `https://…` origin.
-5. Deploy, open `/api/health`, and confirm that `configured` is `true`. The endpoint never returns the key.
+- `labs/lab-01-text-to-speech`
+- `labs/lab-02-realtime-voice-agent`
 
-Vercel stores environment variables outside source control and encrypts them at rest. Changing a variable requires a new deployment before existing functions see the new value.
+Add `OPENAI_API_KEY` in Vercel’s encrypted environment settings, optionally add `PLAYGROUND_ACCESS_TOKEN`, and deploy from `main`. Do not upload `.env.local`.
 
-## Important production boundaries
+## Security boundary
 
-- **The included rate limiter is process-local.** Serverless instances do not share its map. Replace it with Redis or another distributed store for a public product.
-- **Transport streaming is not the same as conversational Realtime.** TTS bytes stream through the server; the compatibility-first web player waits for the complete Blob. For interruption, turn detection, and live transcript deltas, use the Realtime API over WebRTC.
-- **Files are bounded, not persisted.** The app forwards an uploaded/recorded file to the transcription API and does not write it to disk or a database. Review your own retention, consent, and compliance requirements.
-- **Same-origin checks are defense in depth, not authentication.** Scripts outside a browser can forge headers. Use the optional token or proper auth before exposing a billable API.
-- **Do not log user text, transcripts, filenames, tokens, or audio.** The included logs contain operational metadata only.
+- The standard OpenAI API key is server-only.
+- Lab 01 proxies a bounded TTS request and streams audio through a Route Handler.
+- Lab 02 mints a short-lived Realtime client secret; the standard key never reaches browser code.
+- Application logs contain request metadata, not prompts, transcripts, credentials, or audio.
+- Local rate limits are teaching-oriented defense in depth, not a complete public SaaS perimeter.
 
-## Project map
-
-```text
-src/
-├── app/
-│   ├── api/health/route.ts
-│   ├── api/speech/route.ts
-│   ├── api/transcribe/route.ts
-│   └── page.tsx
-├── components/
-│   ├── speech-studio.tsx
-│   ├── transcription-studio.tsx
-│   └── voice-playground.tsx
-└── lib/
-    ├── errors.ts
-    ├── openai.ts
-    ├── rate-limit.ts
-    ├── request-guard.ts
-    └── schemas.ts
-
-tutorial/
-├── README.md           # series index and learning path
-└── tutorial-01.md      # Tutorial 01: production-minded TTS
-tests/                 # unit tests for contracts and guards
-AGENTS.md              # durable instructions for Codex and contributors
-```
-
-## Learn the reasoning, not only the API calls
-
-The long-form [Tutorial 01 in Portuguese](tutorial/tutorial-01.md) explains the TTS implementation as vertical slices, including:
-
-- choosing request-based Audio APIs versus Realtime;
-- building a server boundary before adding polish;
-- streaming and browser buffering trade-offs;
-- validation, errors, quotas, observability, privacy, and voice disclosure;
-- using Codex with explicit context, constraints, definition of done, and validation gates;
-- the TypeScript 7 and Next.js 15 tooling compatibility decision;
-- Vercel deployment and the work still required for a truly public product.
-
-## Contributing and security
-
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Report vulnerabilities privately according to [SECURITY.md](SECURITY.md). Never include real credentials, private recordings, or customer transcripts in issues, fixtures, or screenshots.
+Read each workshop before reusing these patterns in production. The guides document the assumptions and missing operational controls rather than hiding them behind a “production-ready” label.
 
 ## License
 
-[MIT](LICENSE) © Glaucia Lemos.
+[MIT](LICENSE)

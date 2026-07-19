@@ -7,6 +7,13 @@
 **Código deste lab:** [`labs/lab-02-realtime-voice-agent`](https://github.com/glaucia86/openai-voice-playground/tree/main/labs/lab-02-realtime-voice-agent)  
 **Última validação técnica:** 19 de julho de 2026
 
+- **Trilha:** Módulo 02 de 02
+- **Tempo estimado:** 3–4 horas
+- **Pré-requisito:** [Módulo 00 — configuração do ambiente e da API](../../../docs/00-configuracao-do-ambiente.md); o Módulo 01 é recomendado, mas não obrigatório
+- **Evidência de conclusão:** aplicação executada e `npm run check:lab02` aprovado na raiz
+
+[← Módulo 01 — TTS](../../lab-01-text-to-speech/tutorial/tutorial.md) · [Índice do workshop](../../../docs/README.md) · [Módulo 00](../../../docs/00-configuracao-do-ambiente.md)
+
 ---
 
 ## Antes de começar
@@ -120,7 +127,7 @@ Abra `.env.local` e preencha a chave de projeto:
 OPENAI_API_KEY=cole_a_sua_chave_de_projeto_aqui
 ```
 
-Mantenha `PLAYGROUND_ACCESS_TOKEN` e `APP_ORIGIN` vazios no primeiro teste local. Confirme a proteção antes de executar:
+Mantenha `PLAYGROUND_ACCESS_TOKEN`, `APP_ORIGIN` e as variáveis Upstash vazias no primeiro teste local. O fallback em memória existe apenas para tornar esse checkpoint reproduzível. Em `NODE_ENV=production`, token, origem e Redis tornam-se obrigatórios e a API falha com `503` quando faltarem. Confirme a proteção do arquivo antes de executar:
 
 ```bash
 git check-ignore -v .env.local
@@ -158,7 +165,7 @@ pwd
 Confirme que o caminho termina em `labs/lab-02-realtime-voice-agent`. Em seguida, instale as dependências de runtime:
 
 ```bash
-npm install next@15.5.20 react@19.2.7 react-dom@19.2.7 openai@^6.48.0 @openai/agents@^0.13.5 zod@^4.4.3 lucide-react@^1.25.0 @fontsource-variable/manrope@^5.2.8 @fontsource-variable/jetbrains-mono@^5.2.8
+npm install next@15.5.20 react@19.2.7 react-dom@19.2.7 openai@^6.48.0 @openai/agents@^0.13.5 zod@^4.4.3 lucide-react@^1.25.0 @fontsource-variable/manrope@^5.2.8 @fontsource-variable/jetbrains-mono@^5.2.8 @upstash/ratelimit@2.0.8 @upstash/redis@1.38.0
 ```
 
 Instale as ferramentas de desenvolvimento:
@@ -175,7 +182,9 @@ touch .env.example .gitignore next.config.mjs tsconfig.json vitest.config.ts scr
 touch src/app/globals.css src/app/layout.tsx src/app/page.tsx
 touch src/app/api/health/route.ts src/app/api/realtime/token/route.ts
 touch src/components/realtime-voice-agent.tsx src/components/voice-playground.tsx
-touch src/lib/constants.ts src/lib/openai.ts src/lib/realtime-config.ts src/lib/schemas.ts
+touch src/middleware.ts src/lib/constants.ts src/lib/openai.ts src/lib/rate-limit.ts
+touch src/lib/realtime-config.ts src/lib/request-body.ts src/lib/request-guard.ts
+touch src/lib/schemas.ts src/lib/security-config.ts
 ```
 
 Árvore esperada neste checkpoint:
@@ -238,6 +247,9 @@ Em `.env.example`, liste nomes vazios — nunca a chave real:
 OPENAI_API_KEY=
 PLAYGROUND_ACCESS_TOKEN=
 APP_ORIGIN=
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+CLIENT_IP_HEADER=
 ```
 
 Copie para `.env.local`, preencha somente a cópia e confirme com `git check-ignore -v .env.local`.
@@ -476,6 +488,9 @@ O exemplo versionado informa nomes, não valores:
 OPENAI_API_KEY=
 PLAYGROUND_ACCESS_TOKEN=
 APP_ORIGIN=
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+CLIENT_IP_HEADER=
 ```
 
 ### TypeScript 7 e Next.js 15
@@ -582,20 +597,28 @@ Não aceitamos `model`, `apiKey`, `tools`, `tracing` ou TTL arbitrário. O produ
 ### Guardas antes da chamada paga
 
 ```ts
-const rateLimit = guardApiRequest(request, "realtime-token");
+const rateLimit = await guardApiRequest(request, "realtime-token");
 const responseHeaders = rateLimitHeaders(rateLimit);
-assertRequestSize(request);
-const payload = realtimeSessionRequestSchema.parse(await request.json());
+const payload = realtimeSessionRequestSchema.parse(
+  await readJsonBody(
+    request,
+    4 * 1024,
+    "The Realtime session request is too large.",
+  ),
+);
 ```
 
 `guardApiRequest` aplica:
 
-1. bloqueio de cross-site explícito;
-2. `APP_ORIGIN`, se configurado;
-3. `PLAYGROUND_ACCESS_TOKEN`, se configurado;
-4. quota local por escopo/endereço.
+1. verificação fail-closed da configuração de produção;
+2. bloqueio de cross-site explícito e `APP_ORIGIN` canônico;
+3. quota de trinta tentativas por minuto **antes** da autenticação;
+4. `PLAYGROUND_ACCESS_TOKEN`, obrigatório em produção;
+5. quota de dez emissões por minuto e cliente.
 
-Isso é defesa em profundidade. `Origin` pode ser forjado fora do browser; token compartilhado não identifica uma pessoa; `Map` não é distribuído entre instâncias serverless.
+No desenvolvimento, a quota usa uma `Map`. Em produção, `UPSTASH_REDIS_REST_URL` e `UPSTASH_REDIS_REST_TOKEN` são obrigatórios e coordenam todas as instâncias; falha do Redis bloqueia a emissão. O endereço é transformado em hash antes de virar chave. Na Vercel, usamos `x-vercel-forwarded-for`, que a plataforma sobrescreve; fora dela, `CLIENT_IP_HEADER` deve apontar para um header sobrescrito pelo proxy confiável.
+
+`readJsonBody` lê o stream e soma os bytes reais. Logo, o limite de 4 KiB continua valendo sem `Content-Length` e em transferência chunked. `Origin` e IP ainda são defesa em profundidade, e token compartilhado não identifica uma pessoa: um SaaS precisa autenticação e quota por conta.
 
 ### Criação da credencial
 
@@ -672,6 +695,24 @@ O TTL limita a janela em que o secret inicia sessões. Uma sessão já conectada
 - não salve em `localStorage`;
 - não trate 60 segundos como limite de conversa;
 - desenhe o limite real de sessão separadamente.
+
+### O workshop encerra a UI após 15 minutos
+
+`REALTIME_SESSION_LIMIT_SECONDS` vale `15 * 60`. Depois de `session.connect`, o componente inicia o relógio; quando atinge o limite, fecha `RealtimeSession`, libera microfone e mostra uma mensagem explícita:
+
+```ts
+const elapsed = Math.floor((Date.now() - startedAt) / 1_000);
+
+if (elapsed >= REALTIME_SESSION_LIMIT_SECONDS) {
+  endSession();
+  setError({
+    code: "session_limit_reached",
+    message: "The 15-minute workshop session limit was reached.",
+  });
+}
+```
+
+Esse controle evita uma aba honesta esquecida e melhora UX, mas roda no navegador: uma pessoa pode modificar o cliente e manter o WebRTC. Para uma fronteira autoritativa de custo, combine autenticação real, limite de concorrência, budgets/alertas do projeto OpenAI e um backend stateful com [conexão sideband para controles server-side](https://developers.openai.com/api/docs/guides/realtime-server-controls). O client secret curto e o timer resolvem problemas diferentes.
 
 ---
 
@@ -971,6 +1012,8 @@ Este app não usa banco, `localStorage` ou analytics de conteúdo. Recarregar a 
 
 Documente cada fronteira sem prometer “zero retention” de forma genérica.
 
+Segundo os [controles de dados da API da OpenAI](https://developers.openai.com/api/docs/guides/your-data), dados da API não são usados para treinamento por padrão. Nos controles padrão, logs de monitoramento de abuso podem conter conteúdo e ser retidos por até 30 dias. Controles como Modified Abuse Monitoring ou Zero Data Retention dependem de elegibilidade e compatibilidade do endpoint. “A aplicação não grava sua cópia” não significa automaticamente “o provedor não retém nada”.
+
 ---
 
 ## 10. Desenhe privacidade, erros e acessibilidade
@@ -1040,27 +1083,28 @@ Esconder a chave padrão resolve exposição de segredo. Não resolve gasto.
 ### Camadas incluídas
 
 1. schema estrito e allowlists;
-2. corpo limitado;
+2. corpo limitado pelos bytes realmente lidos;
 3. modelo fixo;
 4. TTL de 60 segundos;
 5. same-origin;
-6. token compartilhado opcional;
-7. rate limit local;
-8. `max_output_tokens` por resposta;
-9. reasoning `low`;
-10. botão End e duração visível;
-11. CSP estreita;
-12. ausência de tools.
+6. token compartilhado obrigatório em produção;
+7. pré-limite de autenticação e quota distribuída no Upstash Redis;
+8. fail closed quando a configuração ou o limitador está indisponível;
+9. `max_output_tokens` por resposta;
+10. reasoning `low`;
+11. botão End, duração visível e encerramento cooperativo em 15 minutos;
+12. CSP com nonce e `strict-dynamic`, sem `unsafe-inline` para scripts em produção;
+13. ausência de tools.
 
 ### O que falta para público
 
 - autenticação individual;
-- quota distribuída por usuário/tenant;
+- quota por usuário/tenant, além da quota distribuída por cliente;
 - limite de sessões concorrentes;
 - orçamento e alertas no projeto OpenAI;
 - detecção de automação e abuso;
 - telemetria de sessão sem conteúdo;
-- expiração/reconexão planejada;
+- controle server-side autoritativo de sessão, expiração e reconexão planejada;
 - feature flag e kill switch;
 - segmentação entre ambientes/chaves;
 - runbook de incidente e rotação.
@@ -1119,8 +1163,13 @@ Também testamos:
 - instruções por idioma;
 - delimitação do objetivo do usuário;
 - origem e token;
+- tentativas inválidas limitadas antes da autenticação;
+- configuração fail-closed de produção;
+- corpo acima do limite mesmo sem `Content-Length`;
 - rate limit e headers;
 - normalização de erros;
+
+No CI, cada laboratório roda `npm ci`, `npm audit --audit-level=high`, lint, TypeScript 7, cobertura e build. Dependabot propõe atualizações semanais e CodeQL executa análise estática com Actions fixadas por SHA. Nenhum desses gates abre microfone ou cria uma sessão paga.
 - logs estruturados.
 
 ### Por que não mockar o mundo inteiro?
@@ -1215,9 +1264,11 @@ Mantenha `main` como Production Branch. Assim, a Vercel instala, testa e compila
 OPENAI_API_KEY=...
 PLAYGROUND_ACCESS_TOKEN=uma-frase-longa-e-aleatoria
 APP_ORIGIN=https://seu-dominio.example
+UPSTASH_REDIS_REST_URL=...
+UPSTASH_REDIS_REST_TOKEN=...
 ```
 
-Use projetos/chaves separados para Preview e Production quando possível. Não disponibilize uma chave produtiva para toda branch de contributor.
+Todas essas variáveis são obrigatórias em produção. Na Vercel, `CLIENT_IP_HEADER` fica ausente para selecionar o header protegido `x-vercel-forwarded-for`; fora da Vercel, configure-o com o header sobrescrito pelo seu proxy confiável. Use projetos/chaves separados para Preview e Production quando possível. Não disponibilize uma chave produtiva para toda branch de contributor.
 
 ### 13.3 Garanta HTTPS e CSP
 
@@ -1226,6 +1277,8 @@ Microfone fora de localhost exige contexto seguro. A CSP contém:
 ```text
 connect-src 'self' https://api.openai.com wss://api.openai.com
 ```
+
+`src/middleware.ts` cria um nonce por resposta e usa `script-src 'self' 'nonce-…' 'strict-dynamic'`; scripts não dependem de `unsafe-inline` em produção. O layout chama `headers()` para forçar renderização dinâmica, pois uma página estática não poderia receber um nonce novo. Isso reduz a superfície de injeção com o custo de abrir mão do HTML estático/CDN. `next.config.mjs` também envia HSTS em produção.
 
 Evite liberar `connect-src *` quando analytics quebrar. Adicione somente origens necessárias e revise o fluxo de dados de cada uma.
 
@@ -1266,8 +1319,9 @@ Use fala sem dado pessoal:
 11. End encerra contador e conexão;
 12. refresh não restaura transcript;
 13. token errado produz `401`;
-14. várias criações atingem `429` local;
-15. teclado e mobile continuam utilizáveis.
+14. várias criações atingem o `429` distribuído e recebem `Retry-After`;
+15. usando timer falso em teste, 15 minutos encerram a sessão e liberam o microfone;
+16. teclado e mobile continuam utilizáveis.
 
 Não automatize esse teste com a chave real em todo pull request. Crie um ambiente controlado, orçamento pequeno e execução explícita.
 
@@ -1276,9 +1330,8 @@ Não automatize esse teste com a chave real em todo pull request. Crie um ambien
 Antes de compartilhar a URL:
 
 - limite financeiro e alertas;
-- proteção de deployment/autenticação;
-- rate limit distribuído;
-- limite de concorrência;
+- identidade real ou proteção de deployment além do token compartilhado;
+- quota por usuário e limite de concorrência além do rate limit distribuído;
 - owner e rotação de chave;
 - métricas de conexão, falha e duração sem conteúdo;
 - alerta de aumento de secrets/sessões;
@@ -1304,7 +1357,9 @@ Antes de compartilhar a URL:
 | tracing desabilitado | minimização de dados no tutorial | menos diagnóstico upstream |
 | reasoning low | equilíbrio de latência/custo | pode não servir a tarefas complexas |
 | nenhuma tool | superfície segura e didática | agente não executa ações externas |
-| rate limit em memória | zero infraestrutura | não protege múltiplas instâncias |
+| Redis em produção; memória local | coordena instâncias sem dificultar o primeiro exercício | quota de rede não substitui identidade |
+| timer de sessão no cliente | encerra abas honestas e comunica custo | cliente modificado pode ignorá-lo; produção precisa controle server-side |
+| CSP com nonce | remove `unsafe-inline` de scripts em produção | força renderização dinâmica |
 
 ### Armadilhas comuns
 
@@ -1320,7 +1375,7 @@ Antes de compartilhar a URL:
 10. **Logar eventos crus.** Eles podem carregar transcript, argumentos, IDs e detalhes do provedor.
 11. **Habilitar tracing para “ver se funciona”.** Faça revisão de dados antes.
 12. **Adicionar tool e confiar no prompt para autorização.** Enforcement pertence ao código.
-13. **Confiar em rate limit local no serverless.** Instâncias não compartilham memória.
+13. **Confiar em rate limit local no serverless.** Use o Redis obrigatório de produção e teste indisponibilidade.
 14. **Ignorar cancelamento durante handshake.** Promessas antigas ressuscitam estado.
 15. **Esquecer limite de sessão.** Conversas longas precisam transição visível.
 
@@ -1333,12 +1388,12 @@ Antes de compartilhar a URL:
 - [ ] Existe alternativa por texto?
 - [ ] Mute, interrupção, End e erros funcionam por teclado?
 - [ ] Reduced motion e contraste foram testados?
-- [ ] Sessão longa tem aviso e reconexão compreensível?
+- [ ] Sessão longa tem aviso, encerramento autoritativo e reconexão compreensível?
 
 #### Segurança e abuso
 
 - [ ] Identidade individual existe?
-- [ ] Quota é distribuída e por tenant/usuário?
+- [ ] A quota distribuída de rede foi complementada por tenant/usuário?
 - [ ] Há limite de sessões simultâneas?
 - [ ] Secret TTL/capacidades são mínimos?
 - [ ] Chaves são separadas por ambiente, com rotação e owner?
@@ -1416,3 +1471,7 @@ Essa é a diferença central entre uma demo de voz e uma base de engenharia: a d
 - MDN — [MediaDevices.getUserMedia](https://developer.mozilla.org/docs/Web/API/MediaDevices/getUserMedia)
 - Vercel — [Environment variables](https://vercel.com/docs/environment-variables)
 - Vercel — [Deployment protection](https://vercel.com/docs/deployment-protection)
+
+---
+
+[← Módulo 01 — TTS](../../lab-01-text-to-speech/tutorial/tutorial.md) · [Índice do workshop](../../../docs/README.md) · [Revisar o Módulo 00](../../../docs/00-configuracao-do-ambiente.md)

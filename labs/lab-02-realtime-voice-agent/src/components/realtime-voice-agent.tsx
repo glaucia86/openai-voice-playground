@@ -23,7 +23,7 @@ import {
   UserRound,
   Volume2,
 } from "lucide-react";
-import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { StatusMessage } from "@/components/status-message";
 import {
@@ -31,6 +31,7 @@ import {
   MAX_CONVERSATION_GOAL_CHARACTERS,
   MICROPHONE_PROFILES,
   REALTIME_MODEL,
+  REALTIME_SESSION_LIMIT_SECONDS,
   REALTIME_VOICES,
   type ConversationLanguageId,
   type MicrophoneProfileId,
@@ -38,6 +39,7 @@ import {
 } from "@/lib/constants";
 import { authorizationHeaders, readApiError, type ClientApiError } from "@/lib/client-api";
 import { buildAgentInstructions } from "@/lib/realtime-config";
+import { getElapsedSessionSeconds, hasReachedSessionLimit } from "@/lib/session-lifetime";
 
 type RealtimeVoiceAgentProps = {
   accessToken: string;
@@ -63,6 +65,8 @@ type ClientSecretResponse = {
     transport: "webrtc";
   };
 };
+
+const SESSION_LIMIT_MINUTES = REALTIME_SESSION_LIMIT_SECONDS / 60;
 
 export function RealtimeVoiceAgent({ accessToken, disabled }: RealtimeVoiceAgentProps) {
   const [voice, setVoice] = useState<RealtimeVoiceId>("marin");
@@ -93,6 +97,18 @@ export function RealtimeVoiceAgent({ accessToken, disabled }: RealtimeVoiceAgent
     [voice],
   );
 
+  const endSession = useCallback((nextState: ConnectionState = "idle") => {
+    attemptRef.current += 1;
+    requestRef.current?.abort();
+    requestRef.current = null;
+    sessionRef.current?.close();
+    sessionRef.current = null;
+    setConnectionState(nextState);
+    setActivity("ready");
+    setMuted(false);
+    setStartedAt(undefined);
+  }, []);
+
   useEffect(() => {
     return () => {
       attemptRef.current += 1;
@@ -107,11 +123,21 @@ export function RealtimeVoiceAgent({ accessToken, disabled }: RealtimeVoiceAgent
       return;
     }
 
-    const tick = () => setElapsedSeconds(Math.floor((Date.now() - startedAt) / 1_000));
+    const tick = () => {
+      const elapsed = getElapsedSessionSeconds(startedAt);
+      setElapsedSeconds(elapsed);
+      if (hasReachedSessionLimit(elapsed)) {
+        endSession();
+        setError({
+          code: "session_limit_reached",
+          message: `The ${SESSION_LIMIT_MINUTES}-minute workshop session limit was reached. Start a new session to continue.`,
+        });
+      }
+    };
     tick();
     const timer = window.setInterval(tick, 1_000);
     return () => window.clearInterval(timer);
-  }, [startedAt]);
+  }, [endSession, startedAt]);
 
   useEffect(() => {
     transcriptEndRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
@@ -228,18 +254,6 @@ export function RealtimeVoiceAgent({ accessToken, disabled }: RealtimeVoiceAgent
   function updateActivityFromTransport(event: TransportEvent) {
     if (event.type === "input_audio_buffer.speech_started") setActivity("hearing");
     if (event.type === "input_audio_buffer.speech_stopped") setActivity("thinking");
-  }
-
-  function endSession(nextState: ConnectionState = "idle") {
-    attemptRef.current += 1;
-    requestRef.current?.abort();
-    requestRef.current = null;
-    sessionRef.current?.close();
-    sessionRef.current = null;
-    setConnectionState(nextState);
-    setActivity("ready");
-    setMuted(false);
-    setStartedAt(undefined);
   }
 
   function toggleMute() {
@@ -383,7 +397,7 @@ export function RealtimeVoiceAgent({ accessToken, disabled }: RealtimeVoiceAgent
             <span id="agent-console-title">Live session</span>
           </div>
           <div className="session-meta">
-            <span><Clock3 aria-hidden="true" /> {formatDuration(elapsedSeconds)}</span>
+            <span title={`Workshop sessions end after ${SESSION_LIMIT_MINUTES} minutes`}><Clock3 aria-hidden="true" /> {formatDuration(elapsedSeconds)} / {formatDuration(REALTIME_SESSION_LIMIT_SECONDS)}</span>
             <span><Radio aria-hidden="true" /> WebRTC</span>
           </div>
         </div>

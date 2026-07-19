@@ -3,6 +3,7 @@ import { randomUUID } from "node:crypto";
 import { AppError, errorResponse, normalizeError } from "@/lib/errors";
 import { logVoiceRequest } from "@/lib/observability";
 import { getOpenAIClient } from "@/lib/openai";
+import { readJsonBody } from "@/lib/request-body";
 import { guardApiRequest, rateLimitHeaders } from "@/lib/request-guard";
 import { speechRequestSchema } from "@/lib/schemas";
 
@@ -23,11 +24,12 @@ export async function POST(request: Request): Promise<Response> {
   let responseHeaders: Record<string, string> = {};
 
   try {
-    const rateLimit = guardApiRequest(request, "speech");
+    const rateLimit = await guardApiRequest(request, "speech");
     responseHeaders = rateLimitHeaders(rateLimit);
-    assertJsonSize(request);
 
-    const payload = speechRequestSchema.parse(await request.json());
+    const payload = speechRequestSchema.parse(
+      await readJsonBody(request, MAX_JSON_BYTES, "The speech request is too large."),
+    );
     const openai = getOpenAIClient();
     const speech = await openai.audio.speech.create(
       {
@@ -79,12 +81,5 @@ export async function POST(request: Request): Promise<Response> {
       status: normalized.status,
     });
     return errorResponse(normalized, requestId, responseHeaders);
-  }
-}
-
-function assertJsonSize(request: Request): void {
-  const contentLength = Number(request.headers.get("content-length"));
-  if (Number.isFinite(contentLength) && contentLength > MAX_JSON_BYTES) {
-    throw new AppError(413, "request_too_large", "The speech request is too large.");
   }
 }

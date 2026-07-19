@@ -11,6 +11,8 @@
 <p>
   <a href="README-PT-BR.md">Português</a>
   ·
+  <a href="docs/README.md">Workshop path</a>
+  ·
   <a href="#-labs">Labs</a>
   ·
   <a href="#-quick-start">Run</a>
@@ -23,6 +25,9 @@
 <p>
   <a href="https://github.com/glaucia86/openai-voice-playground/actions/workflows/ci.yml">
     <img alt="CI" src="https://github.com/glaucia86/openai-voice-playground/actions/workflows/ci.yml/badge.svg?branch=main">
+  </a>
+  <a href="https://github.com/glaucia86/openai-voice-playground/actions/workflows/codeql.yml">
+    <img alt="CodeQL" src="https://github.com/glaucia86/openai-voice-playground/actions/workflows/codeql.yml/badge.svg?branch=main">
   </a>
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-8BFFCC.svg"></a>
   <a href="https://github.com/glaucia86/openai-voice-playground/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/glaucia86/openai-voice-playground?style=flat&logo=github&color=8BFFCC"></a>
@@ -37,6 +42,7 @@
   <img alt="OpenAI SDK" src="https://img.shields.io/badge/OpenAI-SDK-412991?logo=openai&logoColor=white">
   <img alt="Agents SDK" src="https://img.shields.io/badge/OpenAI-Agents_SDK-412991?logo=openai&logoColor=white">
   <img alt="WebRTC" src="https://img.shields.io/badge/WebRTC-Realtime-333333?logo=webrtc&logoColor=white">
+  <img alt="Upstash Redis" src="https://img.shields.io/badge/Upstash-Redis-00E9A3?logo=redis&logoColor=white">
   <img alt="Vercel" src="https://img.shields.io/badge/Deploy-Vercel-000000?logo=vercel&logoColor=white">
 </p>
 
@@ -59,6 +65,7 @@
 ## 🧭 Contents
 
 - [Why this repository exists](#-why-this-repository-exists)
+- [Workshop path](#-workshop-path)
 - [Labs](#-labs)
 - [Repository architecture](#%EF%B8%8F-repository-architecture)
 - [Prerequisites](#-prerequisites)
@@ -87,6 +94,18 @@ Every lab provides:
 - CI/CD, Vercel instructions, and documented production boundaries;
 - a detailed Portuguese workshop starting from an empty folder;
 - decisions, trade-offs, pitfalls, and extension exercises.
+
+## 🧭 Workshop path
+
+New to the OpenAI API or running the repository for the first time? Start with the **[workshop index](docs/README.md)**. It follows the same progressive idea used by hands-on engineering workshops: prepare the environment once, complete one bounded module at a time, verify a checkpoint, and then move forward.
+
+| Module | Start here | Result |
+| --- | --- | --- |
+| **00 — Environment and API setup** | **[Setup guide](docs/00-configuracao-do-ambiente.md)** | Tools, OpenAI API project, local secret, health check, and quality gate validated |
+| **01 — Text to Speech** | **[TTS workshop](labs/lab-01-text-to-speech/tutorial/tutorial.md)** | A bounded, streamed, and protected speech-generation application |
+| **02 — Realtime voice agent** | **[Realtime workshop](labs/lab-02-realtime-voice-agent/tutorial/tutorial.md)** | A live WebRTC conversation with explicit session and security states |
+
+The modules are written in Portuguese and support two routes: run and study the completed lab, or reconstruct it from an empty folder. The README below remains the concise operational reference.
 
 ## 🧪 Labs
 
@@ -120,7 +139,10 @@ openai-voice-playground/
 │       ├── src/                  # Realtime agent
 │       ├── tests/                # session contracts and safeguards
 │       └── tutorial/tutorial.md  # empty folder to deployment
-├── docs/assets/                  # documentation media
+├── docs/
+│   ├── README.md                 # workshop index and learning paths
+│   ├── 00-configuracao-do-ambiente.md
+│   └── assets/                   # documentation media
 ├── .github/workflows/ci.yml      # CI matrix for both labs
 ├── AGENTS.md                     # durable rules for people and Codex
 └── package.json                  # repository orchestration commands
@@ -138,6 +160,8 @@ Each lab owns its package manifest and lockfile. This is intentional: every work
 - headphones recommended for the Realtime agent.
 
 ## 🚀 Quick start
+
+For a first run—including how to create an OpenAI API project, protect the local key, check `/api/health`, and troubleshoot setup—follow **[Module 00](docs/00-configuracao-do-ambiente.md)**. The condensed commands are:
 
 ```bash
 git clone https://github.com/glaucia86/openai-voice-playground.git
@@ -187,11 +211,18 @@ Run one development server at a time unless you explicitly assign different port
 # Required and server-only
 OPENAI_API_KEY=
 
-# Optional shared protection for a demonstration
+# Required in production; optional for local development
 PLAYGROUND_ACCESS_TOKEN=
 
-# Optional canonical deployment origin
+# Required in production
 APP_ORIGIN=
+
+# Required in production: shared serverless quota
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+
+# Required outside Vercel; use a header overwritten by your trusted proxy
+CLIENT_IP_HEADER=
 ```
 
 Never commit `.env` or `.env.local`, expose a key through `NEXT_PUBLIC_`, or put a real value in `.env.example`. Verify the ignore rule with `git check-ignore -v path/.env.local`.
@@ -202,11 +233,14 @@ The [CI workflow](.github/workflows/ci.yml) runs an independent matrix for both 
 
 ```text
 npm ci
+  ├── dependency audit (high/critical)
   ├── Oxlint
   ├── TypeScript 7 type-check
   ├── tests with coverage
   └── Next.js 15 production build
 ```
+
+Dependencies are updated through [Dependabot](.github/dependabot.yml), and the pinned-action [CodeQL workflow](.github/workflows/codeql.yml) performs scheduled static analysis.
 
 Run the same gate locally:
 
@@ -225,7 +259,7 @@ Create a separate Vercel project for each lab and select its **Root Directory**:
 | Lab 01 — TTS | `labs/lab-01-text-to-speech` |
 | Lab 02 — Realtime | `labs/lab-02-realtime-voice-agent` |
 
-Keep `main` as the production branch, add `OPENAI_API_KEY` through encrypted Environment Variables, optionally protect the demo with `PLAYGROUND_ACCESS_TOKEN`, and configure `APP_ORIGIN`. Lab 02 requires HTTPS for microphone use outside localhost.
+Keep `main` as the production branch and configure every variable shown above through encrypted Environment Variables. On Vercel, `CLIENT_IP_HEADER` defaults to the platform-overwritten `x-vercel-forwarded-for`; outside Vercel it is mandatory and must name a header overwritten by your trusted proxy. Both apps deliberately return `503` rather than issue a billable request when production security configuration or the distributed limiter is unavailable. Lab 02 requires HTTPS for microphone use outside localhost.
 
 ## 🛡️ Responsible use
 
@@ -233,9 +267,11 @@ Keep `main` as the production branch, add `OPENAI_API_KEY` through encrypted Env
 - Do not impersonate real people or mislead listeners.
 - Prompts, instructions, audio, transcripts, and credentials do not belong in application logs.
 - Realtime client secrets reduce exposure but remain bearer credentials.
-- Process-local limits and shared tokens are educational safeguards, not a complete public SaaS perimeter.
+- Production uses a distributed Upstash Redis quota; local development falls back to a process-local limiter.
+- The Lab 02 UI ends workshop sessions after 15 minutes. Because WebRTC goes directly to OpenAI, this client timer is not an authoritative boundary against a modified client.
+- The apps do not persist content, but provider-side abuse-monitoring logs may be retained for up to 30 days under the default API data controls.
 
-Before production, define identity, authorization, distributed quotas, budgets, consent, retention, observability, abuse response, and human approval for consequential tools. Read [SECURITY.md](SECURITY.md).
+Before a public SaaS launch, replace the shared workshop token with user identity and authorization, add per-user/concurrent-session quotas, OpenAI project budgets and alerts, consent, a reviewed retention policy, observability, abuse response, and human approval for consequential tools. Read [SECURITY.md](SECURITY.md).
 
 ## 🤝 Contributing
 

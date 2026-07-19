@@ -2,7 +2,7 @@
 
 Build a fluid, interruptible speech-to-speech conversational agent with Next.js 15, TypeScript 7, OpenAI Realtime, WebRTC, and the OpenAI Agents SDK.
 
-[Versão em português](README-PT-BR.md) · [Detailed Portuguese workshop](tutorial/tutorial.md) · [Back to all labs](../../README.md)
+[Versão em português](README-PT-BR.md) · [Workshop index](../../docs/README.md) · [Environment setup](../../docs/00-configuracao-do-ambiente.md) · [Detailed Portuguese workshop](tutorial/tutorial.md) · [Back to all labs](../../README.md)
 
 ## What this lab teaches
 
@@ -43,7 +43,7 @@ Browser <──────── short-lived ek_… ──── Next.js server
 Browser <════════════ WebRTC audio and events ═══════════> OpenAI
 ```
 
-The app uses `gpt-realtime-2.1`, semantic VAD, `gpt-4o-mini-transcribe` for visual input transcripts, and an ephemeral client secret with a 60-second issuance TTL. The lab does not persist application transcripts or audio.
+The app uses `gpt-realtime-2.1`, semantic VAD, `gpt-4o-mini-transcribe` for visual input transcripts, and an ephemeral client secret with a 60-second issuance TTL. The UI ends a workshop session after 15 minutes. The lab does not persist application transcripts or audio; default provider abuse-monitoring retention remains a separate boundary.
 
 ## Quality gate
 
@@ -60,8 +60,8 @@ Automated tests validate local contracts without starting a paid Realtime sessio
 
 ## Deploy to Vercel
 
-Import the repository and set **Root Directory** to `labs/lab-02-realtime-voice-agent`. Add `OPENAI_API_KEY` in Vercel’s Environment Variables and deploy from `main`. HTTPS is required for microphone use outside localhost. See the [workshop deployment chapter](tutorial/tutorial.md#13-faça-deploy-na-vercel-e-valide-a-sessão-real).
+Import the repository and set **Root Directory** to `labs/lab-02-realtime-voice-agent`. Add `OPENAI_API_KEY`, `PLAYGROUND_ACCESS_TOKEN`, `APP_ORIGIN`, `UPSTASH_REDIS_REST_URL`, and `UPSTASH_REDIS_REST_TOKEN` in Vercel Environment Variables, then deploy from `main`. HTTPS is required for microphone use outside localhost. See the [workshop deployment chapter](tutorial/tutorial.md#13-faça-deploy-na-vercel-e-valide-a-sessão-real).
 
 ## Production boundary
 
-The sample includes same-origin checks, strict schemas, sanitized errors, a process-local limiter, optional shared access protection, short-lived credentials, explicit session cleanup, and content-free logs. A public product still needs user identity, distributed quotas, budgets, consent and retention policy, telemetry, abuse response, reconnect design, and authorization for every consequential agent tool.
+Production fails closed unless mandatory shared access, canonical origin, trusted client identity, and a distributed Upstash Redis quota are configured. The 15-minute UI timer is cooperative, not authoritative against a modified WebRTC client. A public product still needs user identity, per-user and concurrent-session quotas, OpenAI project budgets/alerts, reviewed consent and retention policy, server-side session control, telemetry, abuse response, reconnect design, and authorization for every consequential agent tool.

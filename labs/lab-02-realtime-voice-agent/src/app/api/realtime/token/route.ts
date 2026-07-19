@@ -6,10 +6,11 @@ import {
   REALTIME_MODEL,
   REALTIME_TRANSCRIPTION_MODEL,
 } from "@/lib/constants";
-import { AppError, errorResponse, normalizeError } from "@/lib/errors";
+import { errorResponse, normalizeError } from "@/lib/errors";
 import { logVoiceRequest } from "@/lib/observability";
 import { getOpenAIClient } from "@/lib/openai";
 import { buildAgentInstructions } from "@/lib/realtime-config";
+import { readJsonBody } from "@/lib/request-body";
 import { guardApiRequest, rateLimitHeaders } from "@/lib/request-guard";
 import { realtimeSessionRequestSchema } from "@/lib/schemas";
 
@@ -23,11 +24,16 @@ export async function POST(request: Request): Promise<Response> {
   let responseHeaders: Record<string, string> = {};
 
   try {
-    const rateLimit = guardApiRequest(request, "realtime-token");
+    const rateLimit = await guardApiRequest(request, "realtime-token");
     responseHeaders = rateLimitHeaders(rateLimit);
-    assertRequestSize(request);
 
-    const payload = realtimeSessionRequestSchema.parse(await request.json());
+    const payload = realtimeSessionRequestSchema.parse(
+      await readJsonBody(
+        request,
+        MAX_REALTIME_REQUEST_BYTES,
+        "The Realtime session request is too large.",
+      ),
+    );
     const openai = getOpenAIClient();
     const clientSecret = await openai.realtime.clientSecrets.create(
       {
@@ -104,12 +110,5 @@ export async function POST(request: Request): Promise<Response> {
       status: normalized.status,
     });
     return errorResponse(normalized, requestId, responseHeaders);
-  }
-}
-
-function assertRequestSize(request: Request): void {
-  const contentLength = Number(request.headers.get("content-length"));
-  if (Number.isFinite(contentLength) && contentLength > MAX_REALTIME_REQUEST_BYTES) {
-    throw new AppError(413, "request_too_large", "The Realtime session request is too large.");
   }
 }

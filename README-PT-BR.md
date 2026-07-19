@@ -11,6 +11,8 @@
 <p>
   <a href="README.md">English</a>
   ·
+  <a href="docs/README.md">Trilha de workshop</a>
+  ·
   <a href="#-laboratórios">Laboratórios</a>
   ·
   <a href="#-início-rápido">Executar</a>
@@ -23,6 +25,9 @@
 <p>
   <a href="https://github.com/glaucia86/openai-voice-playground/actions/workflows/ci.yml">
     <img alt="CI" src="https://github.com/glaucia86/openai-voice-playground/actions/workflows/ci.yml/badge.svg?branch=main">
+  </a>
+  <a href="https://github.com/glaucia86/openai-voice-playground/actions/workflows/codeql.yml">
+    <img alt="CodeQL" src="https://github.com/glaucia86/openai-voice-playground/actions/workflows/codeql.yml/badge.svg?branch=main">
   </a>
   <a href="LICENSE">
     <img alt="Licença MIT" src="https://img.shields.io/badge/licença-MIT-8BFFCC.svg">
@@ -43,6 +48,7 @@
   <img alt="OpenAI SDK" src="https://img.shields.io/badge/OpenAI-SDK-412991?logo=openai&logoColor=white">
   <img alt="Agents SDK" src="https://img.shields.io/badge/OpenAI-Agents_SDK-412991?logo=openai&logoColor=white">
   <img alt="WebRTC" src="https://img.shields.io/badge/WebRTC-Realtime-333333?logo=webrtc&logoColor=white">
+  <img alt="Upstash Redis" src="https://img.shields.io/badge/Upstash-Redis-00E9A3?logo=redis&logoColor=white">
   <img alt="Vercel" src="https://img.shields.io/badge/Deploy-Vercel-000000?logo=vercel&logoColor=white">
 </p>
 
@@ -65,6 +71,7 @@
 ## 🧭 Sumário
 
 - [Por que este repositório existe](#-por-que-este-repositório-existe)
+- [Trilha de workshop](#-trilha-de-workshop)
 - [Laboratórios](#-laboratórios)
 - [Arquitetura do repositório](#%EF%B8%8F-arquitetura-do-repositório)
 - [Pré-requisitos](#-pré-requisitos)
@@ -93,6 +100,18 @@ Cada laboratório inclui:
 - CI/CD, instruções de deploy e fronteiras de produção documentadas;
 - workshop em português começando numa pasta vazia;
 - decisões, trade-offs, armadilhas e exercícios de evolução.
+
+## 🧭 Trilha de workshop
+
+Se esta é sua primeira experiência com a API da OpenAI ou com o repositório, comece pelo **[índice do workshop](docs/README.md)**. A trilha segue a mesma ideia incremental de workshops práticos de engenharia: preparar o ambiente uma única vez, concluir um módulo delimitado, comprovar o checkpoint e só então avançar.
+
+| Módulo | Comece aqui | Resultado |
+| --- | --- | --- |
+| **00 — Ambiente e API** | **[Guia de configuração](docs/00-configuracao-do-ambiente.md)** | Ferramentas, projeto da API OpenAI, segredo local, health check e gate de qualidade validados |
+| **01 — Text to Speech** | **[Workshop de TTS](labs/lab-01-text-to-speech/tutorial/tutorial.md)** | Aplicação de geração de fala delimitada, com streaming e proteções |
+| **02 — Agente de voz Realtime** | **[Workshop Realtime](labs/lab-02-realtime-voice-agent/tutorial/tutorial.md)** | Conversa ao vivo por WebRTC, com estados de sessão e segurança explícitos |
+
+Você pode seguir pelo caminho “executar e estudar” ou reconstruir cada aplicação a partir de uma pasta vazia. O restante deste README continua sendo a referência operacional resumida.
 
 ## 🧪 Laboratórios
 
@@ -126,7 +145,10 @@ openai-voice-playground/
 │       ├── src/                  # agente Realtime
 │       ├── tests/                # sessão, schemas e proteções
 │       └── tutorial/tutorial.md  # workshop do zero ao deploy
-├── docs/assets/                  # mídia da documentação
+├── docs/
+│   ├── README.md                 # índice e trilhas do workshop
+│   ├── 00-configuracao-do-ambiente.md
+│   └── assets/                   # mídia da documentação
 ├── .github/workflows/ci.yml      # matriz de CI dos laboratórios
 ├── AGENTS.md                     # regras duráveis para humanos e Codex
 └── package.json                  # comandos de orquestração
@@ -153,6 +175,8 @@ git --version
 ```
 
 ## 🚀 Início rápido
+
+Na primeira execução, siga o **[Módulo 00 — configuração do ambiente, da API e execução local](docs/00-configuracao-do-ambiente.md)**. Ele explica como criar ou selecionar o projeto da API OpenAI, proteger a chave, validar `/api/health` e resolver erros comuns. A versão resumida está abaixo.
 
 ### 1. Clone o repositório
 
@@ -232,11 +256,18 @@ Cada laboratório possui seu próprio `.env.example`:
 # Obrigatória e somente no servidor
 OPENAI_API_KEY=
 
-# Opcional: protege uma demonstração com bearer token compartilhado
+# Obrigatória em produção; opcional somente no desenvolvimento local
 PLAYGROUND_ACCESS_TOKEN=
 
-# Opcional: origem canônica do deploy
+# Obrigatória em produção
 APP_ORIGIN=
+
+# Obrigatórias em produção: quota compartilhada entre instâncias serverless
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+
+# Obrigatória fora da Vercel; use um header sobrescrito pelo proxy confiável
+CLIENT_IP_HEADER=
 ```
 
 Regras inegociáveis:
@@ -253,11 +284,14 @@ O workflow [`.github/workflows/ci.yml`](.github/workflows/ci.yml) executa uma ma
 
 ```text
 npm ci
+  ├── auditoria de dependências high/critical
   ├── lint com Oxlint
   ├── type-check com TypeScript 7
   ├── testes com cobertura
   └── build de produção com Next.js 15
 ```
+
+O [Dependabot](.github/dependabot.yml) mantém as dependências visíveis para revisão e o workflow [CodeQL](.github/workflows/codeql.yml), com Actions fixadas por SHA, executa análise estática também de forma agendada.
 
 Execute localmente antes de abrir um pull request:
 
@@ -280,10 +314,14 @@ Depois:
 
 1. mantenha `main` como Production Branch;
 2. cadastre `OPENAI_API_KEY` nas Environment Variables criptografadas;
-3. adicione `PLAYGROUND_ACCESS_TOKEN` para restringir uma demo pública;
+3. adicione `PLAYGROUND_ACCESS_TOKEN` — ele é obrigatório em produção;
 4. configure `APP_ORIGIN` com o domínio final;
-5. valide `/api/health` sem expor credenciais;
-6. no Lab 02, confirme HTTPS e permissão de microfone.
+5. conecte Upstash Redis com `UPSTASH_REDIS_REST_URL` e `UPSTASH_REDIS_REST_TOKEN`;
+6. na Vercel, deixe `CLIENT_IP_HEADER` vazio para usar `x-vercel-forwarded-for`; fora dela, informe um header sobrescrito pelo seu proxy confiável;
+7. valide `/api/health` sem expor credenciais;
+8. no Lab 02, confirme HTTPS e permissão de microfone.
+
+Se a configuração de segurança ou o limitador distribuído falhar em produção, a API retorna `503` e não inicia uma chamada faturável.
 
 Os capítulos de deploy dos workshops documentam smoke tests e controles operacionais ainda necessários.
 
@@ -294,9 +332,11 @@ Os capítulos de deploy dos workshops documentam smoke tests e controles operaci
 - Texto, instruções, áudio, transcripts e credenciais não pertencem aos logs.
 - O Lab 02 mantém transcripts apenas na memória da página e não copia áudio para o histórico local.
 - Client secrets efêmeros reduzem exposição, mas continuam sendo credenciais bearer.
-- Rate limit em memória e token compartilhado são proteções didáticas, não um perímetro completo para SaaS público.
+- Em produção a quota é distribuída com Upstash Redis; apenas o desenvolvimento local usa fallback em memória.
+- O Lab 02 encerra a sessão do workshop após 15 minutos no cliente. Como o WebRTC segue direto para a OpenAI, esse timer não é um limite autoritativo contra um cliente modificado.
+- A aplicação não persiste conteúdo, mas logs de monitoramento de abuso do provedor podem ser retidos por até 30 dias nos controles padrão da API.
 
-Antes de usar em produção, defina identidade, autorização, quota distribuída, orçamento, consentimento, retenção, observabilidade, resposta a abuso e aprovação humana para ferramentas com efeitos relevantes.
+Antes de lançar um SaaS público, substitua o token compartilhado por identidade e autorização reais, adicione quota por usuário e sessões concorrentes, orçamentos e alertas do projeto OpenAI, consentimento, política de retenção revisada, observabilidade, resposta a abuso e aprovação humana para ferramentas com efeitos relevantes.
 
 Leia [SECURITY.md](SECURITY.md) para conhecer a política de segurança.
 

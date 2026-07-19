@@ -6,27 +6,36 @@ import {
   resetRateLimitsForTests,
 } from "../src/lib/rate-limit";
 
-afterEach(() => resetRateLimitsForTests());
+afterEach(() => {
+  delete process.env.UPSTASH_REDIS_REST_URL;
+  delete process.env.UPSTASH_REDIS_REST_TOKEN;
+  resetRateLimitsForTests();
+});
 
 describe("checkRateLimit", () => {
-  it("allows requests inside the fixed window", () => {
-    const first = checkRateLimit("speech:client", { limit: 2, windowMs: 1_000, now: 100 });
-    const second = checkRateLimit("speech:client", { limit: 2, windowMs: 1_000, now: 200 });
+  it("allows requests inside the fixed window", async () => {
+    const first = await checkRateLimit("speech:client", { limit: 2, windowMs: 1_000, now: 100 });
+    const second = await checkRateLimit("speech:client", { limit: 2, windowMs: 1_000, now: 200 });
 
     expect(first).toMatchObject({ allowed: true, remaining: 1, resetAt: 1_100 });
     expect(second).toMatchObject({ allowed: true, remaining: 0, resetAt: 1_100 });
   });
 
-  it("blocks a request after the limit", () => {
-    checkRateLimit("speech:client", { limit: 1, windowMs: 1_000, now: 100 });
-    const blocked = checkRateLimit("speech:client", { limit: 1, windowMs: 1_000, now: 200 });
+  it("blocks a request after the limit", async () => {
+    await checkRateLimit("speech:client", { limit: 1, windowMs: 1_000, now: 100 });
+    const blocked = await checkRateLimit("speech:client", { limit: 1, windowMs: 1_000, now: 200 });
 
     expect(blocked).toEqual({ allowed: false, limit: 1, remaining: 0, resetAt: 1_100 });
+    expect(rateLimitHeaders(blocked)).toMatchObject({ "Retry-After": "1" });
   });
 
-  it("opens a fresh window after reset", () => {
-    checkRateLimit("speech:client", { limit: 1, windowMs: 1_000, now: 100 });
-    const nextWindow = checkRateLimit("speech:client", { limit: 1, windowMs: 1_000, now: 1_101 });
+  it("opens a fresh window after reset", async () => {
+    await checkRateLimit("speech:client", { limit: 1, windowMs: 1_000, now: 100 });
+    const nextWindow = await checkRateLimit("speech:client", {
+      limit: 1,
+      windowMs: 1_000,
+      now: 1_101,
+    });
 
     expect(nextWindow).toMatchObject({ allowed: true, remaining: 0, resetAt: 2_101 });
   });
@@ -41,12 +50,12 @@ describe("checkRateLimit", () => {
     });
   });
 
-  it("periodically removes expired keys", () => {
+  it("periodically removes expired keys", async () => {
     for (let index = 0; index < 1_000; index += 1) {
-      checkRateLimit(`expired:${index}`, { limit: 1, windowMs: 1, now: 0 });
+      await checkRateLimit(`expired:${index}`, { limit: 1, windowMs: 1, now: 0 });
     }
 
-    const result = checkRateLimit("fresh", { limit: 1, windowMs: 1_000, now: 2 });
+    const result = await checkRateLimit("fresh", { limit: 1, windowMs: 1_000, now: 2 });
     expect(result.allowed).toBe(true);
   });
 });

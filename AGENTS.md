@@ -9,7 +9,8 @@ OpenAI Voice Labs is an educational collection of independent Next.js workshops.
 - `labs/lab-01-text-to-speech`: bounded text-to-speech request with streamed audio.
 - `labs/lab-02-realtime-voice-agent`: stateful speech-to-speech Realtime session over WebRTC.
 - Each lab owns its `package.json`, lockfile, app, tests, READMEs, `.env.example`, and `tutorial/tutorial.md`.
-- Root documentation is the catalog. Do not move lab implementations to separate branches.
+- Root documentation is the catalog. `docs/README.md` is the workshop index, and `docs/00-configuracao-do-ambiente.md` owns the shared environment, API-key, installation, and first-run guidance.
+- Do not move lab implementations to separate branches.
 
 ## Commands
 
@@ -34,7 +35,8 @@ Run the narrowest relevant check while iterating and the complete check for ever
 - Realtime client secrets must be short-lived, returned with `no-store`, and never logged. They are still bearer credentials.
 - Validate all client-controlled values before any billable call or credential issuance.
 - Return stable sanitized errors and request IDs without forwarding raw provider errors.
-- Treat same-origin checks, a shared token, and process-local rate limiting as defense in depth, not a complete public perimeter.
+- Production must fail closed without the shared workshop token, canonical origin, trusted proxy identity, and distributed Redis rate limiter. Local process limits remain a development fallback only.
+- Treat origin, shared tokens, IP quotas, and client-side session timers as defense in depth, not user identity or a complete public perimeter.
 - Clearly disclose that synthesized voices are AI-generated.
 
 ## Engineering conventions
@@ -50,7 +52,9 @@ Run the narrowest relevant check while iterating and the complete check for ever
 
 ## Documentation convention
 
-Every lab tutorial must include exact prerequisites, terminal location, commands, folders, files, checkpoints, expected output, common failures, cleanup, tests, deploy, and production limitations. Update the lab README and tutorial whenever behavior or architecture changes.
+Treat `tutorial/tutorial.md` in each lab as the canonical workshop module. Every module must include exact prerequisites, terminal location, commands, folders, files, checkpoints, expected output, common failures, cleanup, tests, deploy, production limitations, and previous/index/next navigation.
+
+Keep shared onboarding in Module 00 and link to it instead of allowing duplicated setup instructions to diverge. A lab module may repeat the minimum commands needed to remain usable on its own. Update the root catalog, workshop index, lab README, and tutorial whenever behavior or architecture changes.
 
 ## Definition of done
 

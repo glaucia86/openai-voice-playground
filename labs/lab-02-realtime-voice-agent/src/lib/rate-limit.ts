@@ -1,3 +1,6 @@
+import { Ratelimit, type Duration } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
+
 type RateLimitEntry = {
   count: number;
   resetAt: number;
@@ -18,14 +21,55 @@ type RateLimitOptions = {
 
 const globalForRateLimit = globalThis as unknown as {
   voicePlaygroundRateLimits?: Map<string, RateLimitEntry>;
+  voicePlaygroundDistributedLimiters?: Map<string, Ratelimit>;
 };
 
 const entries =
   globalForRateLimit.voicePlaygroundRateLimits ?? new Map<string, RateLimitEntry>();
+const distributedLimiters =
+  globalForRateLimit.voicePlaygroundDistributedLimiters ?? new Map<string, Ratelimit>();
 
 globalForRateLimit.voicePlaygroundRateLimits = entries;
+globalForRateLimit.voicePlaygroundDistributedLimiters = distributedLimiters;
 
-export function checkRateLimit(
+export async function checkRateLimit(
+  key: string,
+  options: RateLimitOptions,
+): Promise<RateLimitResult> {
+  const redisUrl = process.env.UPSTASH_REDIS_REST_URL?.trim();
+  const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN?.trim();
+
+  if (redisUrl && redisToken) {
+    const limiter = getDistributedLimiter(redisUrl, redisToken, options);
+    const result = await limiter.limit(key);
+    return {
+      allowed: result.success,
+      limit: result.limit,
+      remaining: result.remaining,
+      resetAt: result.reset,
+    };
+  }
+
+  return checkLocalRateLimit(key, options);
+}
+
+export function rateLimitHeaders(result: RateLimitResult): Record<string, string> {
+  return {
+    "RateLimit-Limit": String(result.limit),
+    "RateLimit-Remaining": String(result.remaining),
+    "RateLimit-Reset": String(Math.ceil(result.resetAt / 1_000)),
+    ...(!result.allowed
+      ? { "Retry-After": String(Math.max(1, Math.ceil((result.resetAt - Date.now()) / 1_000))) }
+      : {}),
+  };
+}
+
+export function resetRateLimitsForTests(): void {
+  entries.clear();
+  distributedLimiters.clear();
+}
+
+function checkLocalRateLimit(
   key: string,
   { limit, windowMs, now = Date.now() }: RateLimitOptions,
 ): RateLimitResult {
@@ -51,16 +95,23 @@ export function checkRateLimit(
   };
 }
 
-export function rateLimitHeaders(result: RateLimitResult): Record<string, string> {
-  return {
-    "RateLimit-Limit": String(result.limit),
-    "RateLimit-Remaining": String(result.remaining),
-    "RateLimit-Reset": String(Math.ceil(result.resetAt / 1_000)),
-  };
-}
+function getDistributedLimiter(
+  url: string,
+  token: string,
+  { limit, windowMs }: RateLimitOptions,
+): Ratelimit {
+  const cacheKey = `${limit}:${windowMs}`;
+  const existing = distributedLimiters.get(cacheKey);
+  if (existing) return existing;
 
-export function resetRateLimitsForTests(): void {
-  entries.clear();
+  const limiter = new Ratelimit({
+    redis: new Redis({ url, token }),
+    limiter: Ratelimit.fixedWindow(limit, `${windowMs} ms` as Duration),
+    analytics: false,
+    prefix: "openai-voice-playground:lab-02",
+  });
+  distributedLimiters.set(cacheKey, limiter);
+  return limiter;
 }
 
 function cleanExpiredEntries(now: number): void {

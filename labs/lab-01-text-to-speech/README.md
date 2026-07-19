@@ -2,7 +2,7 @@
 
 Build an accessible, production-minded text-to-speech interface with Next.js 15, TypeScript 7, the OpenAI SDK, validated server boundaries, streamed audio, and carefully designed loading and error states.
 
-[Versão em português](README-PT-BR.md) · [Detailed Portuguese workshop](tutorial/tutorial.md) · [Back to all labs](../../README.md)
+[Versão em português](README-PT-BR.md) · [Workshop index](../../docs/README.md) · [Environment setup](../../docs/00-configuracao-do-ambiente.md) · [Detailed Portuguese workshop](tutorial/tutorial.md) · [Back to all labs](../../README.md)
 
 ## What this lab teaches
 
@@ -11,7 +11,7 @@ Build an accessible, production-minded text-to-speech interface with Next.js 15,
 - how to validate a small product contract with Zod;
 - how to forward OpenAI’s audio stream without buffering it on the server;
 - how to expose cancellation, progress, playback, download, and accessible errors;
-- where local rate limiting and shared access tokens stop being sufficient.
+- how production fails closed behind mandatory access protection and a distributed quota.
 
 ## Run locally
 
@@ -51,8 +51,8 @@ Tests do not make paid OpenAI requests.
 
 ## Deploy to Vercel
 
-Import the repository and set **Root Directory** to `labs/lab-01-text-to-speech`. Add `OPENAI_API_KEY` in Vercel’s Environment Variables and deploy from `main`. See the [workshop deployment chapter](tutorial/tutorial.md#11-faça-deploy-na-vercel) for validation and production caveats.
+Import the repository and set **Root Directory** to `labs/lab-01-text-to-speech`. In Vercel Environment Variables, add `OPENAI_API_KEY`, `PLAYGROUND_ACCESS_TOKEN`, `APP_ORIGIN`, `UPSTASH_REDIS_REST_URL`, and `UPSTASH_REDIS_REST_TOKEN`, then deploy from `main`. Vercel supplies the trusted `x-vercel-forwarded-for` identity header. See the [workshop deployment chapter](tutorial/tutorial.md#11-faça-deploy-na-vercel) for validation and production caveats.
 
 ## Responsible use
 
-The UI discloses that the output is AI-generated. Do not use the application to impersonate real people or mislead listeners. Public deployments need real identity, distributed quotas, budgets, monitoring, and an abuse-response process.
+The UI discloses that the output is AI-generated. Do not use the application to impersonate real people or mislead listeners. The workshop token and IP quota protect a demo, not user accounts; a public product still needs real identity, per-user authorization, budgets, monitoring, and an abuse-response process.

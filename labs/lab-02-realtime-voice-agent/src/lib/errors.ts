@@ -6,6 +6,7 @@ export class AppError extends Error {
     public readonly status: number,
     public readonly code: string,
     message: string,
+    public readonly headers: Record<string, string> = {},
   ) {
     super(message);
     this.name = "AppError";
@@ -72,6 +73,12 @@ export function errorResponse(
   headers?: HeadersInit,
 ): Response {
   const normalized = normalizeError(error);
+  const responseHeaders = new Headers(headers);
+  for (const [name, value] of Object.entries(normalized.headers)) {
+    responseHeaders.set(name, value);
+  }
+  responseHeaders.set("Cache-Control", "no-store");
+  responseHeaders.set("X-Request-Id", requestId);
   const body: ErrorBody = {
     error: {
       code: normalized.code,
@@ -82,10 +89,6 @@ export function errorResponse(
 
   return Response.json(body, {
     status: normalized.status,
-    headers: {
-      "Cache-Control": "no-store",
-      "X-Request-Id": requestId,
-      ...headers,
-    },
+    headers: responseHeaders,
   });
 }

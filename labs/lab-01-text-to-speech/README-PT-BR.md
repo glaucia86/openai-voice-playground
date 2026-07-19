@@ -2,7 +2,7 @@
 
 Construa uma interface acessível de texto para voz com Next.js 15, TypeScript 7, SDK da OpenAI, fronteira de servidor validada, áudio em streaming e estados de carregamento e erro bem desenhados.
 
-[Read in English](README.md) · [Workshop completo e passo a passo](tutorial/tutorial.md) · [Voltar para todos os labs](../../README-PT-BR.md)
+[Read in English](README.md) · [Índice do workshop](../../docs/README.md) · [Configurar ambiente e API](../../docs/00-configuracao-do-ambiente.md) · [Módulo completo e passo a passo](tutorial/tutorial.md) · [Voltar para todos os labs](../../README-PT-BR.md)
 
 ## O que você aprende
 
@@ -11,7 +11,7 @@ Construa uma interface acessível de texto para voz com Next.js 15, TypeScript 7
 - como validar um contrato pequeno de produto com Zod;
 - como encaminhar o stream da OpenAI sem acumular o arquivo no servidor;
 - como implementar cancelamento, progresso, player, download e erros acessíveis;
-- por que rate limit local e token compartilhado não bastam para um SaaS público.
+- como produção falha de modo seguro atrás de proteção obrigatória e quota distribuída.
 
 ## Execute localmente
 
@@ -51,8 +51,8 @@ Os testes não fazem requisições pagas para a OpenAI.
 
 ## Deploy na Vercel
 
-Importe o repositório e defina **Root Directory** como `labs/lab-01-text-to-speech`. Cadastre `OPENAI_API_KEY` nas Environment Variables da Vercel e publique a partir da `main`. O [capítulo de deploy do workshop](tutorial/tutorial.md#11-faça-deploy-na-vercel) inclui validação e ressalvas de produção.
+Importe o repositório e defina **Root Directory** como `labs/lab-01-text-to-speech`. Nas Environment Variables da Vercel, cadastre `OPENAI_API_KEY`, `PLAYGROUND_ACCESS_TOKEN`, `APP_ORIGIN`, `UPSTASH_REDIS_REST_URL` e `UPSTASH_REDIS_REST_TOKEN`; depois publique a partir da `main`. A Vercel fornece o header confiável `x-vercel-forwarded-for`. O [capítulo de deploy do workshop](tutorial/tutorial.md#11-faça-deploy-na-vercel) inclui validação e ressalvas de produção.
 
 ## Uso responsável
 
-A interface avisa que a voz é gerada por IA. Não use a aplicação para imitar pessoas reais ou enganar ouvintes. Um deploy público precisa de identidade real, quotas distribuídas, orçamento, monitoramento e processo de resposta a abuso.
+A interface avisa que a voz é gerada por IA. Não use a aplicação para imitar pessoas reais ou enganar ouvintes. O token do workshop e a quota por IP protegem uma demo, não contas de usuário; um produto público ainda precisa de identidade, autorização por usuário, orçamento, monitoramento e resposta a abuso.

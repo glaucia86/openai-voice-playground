@@ -46,7 +46,7 @@ export const MICROPHONE_PROFILE_IDS = MICROPHONE_PROFILES.map((profile) => profi
 export const MAX_CONVERSATION_GOAL_CHARACTERS = 600;
 export const MAX_REALTIME_REQUEST_BYTES = 4 * 1024;
 export const CLIENT_SECRET_TTL_SECONDS = 60;
-export const REALTIME_SESSION_LIMIT_SECONDS = 60 * 60;
+export const REALTIME_SESSION_LIMIT_SECONDS = 15 * 60;
 
 export type RealtimeVoiceId = (typeof REALTIME_VOICE_IDS)[number];
 export type ConversationLanguageId = (typeof CONVERSATION_LANGUAGE_IDS)[number];

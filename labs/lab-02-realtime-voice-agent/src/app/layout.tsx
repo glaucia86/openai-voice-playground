@@ -1,6 +1,7 @@
 import "@fontsource-variable/jetbrains-mono";
 import "@fontsource-variable/manrope";
 import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
 
 import "./globals.css";
 
@@ -32,7 +33,8 @@ export const viewport: Viewport = {
   themeColor: "#070b12",
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  await headers();
   return (
     <html lang="en">
       <body>{children}</body>

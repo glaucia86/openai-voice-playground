@@ -7,6 +7,13 @@
 **Código deste lab:** [`labs/lab-01-text-to-speech`](https://github.com/glaucia86/openai-voice-playground/tree/main/labs/lab-01-text-to-speech)  
 **Última validação técnica:** 19 de julho de 2026
 
+- **Trilha:** Módulo 01 de 02
+- **Tempo estimado:** 2–3 horas
+- **Pré-requisito:** [Módulo 00 — configuração do ambiente e da API](../../../docs/00-configuracao-do-ambiente.md)
+- **Evidência de conclusão:** aplicação executada e `npm run check:lab01` aprovado na raiz
+
+[← Módulo 00](../../../docs/00-configuracao-do-ambiente.md) · [Índice do workshop](../../../docs/README.md) · [Módulo 02 — Realtime →](../../lab-02-realtime-voice-agent/tutorial/tutorial.md)
+
 ---
 
 ## Antes de começar
@@ -113,7 +120,7 @@ Abra `.env.local` no editor e preencha somente:
 OPENAI_API_KEY=cole_a_sua_chave_de_projeto_aqui
 ```
 
-Não adicione aspas, não use `NEXT_PUBLIC_` e não altere `.env.example`. Antes de iniciar, confirme que o Git ignora o arquivo:
+Não adicione aspas, não use `NEXT_PUBLIC_` e não altere `.env.example`. Para o primeiro teste local, token, origem e Upstash podem ficar vazios; em produção eles são obrigatórios e a API falha com `503` se estiverem ausentes. Antes de iniciar, confirme que o Git ignora o arquivo:
 
 ```bash
 git check-ignore -v .env.local
@@ -164,7 +171,7 @@ O caminho precisa terminar em `labs/lab-01-text-to-speech`. Isso evita instalar 
 Instale as dependências de runtime validadas pelo laboratório:
 
 ```bash
-npm install next@15.5.20 react@19.2.7 react-dom@19.2.7 openai@^6.48.0 zod@^4.4.3 lucide-react@^1.25.0 @fontsource-variable/manrope@^5.2.8 @fontsource-variable/jetbrains-mono@^5.2.8
+npm install next@15.5.20 react@19.2.7 react-dom@19.2.7 openai@^6.48.0 zod@^4.4.3 lucide-react@^1.25.0 @fontsource-variable/manrope@^5.2.8 @fontsource-variable/jetbrains-mono@^5.2.8 @upstash/ratelimit@2.0.8 @upstash/redis@1.38.0
 ```
 
 Instale as ferramentas de desenvolvimento:
@@ -243,6 +250,9 @@ Em `.env.example`, registre apenas nomes vazios:
 OPENAI_API_KEY=
 PLAYGROUND_ACCESS_TOKEN=
 APP_ORIGIN=
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+CLIENT_IP_HEADER=
 ```
 
 Agora crie `.env.local` a partir do exemplo e use `git check-ignore -v .env.local`, como no Caminho A. A única cópia com valor real deve continuar local.
@@ -385,7 +395,7 @@ Em vez de “fazer todo o backend” e depois “fazer todo o frontend”, entre
 | 0. Base | Projeto sobe e `/api/health` informa configuração sem expor segredo | type-check + build |
 | 1. TTS mínimo | Texto validado retorna MP3 pelo servidor | teste de schema + chamada manual |
 | 2. TTS utilizável | Voz, instrução, formato, velocidade, stream e download | acessibilidade + cancelamento |
-| 3. Hardening | Token opcional, origem, quota, request ID e logs sanitizados | testes de guardas |
+| 3. Hardening | Token obrigatório em produção, origem, quota distribuída, request ID e logs sanitizados | testes de guardas |
 | 4. Entrega | README, tutorial, CI e Vercel | `npm run check` |
 
 O ponto importante é que cada fatia atravessa interface, contrato, servidor e validação. Se o contexto acabar ou outra pessoa assumir, há um estado funcional e explicável para continuar.
@@ -617,6 +627,8 @@ O limite de 4.096 caracteres vem da referência de [Create speech](https://devel
 
 `strict()` rejeita campos extras. Se alguém enviar `model: "qualquer-modelo"` ou `apiKey: "…"`, isso não será aceito silenciosamente.
 
+`readJsonBody` não confia somente em `Content-Length`: ele lê o `ReadableStream`, soma os bytes reais e interrompe em 16 KiB. Isso cobre requisições chunked ou clientes que omitem o header. Ele também exige `application/json` e transforma JSON/UTF-8 inválido em erro estável, antes de qualquer chamada faturável.
+
 ---
 
 ## 5. Implemente texto para voz com streaming
@@ -626,7 +638,9 @@ A documentação de [Text to speech](https://developers.openai.com/api/docs/guid
 O núcleo de `POST /api/speech` é:
 
 ```ts
-const payload = speechRequestSchema.parse(await request.json());
+const payload = speechRequestSchema.parse(
+  await readJsonBody(request, 16 * 1024, "The speech request is too large."),
+);
 const openai = getOpenAIClient();
 
 const speech = await openai.audio.speech.create(
@@ -788,8 +802,10 @@ Mapeamentos importantes:
 | --- | --- |
 | Zod | `400 invalid_request` |
 | JSON inválido | `400 invalid_json` |
-| corpo JSON grande | `413 payload_too_large` |
-| quota local | `429 rate_limit_exceeded` |
+| corpo JSON grande | `413 request_too_large` |
+| quota da aplicação | `429 rate_limit_exceeded`, com `Retry-After` |
+| limitador distribuído indisponível | `503 rate_limiter_unavailable` |
+| configuração de segurança incompleta | `503 security_configuration_incomplete` |
 | rate limit da OpenAI | `429 upstream_rate_limit` |
 | credencial upstream inválida | `503 upstream_authentication_error` |
 | outro erro upstream | `502 upstream_error` |
@@ -828,7 +844,7 @@ Mesmo o tamanho pode ser sensível em alguns domínios. O schema de log deve pas
 
 ### Privacidade de API não substitui governança do produto
 
-A [página de privacidade empresarial da OpenAI](https://openai.com/enterprise-privacy/) informa que dados da API não são usados para treinamento por padrão. Ainda assim, a sua organização precisa avaliar retenção aplicável, região, consentimento, base legal, dados de crianças, dados biométricos/voz e termos do caso de uso.
+A documentação de [controles de dados da API](https://developers.openai.com/api/docs/guides/your-data) informa que dados da API não são usados para treinamento por padrão. Nos controles padrão, logs de monitoramento de abuso podem conter conteúdo e ser retidos por até 30 dias. Organizações elegíveis podem solicitar controles adicionais, mas o código não deve prometer Zero Data Retention sem confirmar configuração e compatibilidade do endpoint. A sua organização ainda precisa avaliar região, consentimento, base legal, dados de crianças, dados biométricos/voz e termos do caso de uso.
 
 Um README não é DPIA, política de privacidade ou parecer jurídico.
 
@@ -841,33 +857,32 @@ Uma chave escondida no servidor ainda pode ser consumida por uma rota pública. 
 ### Camadas incluídas
 
 1. **Same-origin check** — bloqueia requisições cross-site explícitas de browser.
-2. **Limite de corpo** — rejeita JSON grande antes do trabalho caro, quando possível.
+2. **Limite de corpo real** — mede bytes do stream, inclusive sem `Content-Length`.
 3. **Allowlist** — modelo, voz e formato são enumerados; velocidade e texto têm limites.
-4. **Rate limit local** — dez chamadas por minuto por rota/endereço em cada processo.
-5. **Token opcional** — `PLAYGROUND_ACCESS_TOKEN` protege workshops e demos privadas.
-6. **Timeout/retries limitados** — o SDK usa timeout de 45 segundos e duas tentativas.
-7. **No-store** — respostas sensíveis não devem ser armazenadas por caches intermediários.
+4. **Pré-limite de autenticação** — limita trinta tentativas por minuto antes de comparar o token.
+5. **Quota da operação** — dez chamadas por minuto, distribuídas via Upstash Redis em produção.
+6. **Token obrigatório em produção** — `PLAYGROUND_ACCESS_TOKEN` só é opcional localmente.
+7. **Fail closed** — configuração ou Redis indisponível produz `503`, não custo upstream.
+8. **Timeout/retries limitados** — o SDK usa timeout de 45 segundos e duas tentativas.
+9. **No-store** — respostas sensíveis não devem ser armazenadas por caches intermediários.
 
-### O rate limiter local não é distribuído
+### Dois modos deliberados de rate limit
 
-Uma `Map` funciona como proteção didática e reduz acidentes em uma instância. Em serverless:
+No desenvolvimento e nos testes, uma `Map` mantém o laboratório reproduzível sem infraestrutura. Em produção, `getSecurityConfiguration` exige `UPSTASH_REDIS_REST_URL` e `UPSTASH_REDIS_REST_TOKEN`; todas as instâncias passam a compartilhar a janela no Redis. Se o Redis falhar, a rota bloqueia a chamada.
 
-- instâncias não compartilham memória;
-- cold starts criam mapas vazios;
-- IP pode representar proxy ou grupo de usuários;
-- headers podem ser forjados fora da infraestrutura confiável.
+O endereço bruto não é gravado como chave: a aplicação usa SHA-256 truncado. Na Vercel, a origem do identificador é `x-vercel-forwarded-for`, sobrescrito pela plataforma. Fora dela, `CLIENT_IP_HEADER` deve nomear um header que o seu proxy confiável sobrescreve. Nunca confie em um header enviado diretamente da internet.
 
-Para produto público, use armazenamento compartilhado, quota por identidade, proteção contra automação e limites de orçamento no projeto OpenAI.
+Redis resolve a coordenação entre instâncias, não identidade, NAT compartilhado, bot detection ou orçamento. Um produto público deve limitar também por conta autenticada, concorrência e orçamento do projeto OpenAI.
 
 ### Token compartilhado também não é identidade
 
-Se `PLAYGROUND_ACCESS_TOKEN` estiver configurado, o health check informa apenas que o token é necessário. A pessoa digita o valor, que fica no estado React e vai no header `Authorization`. Não usamos `localStorage`.
+Em produção, `PLAYGROUND_ACCESS_TOKEN` é obrigatório. O health check informa apenas que o token é necessário. A pessoa digita o valor, que fica no estado React e vai no header `Authorization`; não usamos `localStorage`. Tentativas inválidas consomem a quota de autenticação antes da comparação em tempo constante sobre hashes.
 
 Isso é suficiente para uma audiência conhecida em um workshop. Não oferece revogação individual, papel, auditoria por usuário ou MFA. Para isso, implemente autenticação real.
 
 ### Headers de segurança
 
-`next.config.mjs` adiciona CSP, `X-Content-Type-Options`, política de referrer, restrição de framing, COOP/CORP e uma `Permissions-Policy`. Como este laboratório é exclusivamente TTS, câmera, geolocalização e microfone ficam desabilitados.
+`src/middleware.ts` cria um nonce por resposta e envia uma CSP com `strict-dynamic`, sem `unsafe-inline` para scripts em produção. Isso exige renderização dinâmica — é um trade-off consciente contra HTML estático/CDN. `next.config.mjs` adiciona HSTS em produção, `X-Content-Type-Options`, política de referrer, restrição de framing, COOP/CORP e `Permissions-Policy`. Como este laboratório é TTS, câmera, geolocalização e microfone ficam desabilitados.
 
 Headers reduzem superfície, mas precisam ser testados junto com analytics, fontes, CDN e ferramentas reais do produto. Copiar uma CSP pronta e depois adicionar `*` quando algo quebra elimina seu valor.
 
@@ -881,6 +896,9 @@ Testes automatizados deste repositório não consomem a API. Eles testam nossa r
 - rejeição de voz e campos extras;
 - formato, velocidade e instruções;
 - janela e headers do rate limiter;
+- tentativas inválidas limitadas antes da autenticação;
+- configuração fail-closed de produção;
+- corpo acima do limite mesmo sem `Content-Length`;
 - origem e token de acesso;
 - parser do envelope de erro;
 - formatação de bytes.
@@ -888,14 +906,14 @@ Testes automatizados deste repositório não consomem a API. Eles testam nossa r
 Exemplo:
 
 ```ts
-it("blocks a request after the limit", () => {
-  checkRateLimit("speech:client", {
+it("blocks a request after the limit", async () => {
+  await checkRateLimit("speech:client", {
     limit: 1,
     windowMs: 1_000,
     now: 100,
   });
 
-  const blocked = checkRateLimit("speech:client", {
+  const blocked = await checkRateLimit("speech:client", {
     limit: 1,
     windowMs: 1_000,
     now: 200,
@@ -929,7 +947,7 @@ npm run test:coverage
 npm run build
 ```
 
-O CI usa `npm ci` e uma chave fictícia somente para o build. Nenhuma rota é executada durante o build; se isso mudar, o teste precisa continuar impedindo uma chamada paga acidental.
+O CI usa `npm ci`, falha em advisories high/critical, e usa uma chave fictícia somente para o build. Nenhuma rota é executada durante o build; se isso mudar, o teste precisa continuar impedindo uma chamada paga acidental. Dependabot abre atualizações semanais e CodeQL analisa JavaScript/TypeScript com Actions fixadas por SHA, reduzindo risco de supply chain sem fingir que automação substitui revisão.
 
 ### O que testar em integração depois
 
@@ -1052,7 +1070,7 @@ Próxima fatia:
 - hardening, documentação e deploy.
 
 Riscos abertos:
-- rate limit ainda é process-local.
+- token compartilhado ainda não representa identidade individual.
 ```
 
 Esse resumo é mais útil que compactar toda a conversa automaticamente e torcer para a próxima janela reconstruir as decisões.
@@ -1085,9 +1103,11 @@ Em **Project Settings → Environment Variables**:
 OPENAI_API_KEY=...
 PLAYGROUND_ACCESS_TOKEN=uma-frase-longa-e-aleatoria
 APP_ORIGIN=https://seu-dominio.example
+UPSTASH_REDIS_REST_URL=...
+UPSTASH_REDIS_REST_TOKEN=...
 ```
 
-`OPENAI_API_KEY` é obrigatório. Os outros são opcionais, mas recomendo acesso protegido para demos públicas. A documentação de [Environment variables na Vercel](https://vercel.com/docs/environment-variables) explica que variáveis ficam fora do código e são criptografadas em repouso.
+Todas as variáveis acima são obrigatórias em produção. A Vercel faz o código usar `x-vercel-forwarded-for`, portanto `CLIENT_IP_HEADER` pode ficar ausente ali; em outro provedor, configure-o com um header sobrescrito pelo proxy confiável. A documentação de [Environment variables na Vercel](https://vercel.com/docs/environment-variables) explica o armazenamento fora do código.
 
 Escolha conscientemente os ambientes:
 
@@ -1103,6 +1123,7 @@ O pipeline executa:
 
 ```bash
 npm ci
+npm audit --audit-level=high
 npm run lint
 npm run typecheck
 npm run test:coverage
@@ -1140,8 +1161,8 @@ Depois execute smoke tests curtos:
 Antes de divulgar a URL:
 
 - orçamento e alerta no projeto OpenAI;
-- Deployment Protection ou autenticação;
-- distributed rate limit;
+- identidade real ou Deployment Protection além do token do workshop;
+- quota por usuário, concorrência e orçamento além do rate limit distribuído;
 - logs e alertas sem conteúdo;
 - política de retenção da plataforma;
 - domínio e `APP_ORIGIN` corretos;
@@ -1196,7 +1217,7 @@ Antes de divulgar a URL:
 | Route Handlers server-side | chave isolada e contrato controlado | servidor vira ponto de custo e latência |
 | modelo fixo para TTS | previsibilidade | menos experimentação arbitrária |
 | stream no servidor + Blob no browser | memória menor no servidor e player compatível | playback só após completar |
-| rate limit em memória | zero infraestrutura para tutorial | não protege múltiplas instâncias |
+| Redis em produção; memória local | coordena instâncias sem dificultar o primeiro exercício | quota por IP não substitui identidade |
 | access token compartilhado | protege workshop rapidamente | não substitui identidade |
 | Oxlint + `tsc` + config `.mjs` | compatibilidade com TS 7 | gates separados; build isolado não faz type-check |
 
@@ -1218,7 +1239,7 @@ Antes de divulgar a URL:
 
 1. Adicione Media Source Extensions e compare time-to-first-audio por navegador.
 2. Compare esta arquitetura com o agente Realtime do Laboratório 02 e documente as diferenças de estado, latência e segurança.
-3. Substitua o rate limiter local por Redis e teste concorrência.
+3. Adicione um teste de integração do Upstash num ambiente isolado e valide concorrência entre instâncias.
 4. Adicione autenticação e budget por usuário.
 5. Crie um teste de contrato que valide assinatura do arquivo, duração e latência sem comparar áudio byte a byte.
 6. Instrumente OpenTelemetry sem registrar conteúdo.
@@ -1254,3 +1275,7 @@ Esse é o padrão que vale carregar para outros projetos de IA: não demonstrar 
 - OpenAI — [Enterprise privacy](https://openai.com/enterprise-privacy/)
 - TypeScript — [Installation](https://www.typescriptlang.org/download/)
 - Vercel — [Environment variables](https://vercel.com/docs/environment-variables)
+
+---
+
+[← Módulo 00](../../../docs/00-configuracao-do-ambiente.md) · [Índice do workshop](../../../docs/README.md) · [Módulo 02 — Realtime →](../../lab-02-realtime-voice-agent/tutorial/tutorial.md)

@@ -16,6 +16,8 @@ import { StatusMessage } from "@/components/status-message";
 
 type HealthState = {
   configured: boolean;
+  configurationIssues: string[];
+  distributedRateLimit: boolean;
   requiresAccessToken: boolean;
 };
 
@@ -71,12 +73,13 @@ export function VoicePlayground() {
         <StatusMessage tone="error">The app could not verify its server configuration. Refresh the page or inspect the health route.</StatusMessage>
       ) : null}
       {health && !health.configured ? (
-        <StatusMessage tone="error">OPENAI_API_KEY is missing on the server. Add it to .env.local or your deployment environment.</StatusMessage>
+        <StatusMessage tone="error">Server configuration is incomplete. Add these environment variables: {health.configurationIssues.join(", ")}.</StatusMessage>
       ) : null}
       {health?.configured ? (
         <div className="configuration-banner">
           <span><LockKeyhole aria-hidden="true" /> Server key isolated</span>
           <span><ShieldCheck aria-hidden="true" /> Inputs validated</span>
+          <span><ShieldCheck aria-hidden="true" /> {health.distributedRateLimit ? "Distributed quota" : "Local development quota"}</span>
           <span><Volume2 aria-hidden="true" /> Voice disclosed as AI</span>
         </div>
       ) : null}

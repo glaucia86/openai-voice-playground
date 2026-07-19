@@ -1,0 +1,50 @@
+{
+  "name": "openai-voice-playground",
+  "version": "1.0.0",
+  "private": false,
+  "description": "A production-minded, educational playground for OpenAI text-to-speech and speech-to-text APIs.",
+  "license": "MIT",
+  "author": "Glaucia Lemos",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/glaucia86/openai-voice-playground.git"
+  },
+  "bugs": {
+    "url": "https://github.com/glaucia86/openai-voice-playground/issues"
+  },
+  "homepage": "https://github.com/glaucia86/openai-voice-playground#readme",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "oxlint --deny-warnings src tests",
+    "typecheck": "node scripts/typecheck.mjs --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "check": "npm run lint && npm run typecheck && npm run test && npm run build"
+  },
+  "dependencies": {
+    "@fontsource-variable/jetbrains-mono": "^5.2.8",
+    "@fontsource-variable/manrope": "^5.2.8",
+    "lucide-react": "^1.25.0",
+    "next": "15.5.20",
+    "openai": "^6.48.0",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitest/coverage-v8": "^4.1.10",
+    "oxlint": "^1.74.0",
+    "typescript": "5.8.2",
+    "typescript7": "npm:typescript@7.0.2",
+    "vitest": "^4.1.10"
+  }
+}

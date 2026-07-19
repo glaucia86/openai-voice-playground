@@ -13,6 +13,10 @@
   ·
   <a href="docs/README.md">Trilha de workshop</a>
   ·
+  <a href="docs/workshop-guide-pt-br.md">Como acompanhar</a>
+  ·
+  <a href="docs/github-pages-pt-br.md">Site da documentação</a>
+  ·
   <a href="#-laboratórios">Laboratórios</a>
   ·
   <a href="#-início-rápido">Executar</a>
@@ -111,14 +115,16 @@ Se esta é sua primeira experiência com a API da OpenAI ou com o repositório, 
 | **01 — Text to Speech** | **[Workshop de TTS](labs/lab-01-text-to-speech/tutorial/tutorial.md)** | Aplicação de geração de fala delimitada, com streaming e proteções |
 | **02 — Agente de voz Realtime** | **[Workshop Realtime](labs/lab-02-realtime-voice-agent/tutorial/tutorial.md)** | Conversa ao vivo por WebRTC, com estados de sessão e segurança explícitos |
 
-Você pode seguir pelo caminho “executar e estudar” ou reconstruir cada aplicação a partir de uma pasta vazia. O restante deste README continua sendo a referência operacional resumida.
+Você pode executar a solução pronta, partir de um starter compilável — caminho recomendado — ou reconstruir cada aplicação a partir de uma pasta vazia. O **[guia de acompanhamento](docs/workshop-guide-pt-br.md)** explica checkpoints, comparação e recuperação sem apagar seu trabalho. O restante deste README continua sendo a referência operacional resumida.
+
+Os workshops estão preparados para um **[site bilíngue no GitHub Pages](docs/github-pages-pt-br.md)**. Pages hospeda o material estático; as aplicações Next.js continuam em deploy separado porque suas rotas de servidor precisam de credenciais protegidas.
 
 ## 🧪 Laboratórios
 
 | Laboratório | O que você constrói | Modelo e transporte | Tutorial | Estado |
 | --- | --- | --- | --- | :---: |
-| **[Lab 01 — Text to Speech](labs/lab-01-text-to-speech)** | Interface acessível que transforma texto em áudio expressivo, com player e download | `gpt-4o-mini-tts` · HTTP · áudio em streaming | **[Português](labs/lab-01-text-to-speech/tutorial/tutorial.md)** · [English](labs/lab-01-text-to-speech/tutorial/tutorial-en.md) | ✅ |
-| **[Lab 02 — Agente de Voz Realtime](labs/lab-02-realtime-voice-agent)** | Agente speech-to-speech fluido, com turnos semânticos, mute, interrupção e alternativa por texto | `gpt-realtime-2.1` · WebRTC · Agents SDK | **[Português](labs/lab-02-realtime-voice-agent/tutorial/tutorial.md)** · [English](labs/lab-02-realtime-voice-agent/tutorial/tutorial-en.md) | ✅ |
+| **[Lab 01 — Text to Speech](labs/lab-01-text-to-speech)** | Interface acessível que transforma texto em áudio expressivo, com player e download | `gpt-4o-mini-tts` · HTTP · áudio em streaming | **[Português](labs/lab-01-text-to-speech/tutorial/tutorial.md)** · [English](labs/lab-01-text-to-speech/tutorial/tutorial-en.md) · [Starter](https://github.com/glaucia86/openai-voice-playground/tree/workshop/lab-01-v1-starter) | ✅ |
+| **[Lab 02 — Agente de Voz Realtime](labs/lab-02-realtime-voice-agent)** | Agente speech-to-speech fluido, com turnos semânticos, mute, interrupção e alternativa por texto | `gpt-realtime-2.1` · WebRTC · Agents SDK | **[Português](labs/lab-02-realtime-voice-agent/tutorial/tutorial.md)** · [English](labs/lab-02-realtime-voice-agent/tutorial/tutorial-en.md) · [Starter](https://github.com/glaucia86/openai-voice-playground/tree/workshop/lab-02-v1-starter) | ✅ |
 
 ### Lab 01 — Text to Speech
 
@@ -152,6 +158,8 @@ openai-voice-playground/
 ├── docs/
 │   ├── README.md                 # índice e trilhas do workshop
 │   ├── 00-configuracao-do-ambiente.md
+│   ├── workshop-guide.md         # fluxo starter/checkpoint em inglês
+│   ├── workshop-guide-pt-br.md   # fluxo starter/checkpoint em português
 │   └── assets/                   # mídia da documentação
 ├── .github/workflows/ci.yml      # matriz de CI dos laboratórios
 ├── AGENTS.md                     # regras duráveis para humanos e Codex
@@ -159,6 +167,8 @@ openai-voice-playground/
 ```
 
 Os laboratórios possuem `package.json` e `package-lock.json` próprios. Essa independência é intencional: cada workshop pode ser instalado, ensinado, testado e publicado sem depender do runtime do outro.
+
+A `main` permanece como solução final. `workshop/lab-01-v1-starter` e `workshop/lab-02-v1-starter` são pontos de partida compiláveis; as branches versionadas `workshop/*-step-*` são checkpoints somente de leitura para comparação e recuperação.
 
 ## 📋 Pré-requisitos
 

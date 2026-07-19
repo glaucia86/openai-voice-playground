@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Módulo 00 — Configuração do ambiente e da API"
+description: "Prepare ferramentas, projeto da API OpenAI, segredo local e primeira execução."
+---
+
 # Módulo 00 — Configuração do ambiente, da API e execução local
 
 Neste módulo você prepara o computador, cria ou seleciona um projeto na plataforma da API OpenAI, configura uma chave sem colocá-la no Git, instala um laboratório e valida o servidor local sem fazer uma chamada paga de voz.
@@ -226,8 +232,8 @@ O navegador nunca recebe `OPENAI_API_KEY`. No Lab 02 ele recebe uma concessão c
 
 Este módulo prepara e executa a base; ele não pede que você copie uma API pronta sem entendê-la. A implementação acontece incrementalmente nos módulos seguintes:
 
-- no Lab 01, [estabeleça primeiro a fronteira servidor–OpenAI](../labs/lab-01-text-to-speech/tutorial/tutorial.md#4-estabeleça-a-fronteira-servidoropenai) e depois [implemente a Route Handler de TTS com streaming](../labs/lab-01-text-to-speech/tutorial/tutorial.md#5-implemente-texto-para-voz-com-streaming);
-- no Lab 02, [modele separadamente autorização e mídia](../labs/lab-02-realtime-voice-agent/tutorial/tutorial.md#3-modele-dois-caminhos-autorização-e-mídia) e então [crie o client secret efêmero no servidor](../labs/lab-02-realtime-voice-agent/tutorial/tutorial.md#5-proteja-a-chave-com-um-client-secret-efêmero).
+- no Lab 01, [estabeleça primeiro a fronteira servidor–OpenAI](../labs/lab-01-text-to-speech/tutorial/article.md#4-estabeleça-a-fronteira-servidoropenai) e depois [implemente a Route Handler de TTS com streaming](../labs/lab-01-text-to-speech/tutorial/article.md#5-implemente-texto-para-voz-com-streaming);
+- no Lab 02, [modele separadamente autorização e mídia](../labs/lab-02-realtime-voice-agent/tutorial/article.md#3-modele-dois-caminhos-autorização-e-mídia) e então [crie o client secret efêmero no servidor](../labs/lab-02-realtime-voice-agent/tutorial/article.md#5-proteja-a-chave-com-um-client-secret-efêmero).
 
 Essa separação é intencional: primeiro provamos que ferramentas, projeto, segredo local e servidor estão corretos; depois adicionamos uma capacidade faturável e suas proteções.
 

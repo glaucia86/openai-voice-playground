@@ -6,8 +6,5 @@ coverage/
 playwright-report/
 test-results/
 .vercel/
-.jekyll-cache/
-.sass-cache/
-_site/
 *.tsbuildinfo
 .DS_Store

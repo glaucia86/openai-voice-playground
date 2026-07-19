@@ -1,3 +1,9 @@
+---
+layout: default
+title: "OpenAI Voice Labs — trilha de workshop"
+description: "Índice bilíngue dos laboratórios passo a passo de voz com OpenAI."
+---
+
 # OpenAI Voice Labs — trilha de workshop
 
 Este é o índice didático do repositório. Ele organiza o conteúdo em módulos numerados, no estilo de workshops práticos: cada módulo declara pré-requisitos, resultado esperado, passos executáveis, checkpoints e a próxima etapa.
@@ -8,20 +14,23 @@ Os laboratórios 01 e 02 são autossuficientes e estão disponíveis integralmen
 
 ## Como usar esta trilha
 
-Você pode seguir por dois caminhos:
+Você pode seguir por três caminhos:
 
 - **Participante — executar e investigar:** prepara o ambiente uma vez, executa a solução pronta e estuda as decisões no código.
-- **Instrutor ou estudo aprofundado — reconstruir do zero:** usa o Caminho B de cada laboratório, criando pastas e arquivos na ordem indicada.
+- **Participante — construir com apoio (recomendado):** parte de um starter compilável, implementa uma fatia por vez e usa checkpoints versionados para comparar ou se recuperar.
+- **Instrutor ou estudo aprofundado — reconstruir do zero:** usa o Caminho C de cada laboratório, criando pastas e arquivos na ordem indicada.
 
 Se esta é sua primeira aplicação com a API da OpenAI, você pode começar pelo Módulo 00 ou diretamente por um dos tutoriais autossuficientes. Ambos repetem o contexto indispensável: conta do ChatGPT, projeto da API, cobrança, credencial, instalação e proteção do segredo.
 
+Consulte o **[guia de acompanhamento em português](workshop-guide-pt-br.md)** ou o **[workshop guide in English](workshop-guide.md)** para escolher um caminho, clonar um starter e usar checkpoints sem perder seu trabalho.
+
 ## Módulos
 
-| Módulo | Português | English | Tempo | Resultado verificável |
-| --- | --- | --- | ---: | --- |
-| **00 — Configuração do ambiente** | **[Guia compartilhado](00-configuracao-do-ambiente.md)** | Incluído nos labs autossuficientes | 30–45 min | Um laboratório abre localmente sem expor segredo |
-| **01 — Text to Speech** | **[Tutorial completo](../labs/lab-01-text-to-speech/tutorial/tutorial.md)** | **[Standalone tutorial](../labs/lab-01-text-to-speech/tutorial/tutorial-en.md)** | 2–3 h | Texto validado retorna áudio reproduzível e baixável |
-| **02 — Agente de voz Realtime** | **[Tutorial completo](../labs/lab-02-realtime-voice-agent/tutorial/tutorial.md)** | **[Standalone tutorial](../labs/lab-02-realtime-voice-agent/tutorial/tutorial-en.md)** | 3–4 h | Conversa ao vivo permite turnos, mute e interrupção |
+| Módulo | Português | English | Starter | Tempo | Resultado verificável |
+| --- | --- | --- | --- | ---: | --- |
+| **00 — Configuração do ambiente** | **[Guia compartilhado](00-configuracao-do-ambiente.md)** | Incluído nos labs autossuficientes | não se aplica | 30–45 min | Um laboratório abre localmente sem expor segredo |
+| **01 — Text to Speech** | **[Tutorial completo](../labs/lab-01-text-to-speech/tutorial/tutorial.md)** | **[Standalone tutorial](../labs/lab-01-text-to-speech/tutorial/tutorial-en.md)** | **[Abrir branch](https://github.com/glaucia86/openai-voice-playground/tree/workshop/lab-01-v1-starter)** | 2–3 h | Texto validado retorna áudio reproduzível e baixável |
+| **02 — Agente de voz Realtime** | **[Tutorial completo](../labs/lab-02-realtime-voice-agent/tutorial/tutorial.md)** | **[Standalone tutorial](../labs/lab-02-realtime-voice-agent/tutorial/tutorial-en.md)** | **[Abrir branch](https://github.com/glaucia86/openai-voice-playground/tree/workshop/lab-02-v1-starter)** | 3–4 h | Conversa ao vivo permite turnos, mute e interrupção |
 
 O Módulo 02 pode ser feito sem concluir o 01, mas comparar os dois ajuda a entender por que uma chamada TTS delimitada e uma sessão Realtime exigem arquiteturas diferentes.
 
@@ -38,14 +47,16 @@ Os testes automatizados não fazem chamadas pagas à OpenAI. Os testes manuais d
 
 ## Checkpoints e solução final
 
-O workshop de Blazor usa cópias completas em `save-points/`. Aqui cada laboratório já é uma aplicação Next.js independente e contém sua **solução final executável**. Para evitar duplicar dois grafos npm inteiros a cada checkpoint, usamos:
+Cada laboratório contém sua **solução final executável** na `main`. Para evitar duplicar dois grafos npm inteiros em pastas de `save-points/`, usamos:
 
 - checkpoints por comportamento dentro do tutorial;
 - comandos de validação depois de cada fatia;
 - testes como evidência repetível;
-- o Caminho B para reconstrução desde uma pasta vazia.
+- uma branch starter compilável por laboratório;
+- branches `workshop/*-v1-step-*` somente de leitura para recuperação e comparação;
+- o Caminho C para reconstrução desde uma pasta vazia.
 
-Se o workshop crescer e precisar de recuperação rápida em sala, o próximo passo recomendado é publicar tags ou artefatos de starter por módulo — não copiar credenciais, `.env.local`, `node_modules` ou builds para pastas de save-point.
+Os starters não contêm a integração de voz pronta; os checkpoints acrescentam contrato, servidor e interface em fatias. Nenhuma referência de workshop contém credenciais, `.env.local`, `node_modules` ou builds. Mudanças incompatíveis devem criar uma família `v2`, preservando a edição `v1` usada em links e aulas anteriores.
 
 ## Convenções visuais dos tutoriais
 

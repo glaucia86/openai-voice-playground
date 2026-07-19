@@ -13,6 +13,14 @@ Build a fluid, interruptible speech-to-speech conversational agent with Next.js 
 - how semantic turn detection, mute, barge-in, text fallback, and explicit cleanup interact;
 - which privacy, abuse, cost, and observability controls still belong to your production system.
 
+## Choose your workshop path
+
+1. **Run and investigate:** use `main` and inspect the completed Realtime application.
+2. **Build from the starter (recommended):** begin at [`workshop/lab-02-v1-starter`](https://github.com/glaucia86/openai-voice-playground/tree/workshop/lab-02-v1-starter), implement one slice at a time, and compare against read-only checkpoints.
+3. **Rebuild from zero:** follow the empty-directory commands in the tutorial, including project scaffolding.
+
+The **[English workshop guide](../../docs/workshop-guide.md)** explains cloning, checkpoint comparison, and recovery without discarding your branch. The [Portuguese guide](../../docs/workshop-guide-pt-br.md) covers the same workflow.
+
 ## Run locally
 
 Requirements: Node.js 20+, npm, an OpenAI project API key, and a browser that supports WebRTC and microphone access.
@@ -60,7 +68,7 @@ Automated tests validate local contracts without starting a paid Realtime sessio
 
 ## Deploy to Vercel
 
-Import the repository and set **Root Directory** to `labs/lab-02-realtime-voice-agent`. Add `OPENAI_API_KEY`, `PLAYGROUND_ACCESS_TOKEN`, `APP_ORIGIN`, `UPSTASH_REDIS_REST_URL`, and `UPSTASH_REDIS_REST_TOKEN` in Vercel Environment Variables, then deploy from `main`. HTTPS is required for microphone use outside localhost. See the [English deployment chapter](tutorial/tutorial-en.md#13-deploy-and-validate-a-real-session).
+Import the repository and set **Root Directory** to `labs/lab-02-realtime-voice-agent`. Add `OPENAI_API_KEY`, `PLAYGROUND_ACCESS_TOKEN`, `APP_ORIGIN`, `UPSTASH_REDIS_REST_URL`, and `UPSTASH_REDIS_REST_TOKEN` in Vercel Environment Variables, then deploy from `main`. HTTPS is required for microphone use outside localhost. See the [hands-on run and deployment chapter](tutorial/en/03-run-test-deploy.md).
 
 ## Production boundary
 

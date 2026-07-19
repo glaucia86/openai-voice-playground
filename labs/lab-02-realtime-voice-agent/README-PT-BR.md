@@ -13,6 +13,14 @@ Construa um agente conversacional speech-to-speech fluido e interrompível com N
 - como semantic turn detection, mute, barge-in, alternativa por texto e limpeza explícita interagem;
 - quais controles de privacidade, abuso, custo e observabilidade ainda pertencem ao seu sistema de produção.
 
+## Escolha seu caminho no workshop
+
+1. **Executar e investigar:** use a `main` e estude a aplicação Realtime completa.
+2. **Construir pelo starter (recomendado):** comece em [`workshop/lab-02-v1-starter`](https://github.com/glaucia86/openai-voice-playground/tree/workshop/lab-02-v1-starter), implemente uma fatia por vez e compare com checkpoints somente de leitura.
+3. **Reconstruir do zero:** siga os comandos de pasta vazia do tutorial, incluindo o scaffolding do projeto.
+
+O **[guia de acompanhamento](../../docs/workshop-guide-pt-br.md)** explica clone, comparação e recuperação sem descartar sua branch. O [English workshop guide](../../docs/workshop-guide.md) descreve o mesmo fluxo.
+
 ## Execute localmente
 
 Pré-requisitos: Node.js 20+, npm, uma API key de projeto da OpenAI e navegador com suporte a WebRTC e microfone.
@@ -60,7 +68,7 @@ Os testes validam os contratos locais sem abrir uma sessão Realtime paga.
 
 ## Deploy na Vercel
 
-Importe o repositório e defina **Root Directory** como `labs/lab-02-realtime-voice-agent`. Cadastre `OPENAI_API_KEY`, `PLAYGROUND_ACCESS_TOKEN`, `APP_ORIGIN`, `UPSTASH_REDIS_REST_URL` e `UPSTASH_REDIS_REST_TOKEN` nas Environment Variables da Vercel; depois publique a partir da `main`. Fora de `localhost`, o microfone exige HTTPS. Consulte o [capítulo de deploy do workshop](tutorial/tutorial.md#13-faça-deploy-na-vercel-e-valide-a-sessão-real).
+Importe o repositório e defina **Root Directory** como `labs/lab-02-realtime-voice-agent`. Cadastre `OPENAI_API_KEY`, `PLAYGROUND_ACCESS_TOKEN`, `APP_ORIGIN`, `UPSTASH_REDIS_REST_URL` e `UPSTASH_REDIS_REST_TOKEN` nas Environment Variables da Vercel; depois publique a partir da `main`. Fora de `localhost`, o microfone exige HTTPS. Consulte o [capítulo prático de execução e deploy](tutorial/pt/03-execucao-testes-deploy.md).
 
 ## Fronteira de produção
 

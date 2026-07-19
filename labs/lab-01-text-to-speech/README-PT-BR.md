@@ -13,6 +13,14 @@ Construa uma interface acessível de texto para voz com Next.js 15, TypeScript 7
 - como implementar cancelamento, progresso, player, download e erros acessíveis;
 - como produção falha de modo seguro atrás de proteção obrigatória e quota distribuída.
 
+## Escolha seu caminho no workshop
+
+1. **Executar e estudar:** use a `main` e investigue a aplicação completa.
+2. **Construir pelo starter (recomendado):** comece em [`workshop/lab-01-v1-starter`](https://github.com/glaucia86/openai-voice-playground/tree/workshop/lab-01-v1-starter), implemente uma fatia por vez e compare com checkpoints somente de leitura.
+3. **Reconstruir do zero:** siga os comandos de pasta vazia do tutorial, incluindo o scaffolding do projeto.
+
+O **[guia de acompanhamento](../../docs/workshop-guide-pt-br.md)** explica clone, comparação e recuperação sem descartar sua branch. O [English workshop guide](../../docs/workshop-guide.md) descreve o mesmo fluxo.
+
 ## Execute localmente
 
 Dentro desta pasta:
@@ -51,7 +59,7 @@ Os testes não fazem requisições pagas para a OpenAI.
 
 ## Deploy na Vercel
 
-Importe o repositório e defina **Root Directory** como `labs/lab-01-text-to-speech`. Nas Environment Variables da Vercel, cadastre `OPENAI_API_KEY`, `PLAYGROUND_ACCESS_TOKEN`, `APP_ORIGIN`, `UPSTASH_REDIS_REST_URL` e `UPSTASH_REDIS_REST_TOKEN`; depois publique a partir da `main`. A Vercel fornece o header confiável `x-vercel-forwarded-for`. O [capítulo de deploy do workshop](tutorial/tutorial.md#11-faça-deploy-na-vercel) inclui validação e ressalvas de produção.
+Importe o repositório e defina **Root Directory** como `labs/lab-01-text-to-speech`. Nas Environment Variables da Vercel, cadastre `OPENAI_API_KEY`, `PLAYGROUND_ACCESS_TOKEN`, `APP_ORIGIN`, `UPSTASH_REDIS_REST_URL` e `UPSTASH_REDIS_REST_TOKEN`; depois publique a partir da `main`. A Vercel fornece o header confiável `x-vercel-forwarded-for`. O [capítulo prático de execução e deploy](tutorial/pt/03-execucao-testes-deploy.md) inclui validação e ressalvas de produção.
 
 ## Uso responsável
 

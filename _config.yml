@@ -1,0 +1,30 @@
+title: OpenAI Voice Labs
+description: Step-by-step workshops for building responsible OpenAI voice applications.
+theme: jekyll-theme-cayman
+lang: en
+markdown: kramdown
+highlighter: rouge
+repository: glaucia86/openai-voice-playground
+github:
+  is_project_page: true
+exclude:
+  - .git
+  - .github
+  - node_modules
+  - vendor
+  - scripts
+  - labs/lab-01-text-to-speech/node_modules
+  - labs/lab-01-text-to-speech/.next
+  - labs/lab-01-text-to-speech/src
+  - labs/lab-01-text-to-speech/tests
+  - labs/lab-01-text-to-speech/package-lock.json
+  - labs/lab-02-realtime-voice-agent/node_modules
+  - labs/lab-02-realtime-voice-agent/.next
+  - labs/lab-02-realtime-voice-agent/src
+  - labs/lab-02-realtime-voice-agent/tests
+  - labs/lab-02-realtime-voice-agent/package-lock.json
+  - package-lock.json
+  - coverage
+  - playwright-report
+  - test-results
+  - "*.tsbuildinfo"

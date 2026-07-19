@@ -5,12 +5,16 @@
   "description": "Independent, production-minded workshops for building voice experiences with OpenAI.",
   "license": "MIT",
   "scripts": {
+    "docs:generate": "node scripts/generate-workshop-guides.mjs",
+    "docs:generated": "node scripts/generate-workshop-guides.mjs --check",
+    "docs:links": "node scripts/check-markdown-links.mjs",
+    "docs:check": "npm run docs:generated && npm run docs:links",
     "install:labs": "npm ci --prefix labs/lab-01-text-to-speech && npm ci --prefix labs/lab-02-realtime-voice-agent",
     "dev:lab01": "npm --prefix labs/lab-01-text-to-speech run dev",
     "dev:lab02": "npm --prefix labs/lab-02-realtime-voice-agent run dev",
     "check:lab01": "npm --prefix labs/lab-01-text-to-speech run check",
     "check:lab02": "npm --prefix labs/lab-02-realtime-voice-agent run check",
-    "check": "npm run check:lab01 && npm run check:lab02"
+    "check": "npm run docs:check && npm run check:lab01 && npm run check:lab02"
   },
   "engines": {
     "node": ">=20.0.0"

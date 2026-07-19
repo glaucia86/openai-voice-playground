@@ -10,7 +10,8 @@ OpenAI Voice Labs is an educational collection of independent Next.js workshops.
 - `labs/lab-02-realtime-voice-agent`: stateful speech-to-speech Realtime session over WebRTC.
 - Each lab owns its `package.json`, lockfile, app, tests, READMEs, `.env.example`, and `tutorial/tutorial.md`.
 - Root documentation is the catalog. `docs/README.md` is the workshop index, and `docs/00-configuracao-do-ambiente.md` owns the shared environment, API-key, installation, and first-run guidance.
-- Do not move lab implementations to separate branches.
+- Keep complete lab implementations on `main`; do not move the canonical solutions away from it.
+- Workshop starter and checkpoint branches are allowed only as versioned, read-only teaching snapshots. Their names, expected contents, and recovery workflow must stay aligned with both tutorial languages and `docs/workshop-guide*.md`.
 
 ## Commands
 
@@ -21,7 +22,9 @@ From the repository root:
 - Develop Lab 02: `npm run dev:lab02`
 - Check Lab 01: `npm run check:lab01`
 - Check Lab 02: `npm run check:lab02`
-- Check both: `npm run check`
+- Regenerate file-by-file workshops: `npm run docs:generate`
+- Verify generated workshops: `npm run docs:check`
+- Check documentation and both labs: `npm run check`
 
 Within either lab, use `npm ci`, `npm run dev`, `npm run lint`, `npm run typecheck`, `npm test`, `npm run test:coverage`, and `npm run build`.
 
@@ -54,7 +57,13 @@ Run the narrowest relevant check while iterating and the complete check for ever
 
 Treat `tutorial/tutorial.md` as the canonical Portuguese workshop and `tutorial/tutorial-en.md` as its standalone English companion. Both must include exact prerequisites, terminal location, commands, folders, files, checkpoints, expected output, common failures, cleanup, tests, deploy, production limitations, language switching, and previous/index/next navigation.
 
+The hands-on `tutorial/pt` and `tutorial/en` chapters are the primary build path. File-by-file chapters are generated from validated source by `scripts/generate-workshop-guides.mjs`; update its bilingual teaching metadata and run `npm run docs:generate` instead of editing generated code blocks. Keep `article.md` and `article-en.md` as deeper architectural companions, not substitutes for executable steps.
+
+GitHub Pages publishes the static learning material from the repository root. Pages never hosts the two Next.js applications or any secret. Keep `_config.yml`, `index.md`, `.github/workflows/pages.yml`, and `docs/github-pages*.md` aligned.
+
 Module 00 remains the shared onboarding reference, but each lab tutorial must also include the minimum complete account, API billing, key-safety, installation, and first-run path required to work on its own. Keep repeated guidance semantically aligned across Portuguese, English, Module 00, root catalogs, and lab READMEs whenever behavior or architecture changes.
+
+Each lab tutorial must present the same three learning paths: run the final solution from `main`, build from the versioned starter branch, or reconstruct from an empty directory. Document every workshop checkpoint as a read-only reference with an objective gate and a non-destructive `git diff`/`git show` recovery path.
 
 ## Definition of done
 

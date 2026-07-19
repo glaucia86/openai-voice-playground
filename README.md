@@ -10,6 +10,8 @@
 [![CI](https://github.com/glaucia86/openai-voice-playground/actions/workflows/ci.yml/badge.svg)](https://github.com/glaucia86/openai-voice-playground/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-8bffcc.svg)](LICENSE)
 
+**English** · [Português (Brasil)](README-PT-BR.md)
+
 [Try the playground](#run-locally) · [Read the tutorial](tutorial/tutorial.md) · [Deploy to Vercel](#deploy-to-vercel) · [Contribute](CONTRIBUTING.md)
 
 </div>

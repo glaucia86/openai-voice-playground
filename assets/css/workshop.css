@@ -71,6 +71,10 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+body.has-open-drawer {
+  overflow: hidden;
+}
+
 body::before {
   position: fixed;
   z-index: -1;
@@ -291,8 +295,72 @@ a {
   display: none;
 }
 
-.toc-mobile-toggle {
+.mobile-menu-toggle,
+.mobile-menu,
+.mobile-menu-scrim {
   display: none;
+}
+
+.mobile-menu__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.mobile-menu__close {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  padding: 0;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--muted-strong);
+  background: var(--surface-2);
+  cursor: pointer;
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.mobile-menu__links {
+  display: grid;
+  gap: 8px;
+  margin-top: 38px;
+}
+
+.mobile-menu__links a,
+.mobile-menu__links button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  color: var(--text);
+  background: var(--surface-2);
+  cursor: pointer;
+  font-weight: 760;
+  text-align: left;
+  text-decoration: none;
+}
+
+.mobile-menu__links span {
+  color: var(--mint);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.66rem;
+}
+
+.mobile-menu__github {
+  display: inline-flex;
+  margin-top: auto;
+  padding-top: 36px;
+  color: var(--muted-strong);
+  font-size: 0.75rem;
+  font-weight: 750;
+  text-decoration: none;
 }
 
 .document-hero {
@@ -1497,7 +1565,40 @@ a {
 
 @media (max-width: 1050px) {
   .desktop-nav { display: none; }
-  .toc-mobile-toggle { display: inline-flex; }
+  .mobile-menu-toggle { display: inline-flex; }
+  .js .mobile-menu {
+    position: fixed;
+    z-index: 230;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    width: min(90vw, 380px);
+    padding: 22px;
+    flex-direction: column;
+    border-left: 1px solid var(--border-strong);
+    background: var(--surface);
+    box-shadow: -20px 0 70px rgba(0, 0, 0, 0.38);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    visibility: hidden;
+    transform: translateX(105%);
+    transition: transform 200ms ease, visibility 200ms ease;
+    -webkit-overflow-scrolling: touch;
+  }
+  .js .mobile-menu.is-open {
+    visibility: visible;
+    transform: translateX(0);
+  }
+  .js .mobile-menu-scrim {
+    position: fixed;
+    z-index: 220;
+    inset: 0;
+    border: 0;
+    background: rgba(1, 7, 13, 0.68);
+    cursor: pointer;
+  }
+  .js .mobile-menu-scrim.is-open { display: block; }
   .page-grid { display: block; width: min(100% - 32px, var(--content-width)); padding-top: 28px; }
   .js .workshop-sidebar {
     position: fixed;

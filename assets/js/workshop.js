@@ -60,14 +60,55 @@
 
   const sidebar = document.querySelector("[data-sidebar]");
   const scrim = document.querySelector(".sidebar-scrim");
-  const setSidebar = (open) => {
-    sidebar?.classList.toggle("is-open", open);
-    scrim?.classList.toggle("is-open", open);
-    document.body.style.overflow = open ? "hidden" : "";
+  const mobileMenu = document.querySelector("[data-mobile-menu]");
+  const mobileMenuScrim = document.querySelector(".mobile-menu-scrim");
+  const mobileMenuToggle = document.querySelector("[data-mobile-menu-toggle]");
+  const updateScrollLock = () => {
+    const drawerIsOpen = sidebar?.classList.contains("is-open") || mobileMenu?.classList.contains("is-open");
+    document.body.classList.toggle("has-open-drawer", Boolean(drawerIsOpen));
   };
-  document.querySelector("[data-toc-toggle]")?.addEventListener("click", () => setSidebar(true));
+  const setSidebar = (open) => {
+    if (!sidebar) return;
+    sidebar.classList.toggle("is-open", open);
+    if (window.innerWidth <= 1050) sidebar.setAttribute("aria-hidden", String(!open));
+    else sidebar.removeAttribute("aria-hidden");
+    scrim?.classList.toggle("is-open", open);
+    updateScrollLock();
+  };
+  setSidebar(false);
   document.querySelectorAll("[data-toc-close]").forEach((button) => {
     button.addEventListener("click", () => setSidebar(false));
+  });
+
+  const setMobileMenu = (open) => {
+    if (!mobileMenu) return;
+    if (open) setSidebar(false);
+    mobileMenu.classList.toggle("is-open", open);
+    mobileMenu.setAttribute("aria-hidden", String(!open));
+    mobileMenuScrim?.classList.toggle("is-open", open);
+    mobileMenuToggle?.setAttribute("aria-expanded", String(open));
+    updateScrollLock();
+  };
+  mobileMenuToggle?.addEventListener("click", () => setMobileMenu(true));
+  document.querySelectorAll("[data-mobile-menu-close]").forEach((button) => {
+    button.addEventListener("click", () => setMobileMenu(false));
+  });
+  mobileMenu?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => setMobileMenu(false));
+  });
+  document.querySelector("[data-open-toc]")?.addEventListener("click", () => {
+    setMobileMenu(false);
+    setSidebar(true);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    setMobileMenu(false);
+    setSidebar(false);
+  });
+  window.addEventListener("resize", () => {
+    if (window.innerWidth <= 1050) return;
+    setMobileMenu(false);
+    setSidebar(false);
   });
 
   const slugify = (value) =>

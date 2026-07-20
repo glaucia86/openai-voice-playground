@@ -6,6 +6,9 @@ on:
     paths:
       - ".github/workflows/pages.yml"
       - "_config.yml"
+      - "_includes/**"
+      - "_layouts/**"
+      - "assets/**"
       - "index.md"
       - "docs/**"
       - "labs/*/tutorial/**"

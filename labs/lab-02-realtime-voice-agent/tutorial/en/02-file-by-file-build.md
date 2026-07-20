@@ -124,7 +124,7 @@ Open `package.json`, remove any placeholder, and add exactly:
     "check": "npm run lint && npm run typecheck && npm run test && npm run build"
   },
   "dependencies": {
-    "@fontsource-variable/jetbrains-mono": "^5.2.8",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
     "@fontsource-variable/manrope": "^5.2.8",
     "@openai/agents": "^0.13.5",
     "@upstash/ratelimit": "2.0.8",

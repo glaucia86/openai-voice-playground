@@ -446,7 +446,7 @@ async function renderGuide(lab, locale) {
           ? `Abra \`${file}\`, apague qualquer placeholder e coloque exatamente:`
           : `Open \`${file}\`, remove any placeholder, and add exactly:`,
         "",
-        `<details><summary><strong>${file}</strong></summary>`,
+        `<details class="code-disclosure" markdown="1"><summary><strong>${file}</strong></summary>`,
         "",
         `\`\`\`${languageFor(file)}`,
         content.trimEnd(),

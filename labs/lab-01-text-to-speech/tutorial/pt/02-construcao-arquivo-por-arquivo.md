@@ -37,7 +37,7 @@ Liste somente nomes de variáveis com valores vazios. A chave real ficará em `.
 
 Abra `.env.example`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>.env.example</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>.env.example</strong></summary>
 
 ```dotenv
 # Server-only. Never prefix this variable with NEXT_PUBLIC_.
@@ -68,7 +68,7 @@ Proteja segredos, dependências e artefatos gerados antes do primeiro commit.
 
 Abra `.gitignore`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>.gitignore</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>.gitignore</strong></summary>
 
 ```text
 .env*
@@ -91,7 +91,7 @@ Defina scripts, versões e dependências reproduzíveis. Não edite `package-loc
 
 Abra `package.json`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>package.json</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>package.json</strong></summary>
 
 ```json
 {
@@ -159,7 +159,7 @@ Configure headers, limites e comportamento de produção do Next.js.
 
 Abra `next.config.mjs`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>next.config.mjs</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>next.config.mjs</strong></summary>
 
 ```js
 import { fileURLToPath } from "node:url";
@@ -215,7 +215,7 @@ Ative tipagem estrita e o alias `@/` usado pelos imports.
 
 Abra `tsconfig.json`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>tsconfig.json</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>tsconfig.json</strong></summary>
 
 ```json
 {
@@ -253,7 +253,7 @@ Ensine o Vitest a resolver o mesmo alias e medir os arquivos relevantes.
 
 Abra `vitest.config.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>vitest.config.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>vitest.config.ts</strong></summary>
 
 ```ts
 import { defineConfig } from "vitest/config";
@@ -289,7 +289,7 @@ Execute o compilador TypeScript 7 separado do compilador usado pelo Next.js.
 
 Abra `scripts/typecheck.mjs`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>scripts/typecheck.mjs</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>scripts/typecheck.mjs</strong></summary>
 
 ```js
 import { spawnSync } from "node:child_process";
@@ -331,7 +331,7 @@ Declare imports de assets que participam da interface.
 
 Abra `src/types/assets.d.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/types/assets.d.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/types/assets.d.ts</strong></summary>
 
 ```ts
 declare module "*.css";
@@ -368,7 +368,7 @@ Centralize allowlists e limites que não podem ser escolhidos livremente pelo cl
 
 Abra `src/lib/constants.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/lib/constants.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/lib/constants.ts</strong></summary>
 
 ```ts
 export const VOICES = [
@@ -409,7 +409,7 @@ Transforme a entrada não confiável num contrato estrito e tipado.
 
 Abra `src/lib/schemas.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/lib/schemas.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/lib/schemas.ts</strong></summary>
 
 ```ts
 import { z } from "zod";
@@ -447,7 +447,7 @@ Crie o teste que prova esta responsabilidade sem chamar a OpenAI.
 
 Abra `tests/schemas.test.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>tests/schemas.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>tests/schemas.test.ts</strong></summary>
 
 ```ts
 import { describe, expect, it } from "vitest";
@@ -524,7 +524,7 @@ Normalize falhas numa resposta estável sem devolver detalhes crus do provedor.
 
 Abra `src/lib/errors.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/lib/errors.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/lib/errors.ts</strong></summary>
 
 ```ts
 import OpenAI from "openai";
@@ -631,7 +631,7 @@ Registre somente metadados operacionais; texto, áudio e credenciais ficam fora 
 
 Abra `src/lib/observability.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/lib/observability.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/lib/observability.ts</strong></summary>
 
 ```ts
 type LogLevel = "info" | "error";
@@ -669,7 +669,7 @@ Crie o cliente OpenAI de forma preguiçosa e somente no servidor.
 
 Abra `src/lib/openai.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/lib/openai.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/lib/openai.ts</strong></summary>
 
 ```ts
 import OpenAI from "openai";
@@ -707,7 +707,7 @@ Implemente quota local no desenvolvimento e distribuída no ambiente de produç�
 
 Abra `src/lib/rate-limit.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/lib/rate-limit.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/lib/rate-limit.ts</strong></summary>
 
 ```ts
 import { Ratelimit, type Duration } from "@upstash/ratelimit";
@@ -843,7 +843,7 @@ Limite os bytes realmente lidos antes de interpretar JSON.
 
 Abra `src/lib/request-body.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/lib/request-body.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/lib/request-body.ts</strong></summary>
 
 ```ts
 import { AppError } from "@/lib/errors";
@@ -917,7 +917,7 @@ Faça produção falhar fechada quando proteções obrigatórias estiverem ausen
 
 Abra `src/lib/security-config.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/lib/security-config.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/lib/security-config.ts</strong></summary>
 
 ```ts
 export type SecurityConfiguration = {
@@ -981,7 +981,7 @@ Aplique origem, acesso e quota antes de qualquer operação faturável.
 
 Abra `src/lib/request-guard.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/lib/request-guard.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/lib/request-guard.ts</strong></summary>
 
 ```ts
 import { createHash, timingSafeEqual } from "node:crypto";
@@ -1115,7 +1115,7 @@ Exponha somente diagnóstico não sensível para provar configuração.
 
 Abra `src/app/api/health/route.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/app/api/health/route.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/app/api/health/route.ts</strong></summary>
 
 ```ts
 import { MAX_SPEECH_CHARACTERS } from "@/lib/constants";
@@ -1165,7 +1165,7 @@ Valide, chame a Speech API e encaminhe o stream sem montar o áudio inteiro no s
 
 Abra `src/app/api/speech/route.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/app/api/speech/route.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/app/api/speech/route.ts</strong></summary>
 
 ```ts
 import { randomUUID } from "node:crypto";
@@ -1263,7 +1263,7 @@ Adicione headers de segurança e nonce por resposta sem expor segredos.
 
 Abra `src/middleware.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/middleware.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/middleware.ts</strong></summary>
 
 ```ts
 import { NextRequest, NextResponse } from "next/server";
@@ -1315,7 +1315,7 @@ Crie o teste que prova esta responsabilidade sem chamar a OpenAI.
 
 Abra `tests/errors.test.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>tests/errors.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>tests/errors.test.ts</strong></summary>
 
 ```ts
 import OpenAI from "openai";
@@ -1411,7 +1411,7 @@ Crie o teste que prova esta responsabilidade sem chamar a OpenAI.
 
 Abra `tests/observability.test.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>tests/observability.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>tests/observability.test.ts</strong></summary>
 
 ```ts
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -1457,7 +1457,7 @@ Crie o teste que prova esta responsabilidade sem chamar a OpenAI.
 
 Abra `tests/rate-limit.test.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>tests/rate-limit.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>tests/rate-limit.test.ts</strong></summary>
 
 ```ts
 import { afterEach, describe, expect, it } from "vitest";
@@ -1531,7 +1531,7 @@ Crie o teste que prova esta responsabilidade sem chamar a OpenAI.
 
 Abra `tests/request-body.test.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>tests/request-body.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>tests/request-body.test.ts</strong></summary>
 
 ```ts
 import { describe, expect, it } from "vitest";
@@ -1622,7 +1622,7 @@ Crie o teste que prova esta responsabilidade sem chamar a OpenAI.
 
 Abra `tests/request-guard.test.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>tests/request-guard.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>tests/request-guard.test.ts</strong></summary>
 
 ```ts
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -1745,7 +1745,7 @@ Crie o teste que prova esta responsabilidade sem chamar a OpenAI.
 
 Abra `tests/security-config.test.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>tests/security-config.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>tests/security-config.test.ts</strong></summary>
 
 ```ts
 import { describe, expect, it } from "vitest";
@@ -1817,7 +1817,7 @@ Crie o teste que prova esta responsabilidade sem chamar a OpenAI.
 
 Abra `tests/middleware.test.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>tests/middleware.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>tests/middleware.test.ts</strong></summary>
 
 ```ts
 import { NextRequest } from "next/server";
@@ -1869,7 +1869,7 @@ Converta erros da API em mensagens seguras e reutilizáveis no navegador.
 
 Abra `src/lib/client-api.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/lib/client-api.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/lib/client-api.ts</strong></summary>
 
 ```ts
 export type ClientApiError = {
@@ -1915,7 +1915,7 @@ Apresente progresso e erro numa live region acessível.
 
 Abra `src/components/status-message.tsx`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/components/status-message.tsx</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/components/status-message.tsx</strong></summary>
 
 ```tsx
 import { AlertCircle, CheckCircle2, Info } from "lucide-react";
@@ -1955,7 +1955,7 @@ Crie feedback visual respeitando preferências de movimento reduzido.
 
 Abra `src/components/waveform.tsx`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/components/waveform.tsx</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/components/waveform.tsx</strong></summary>
 
 ```tsx
 import type { CSSProperties } from "react";
@@ -2004,7 +2004,7 @@ Implemente formulário, requisição, cancelamento, player, download e cleanup d
 
 Abra `src/components/speech-studio.tsx`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/components/speech-studio.tsx</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/components/speech-studio.tsx</strong></summary>
 
 ```tsx
 "use client";
@@ -2295,7 +2295,7 @@ Monte a composição principal que conecta apresentação e experiência de voz.
 
 Abra `src/components/voice-playground.tsx`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/components/voice-playground.tsx</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/components/voice-playground.tsx</strong></summary>
 
 ```tsx
 "use client";
@@ -2430,7 +2430,7 @@ Defina metadados, fontes, idioma e estrutura raiz da página.
 
 Abra `src/app/layout.tsx`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/app/layout.tsx</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/app/layout.tsx</strong></summary>
 
 ```tsx
 import "@fontsource-variable/jetbrains-mono";
@@ -2486,7 +2486,7 @@ Renderize a experiência principal pelo App Router.
 
 Abra `src/app/page.tsx`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/app/page.tsx</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/app/page.tsx</strong></summary>
 
 ```tsx
 import {
@@ -2643,7 +2643,7 @@ Aplique o sistema visual responsivo, foco visível, contraste e reduced motion.
 
 Abra `src/app/globals.css`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/app/globals.css</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/app/globals.css</strong></summary>
 
 ```css
 :root {
@@ -3006,7 +3006,7 @@ Descreva o app para instalação e metadados de navegador.
 
 Abra `src/app/manifest.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/app/manifest.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/app/manifest.ts</strong></summary>
 
 ```ts
 import type { MetadataRoute } from "next";
@@ -3033,7 +3033,7 @@ Adicione o ícone vetorial usado pela aplicação.
 
 Abra `src/app/icon.svg`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>src/app/icon.svg</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/app/icon.svg</strong></summary>
 
 ```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
@@ -3050,7 +3050,7 @@ Crie o teste que prova esta responsabilidade sem chamar a OpenAI.
 
 Abra `tests/client-api.test.ts`, apague qualquer placeholder e coloque exatamente:
 
-<details><summary><strong>tests/client-api.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>tests/client-api.test.ts</strong></summary>
 
 ```ts
 import { describe, expect, it } from "vitest";

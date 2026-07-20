@@ -42,6 +42,17 @@ npm run check:lab02
 
 Creating your own branch immediately keeps the starter reference untouched and makes your commits easy to review. The starter already contains pinned dependencies, configuration, a compilable page, an educational health check, and a first test. It does not contain the working voice integration.
 
+### About GitHub's yellow cards
+
+After `workshop/*` branches receive commits, GitHub may show yellow **Compare & pull request** cards on the repository home page. They are automatic interface suggestions, not a workshop action.
+
+- do not open a checkpoint Pull Request against `main`;
+- do not merge a checkpoint;
+- do not delete the branch;
+- dismiss or ignore the card and use `git diff` or `git show` as shown below.
+
+An intermediate checkpoint intentionally removes everything that has not been taught yet. Merging it into `main` would regress the final solution.
+
 ## Use a checkpoint without losing your work
 
 Checkpoints are versioned, read-only branches. The `v1` suffix keeps this edition reproducible when the workshop evolves.

@@ -42,6 +42,17 @@ npm run check:lab02
 
 Criar sua própria branch imediatamente mantém a referência starter intacta e deixa seus commits fáceis de revisar. O starter já contém dependências fixadas, configuração, uma página compilável, health check didático e um primeiro teste. Ele não contém a integração funcional de voz.
 
+### Sobre os cartões amarelos do GitHub
+
+Depois que os branches `workshop/*` recebem commits, o GitHub pode mostrar cartões amarelos com o botão **Compare & pull request** na página inicial do repositório. Eles são apenas sugestões automáticas da interface — não fazem parte do exercício.
+
+- não crie um Pull Request do checkpoint para a `main`;
+- não faça merge de um checkpoint;
+- não apague o branch;
+- ignore ou dispense o cartão e use `git diff` ou `git show` como explicado abaixo.
+
+Um checkpoint intermediário remove intencionalmente tudo que ainda não foi ensinado. Fazer merge dele na `main` faria a solução final regredir.
+
 ## Como usar um checkpoint sem perder seu trabalho
 
 Os checkpoints são branches versionadas e somente de leitura. O sufixo `v1` mantém esta edição reproduzível mesmo quando o workshop evoluir.

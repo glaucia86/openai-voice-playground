@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="{{ page.lang | default: site.lang | default: 'en' }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#07111f">
+    <meta name="color-scheme" content="dark light">
+    <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
+    <meta name="description" content="{{ page.description | default: site.description | strip_html | normalize_whitespace | escape }}">
+    <link rel="icon" href="{{ '/assets/images/voice-labs-mark.svg' | relative_url }}" type="image/svg+xml">
+    <link rel="stylesheet" href="{{ '/assets/css/workshop.css' | relative_url }}">
+    <script>
+      document.documentElement.classList.add("js");
+      try {
+        const savedTheme = localStorage.getItem("voice-labs-theme");
+        if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+      } catch (_) {}
+    </script>
+  </head>
+  <body class="{% if page.url == '/' %}home-page{% else %}document-page{% endif %}">
+    <a class="skip-link" href="#main-content">Skip to content / Ir para o conteúdo</a>
+    <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
+
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="brand" href="{{ '/' | relative_url }}" aria-label="OpenAI Voice Labs home">
+          <img src="{{ '/assets/images/voice-labs-mark.svg' | relative_url }}" width="42" height="42" alt="">
+          <span><strong>OpenAI Voice Labs</strong><small>Build · listen · understand</small></span>
+        </a>
+
+        <nav class="desktop-nav" aria-label="Primary navigation">
+          <a href="{{ '/#workshops' | relative_url }}">Workshops</a>
+          <a href="{{ '/docs/README.html' | relative_url }}">Learning path</a>
+          <a href="{{ '/docs/workshop-guide-pt-br.html' | relative_url }}">Como acompanhar</a>
+        </nav>
+
+        <div class="header-actions">
+          <button class="icon-button" type="button" data-search-toggle aria-label="Search this page" title="Search / Buscar">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.7-3.7"></path></svg>
+          </button>
+          <button class="icon-button" type="button" data-theme-toggle aria-label="Change color theme" title="Theme / Tema">
+            <svg class="theme-icon theme-icon--sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path></svg>
+            <svg class="theme-icon theme-icon--moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 15.4A8.5 8.5 0 0 1 8.6 3.5 8.5 8.5 0 1 0 20.5 15.4Z"></path></svg>
+          </button>
+          <a class="github-link" href="https://github.com/{{ site.repository }}" target="_blank" rel="noreferrer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.87c-2.78.6-3.37-1.18-3.37-1.18-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.35 1.09 2.92.83.09-.65.35-1.09.64-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.57 9.57 0 0 1 12 6.82a9.5 9.5 0 0 1 2.5.34c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.86v2.76c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"></path></svg>
+            <span>GitHub</span>
+          </a>
+          <button class="icon-button toc-mobile-toggle" type="button" data-toc-toggle aria-label="Open page navigation" title="Contents / Sumário">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    {% if page.url == '/' %}
+      <main id="main-content" class="home-content">{{ content }}</main>
+    {% else %}
+      <div class="document-hero">
+        <div>
+          <a href="{{ '/' | relative_url }}">OpenAI Voice Labs</a>
+          <span aria-hidden="true">/</span>
+          <span>{{ page.title }}</span>
+        </div>
+      </div>
+      <div class="page-grid">
+        <aside class="workshop-sidebar" data-sidebar aria-label="Page navigation">
+          <div class="sidebar-header">
+            <span class="sidebar-kicker">On this page · Nesta página</span>
+            <button type="button" class="sidebar-close" data-toc-close aria-label="Close page navigation">×</button>
+          </div>
+          <div class="completion-card">
+            <div><span>Workshop progress</span><strong data-completion-label>0%</strong></div>
+            <div class="completion-track" aria-hidden="true"><span data-completion-bar></span></div>
+            <button type="button" data-reset-progress>Reset progress / Reiniciar</button>
+          </div>
+          <nav class="page-toc" data-toc aria-label="Table of contents"></nav>
+          <a class="sidebar-github" href="https://github.com/{{ site.repository }}/blob/main/{{ page.path }}" target="_blank" rel="noreferrer">View source on GitHub ↗</a>
+        </aside>
+        <button class="sidebar-scrim" type="button" data-toc-close aria-label="Close navigation"></button>
+
+        <main id="main-content" class="workshop-content" data-workshop-content>
+          <article>{{ content }}</article>
+          <nav class="document-footer-nav" aria-label="Document actions">
+            <a href="{{ '/' | relative_url }}">← All workshops</a>
+            <button type="button" data-scroll-top>Back to top ↑</button>
+          </nav>
+        </main>
+      </div>
+    {% endif %}
+
+    <footer class="site-footer">
+      <div>
+        <a class="brand brand--footer" href="{{ '/' | relative_url }}">
+          <img src="{{ '/assets/images/voice-labs-mark.svg' | relative_url }}" width="36" height="36" alt="">
+          <span><strong>OpenAI Voice Labs</strong><small>Independent educational project</small></span>
+        </a>
+        <p>Created to be read, built, tested, and questioned. Not an official OpenAI product.</p>
+      </div>
+      <nav aria-label="Footer navigation">
+        <a href="{{ '/docs/README.html' | relative_url }}">Workshop index</a>
+        <a href="{{ '/docs/github-pages-pt-br.html' | relative_url }}">Publishing guide</a>
+        <a href="https://github.com/{{ site.repository }}" target="_blank" rel="noreferrer">Repository ↗</a>
+      </nav>
+    </footer>
+
+    <dialog class="search-dialog" data-search-dialog aria-labelledby="search-title">
+      <div class="search-dialog__header">
+        <div><span>Quick navigation</span><h2 id="search-title">Search this page · Buscar</h2></div>
+        <button type="button" data-search-close aria-label="Close search">×</button>
+      </div>
+      <label for="page-search">Heading or topic / Título ou assunto</label>
+      <input id="page-search" type="search" autocomplete="off" placeholder="Try: API key, WebRTC, deploy…" data-search-input>
+      <div class="search-results" data-search-results aria-live="polite"></div>
+    </dialog>
+
+    <div class="toast" data-toast role="status" aria-live="polite"></div>
+    <script src="{{ '/assets/js/workshop.js' | relative_url }}" defer></script>
+  </body>
+</html>

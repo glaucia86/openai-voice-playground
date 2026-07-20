@@ -37,7 +37,7 @@ List variable names with empty values only. The real key belongs in `.env.local`
 
 Open `.env.example`, remove any placeholder, and add exactly:
 
-<details><summary><strong>.env.example</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>.env.example</strong></summary>
 
 ```dotenv
 # Server-only. Never prefix this variable with NEXT_PUBLIC_.
@@ -68,7 +68,7 @@ Protect secrets, dependencies, and generated artifacts before the first commit.
 
 Open `.gitignore`, remove any placeholder, and add exactly:
 
-<details><summary><strong>.gitignore</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>.gitignore</strong></summary>
 
 ```text
 .env*
@@ -91,7 +91,7 @@ Define reproducible scripts, versions, and dependencies. Never edit `package-loc
 
 Open `package.json`, remove any placeholder, and add exactly:
 
-<details><summary><strong>package.json</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>package.json</strong></summary>
 
 ```json
 {
@@ -160,7 +160,7 @@ Configure Next.js headers, limits, and production behavior.
 
 Open `next.config.mjs`, remove any placeholder, and add exactly:
 
-<details><summary><strong>next.config.mjs</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>next.config.mjs</strong></summary>
 
 ```js
 import { fileURLToPath } from "node:url";
@@ -216,7 +216,7 @@ Enable strict typing and the `@/` alias used by imports.
 
 Open `tsconfig.json`, remove any placeholder, and add exactly:
 
-<details><summary><strong>tsconfig.json</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>tsconfig.json</strong></summary>
 
 ```json
 {
@@ -254,7 +254,7 @@ Teach Vitest to resolve the same alias and measure the relevant files.
 
 Open `vitest.config.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>vitest.config.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>vitest.config.ts</strong></summary>
 
 ```ts
 import { defineConfig } from "vitest/config";
@@ -290,7 +290,7 @@ Run the TypeScript 7 compiler separately from the compiler used by Next.js.
 
 Open `scripts/typecheck.mjs`, remove any placeholder, and add exactly:
 
-<details><summary><strong>scripts/typecheck.mjs</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>scripts/typecheck.mjs</strong></summary>
 
 ```js
 import { spawnSync } from "node:child_process";
@@ -332,7 +332,7 @@ Declare asset imports used by the interface.
 
 Open `src/types/assets.d.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/types/assets.d.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/types/assets.d.ts</strong></summary>
 
 ```ts
 declare module "*.css";
@@ -369,7 +369,7 @@ Centralize allowlists and limits the client may not choose freely.
 
 Open `src/lib/constants.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/lib/constants.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/lib/constants.ts</strong></summary>
 
 ```ts
 export const REALTIME_MODEL = "gpt-realtime-2.1" as const;
@@ -435,7 +435,7 @@ Turn untrusted input into a strict, typed contract.
 
 Open `src/lib/schemas.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/lib/schemas.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/lib/schemas.ts</strong></summary>
 
 ```ts
 import { z } from "zod";
@@ -467,7 +467,7 @@ Build agent instructions without letting the user goal replace system rules.
 
 Open `src/lib/realtime-config.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/lib/realtime-config.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/lib/realtime-config.ts</strong></summary>
 
 ```ts
 import {
@@ -515,7 +515,7 @@ Calculate session duration and limits with small, testable functions.
 
 Open `src/lib/session-lifetime.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/lib/session-lifetime.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/lib/session-lifetime.ts</strong></summary>
 
 ```ts
 import { REALTIME_SESSION_LIMIT_SECONDS } from "@/lib/constants";
@@ -537,7 +537,7 @@ Create the test that proves this responsibility without calling OpenAI.
 
 Open `tests/schemas.test.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>tests/schemas.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>tests/schemas.test.ts</strong></summary>
 
 ```ts
 import { describe, expect, it } from "vitest";
@@ -587,7 +587,7 @@ Create the test that proves this responsibility without calling OpenAI.
 
 Open `tests/realtime-config.test.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>tests/realtime-config.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>tests/realtime-config.test.ts</strong></summary>
 
 ```ts
 import { describe, expect, it } from "vitest";
@@ -628,7 +628,7 @@ Create the test that proves this responsibility without calling OpenAI.
 
 Open `tests/session-lifetime.test.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>tests/session-lifetime.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>tests/session-lifetime.test.ts</strong></summary>
 
 ```ts
 import { describe, expect, it } from "vitest";
@@ -680,7 +680,7 @@ Normalize failures into stable responses without forwarding raw provider details
 
 Open `src/lib/errors.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/lib/errors.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/lib/errors.ts</strong></summary>
 
 ```ts
 import OpenAI from "openai";
@@ -787,7 +787,7 @@ Record operational metadata only; text, audio, and credentials stay out of logs.
 
 Open `src/lib/observability.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/lib/observability.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/lib/observability.ts</strong></summary>
 
 ```ts
 type LogLevel = "info" | "error";
@@ -825,7 +825,7 @@ Create the OpenAI client lazily and on the server only.
 
 Open `src/lib/openai.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/lib/openai.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/lib/openai.ts</strong></summary>
 
 ```ts
 import OpenAI from "openai";
@@ -863,7 +863,7 @@ Implement local development quota and distributed production quota.
 
 Open `src/lib/rate-limit.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/lib/rate-limit.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/lib/rate-limit.ts</strong></summary>
 
 ```ts
 import { Ratelimit, type Duration } from "@upstash/ratelimit";
@@ -999,7 +999,7 @@ Bound the bytes actually read before parsing JSON.
 
 Open `src/lib/request-body.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/lib/request-body.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/lib/request-body.ts</strong></summary>
 
 ```ts
 import { AppError } from "@/lib/errors";
@@ -1073,7 +1073,7 @@ Make production fail closed when mandatory safeguards are absent.
 
 Open `src/lib/security-config.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/lib/security-config.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/lib/security-config.ts</strong></summary>
 
 ```ts
 export type SecurityConfiguration = {
@@ -1137,7 +1137,7 @@ Apply origin, access, and quota checks before any billable operation.
 
 Open `src/lib/request-guard.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/lib/request-guard.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/lib/request-guard.ts</strong></summary>
 
 ```ts
 import { createHash, timingSafeEqual } from "node:crypto";
@@ -1271,7 +1271,7 @@ Expose non-sensitive diagnostics only to prove configuration.
 
 Open `src/app/api/health/route.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/app/api/health/route.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/app/api/health/route.ts</strong></summary>
 
 ```ts
 import {
@@ -1332,7 +1332,7 @@ Create a short-lived client secret and return only the minimal `no-store` contra
 
 Open `src/app/api/realtime/token/route.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/app/api/realtime/token/route.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/app/api/realtime/token/route.ts</strong></summary>
 
 ```ts
 import { randomUUID } from "node:crypto";
@@ -1459,7 +1459,7 @@ Add security headers and a per-response nonce without exposing secrets.
 
 Open `src/middleware.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/middleware.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/middleware.ts</strong></summary>
 
 ```ts
 import { NextRequest, NextResponse } from "next/server";
@@ -1511,7 +1511,7 @@ Create the test that proves this responsibility without calling OpenAI.
 
 Open `tests/errors.test.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>tests/errors.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>tests/errors.test.ts</strong></summary>
 
 ```ts
 import OpenAI from "openai";
@@ -1607,7 +1607,7 @@ Create the test that proves this responsibility without calling OpenAI.
 
 Open `tests/observability.test.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>tests/observability.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>tests/observability.test.ts</strong></summary>
 
 ```ts
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -1652,7 +1652,7 @@ Create the test that proves this responsibility without calling OpenAI.
 
 Open `tests/rate-limit.test.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>tests/rate-limit.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>tests/rate-limit.test.ts</strong></summary>
 
 ```ts
 import { afterEach, describe, expect, it } from "vitest";
@@ -1726,7 +1726,7 @@ Create the test that proves this responsibility without calling OpenAI.
 
 Open `tests/request-body.test.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>tests/request-body.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>tests/request-body.test.ts</strong></summary>
 
 ```ts
 import { describe, expect, it } from "vitest";
@@ -1817,7 +1817,7 @@ Create the test that proves this responsibility without calling OpenAI.
 
 Open `tests/request-guard.test.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>tests/request-guard.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>tests/request-guard.test.ts</strong></summary>
 
 ```ts
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -1953,7 +1953,7 @@ Create the test that proves this responsibility without calling OpenAI.
 
 Open `tests/security-config.test.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>tests/security-config.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>tests/security-config.test.ts</strong></summary>
 
 ```ts
 import { describe, expect, it } from "vitest";
@@ -2025,7 +2025,7 @@ Create the test that proves this responsibility without calling OpenAI.
 
 Open `tests/middleware.test.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>tests/middleware.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>tests/middleware.test.ts</strong></summary>
 
 ```ts
 import { NextRequest } from "next/server";
@@ -2078,7 +2078,7 @@ Convert API errors into safe, reusable browser messages.
 
 Open `src/lib/client-api.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/lib/client-api.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/lib/client-api.ts</strong></summary>
 
 ```ts
 export type ClientApiError = {
@@ -2118,7 +2118,7 @@ Present progress and errors in an accessible live region.
 
 Open `src/components/status-message.tsx`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/components/status-message.tsx</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/components/status-message.tsx</strong></summary>
 
 ```tsx
 import { AlertCircle, CheckCircle2, Info } from "lucide-react";
@@ -2158,7 +2158,7 @@ Create visual feedback that respects reduced-motion preferences.
 
 Open `src/components/waveform.tsx`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/components/waveform.tsx</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/components/waveform.tsx</strong></summary>
 
 ```tsx
 import type { CSSProperties } from "react";
@@ -2207,7 +2207,7 @@ Implement authorization, agent, WebRTC session, events, mute, text, transcript, 
 
 Open `src/components/realtime-voice-agent.tsx`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/components/realtime-voice-agent.tsx</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/components/realtime-voice-agent.tsx</strong></summary>
 
 ```tsx
 "use client";
@@ -2801,7 +2801,7 @@ Compose the main presentation and voice experience.
 
 Open `src/components/voice-playground.tsx`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/components/voice-playground.tsx</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/components/voice-playground.tsx</strong></summary>
 
 ```tsx
 "use client";
@@ -2925,7 +2925,7 @@ Define metadata, fonts, language, and the root page structure.
 
 Open `src/app/layout.tsx`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/app/layout.tsx</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/app/layout.tsx</strong></summary>
 
 ```tsx
 import "@fontsource-variable/jetbrains-mono";
@@ -2981,7 +2981,7 @@ Render the main experience through the App Router.
 
 Open `src/app/page.tsx`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/app/page.tsx</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/app/page.tsx</strong></summary>
 
 ```tsx
 import {
@@ -3140,7 +3140,7 @@ Apply the responsive visual system, visible focus, contrast, and reduced motion.
 
 Open `src/app/globals.css`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/app/globals.css</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/app/globals.css</strong></summary>
 
 ```css
 :root {
@@ -3652,7 +3652,7 @@ Describe the app for installation and browser metadata.
 
 Open `src/app/manifest.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/app/manifest.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/app/manifest.ts</strong></summary>
 
 ```ts
 import type { MetadataRoute } from "next";
@@ -3679,7 +3679,7 @@ Add the vector icon used by the application.
 
 Open `src/app/icon.svg`, remove any placeholder, and add exactly:
 
-<details><summary><strong>src/app/icon.svg</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>src/app/icon.svg</strong></summary>
 
 ```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
@@ -3696,7 +3696,7 @@ Create the test that proves this responsibility without calling OpenAI.
 
 Open `tests/client-api.test.ts`, remove any placeholder, and add exactly:
 
-<details><summary><strong>tests/client-api.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><strong>tests/client-api.test.ts</strong></summary>
 
 ```ts
 import { describe, expect, it } from "vitest";

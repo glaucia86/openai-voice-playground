@@ -4,6 +4,12 @@ theme: jekyll-theme-cayman
 lang: en
 markdown: kramdown
 highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    block:
+      line_numbers: false
 repository: glaucia86/openai-voice-playground
 github:
   is_project_page: true

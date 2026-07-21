@@ -4,6 +4,12 @@ Build an accessible, production-minded text-to-speech interface with Next.js 15,
 
 [Versão em português](README-PT-BR.md) · [Workshop index](../../docs/README.md) · [Standalone English tutorial](tutorial/tutorial-en.md) · [Tutorial em português](tutorial/tutorial.md) · [Back to all labs](../../README.md)
 
+| Duration | Level | Prerequisites | Outcome | Cost |
+| --- | --- | --- | --- | --- |
+| 2–3 h | beginner | Node.js 22+, Git, OpenAI API account | text becomes playable, downloadable audio | offline tests: none; voice: usage-based billing |
+
+Want to see it before building? Open **[Start in 5 minutes](tutorial/tutorial-en.md#start-in-5-minutes)**. Lab 01 is the recommended starting point.
+
 ## What this lab teaches
 
 - why bounded TTS is a request/response problem, not a Realtime session;

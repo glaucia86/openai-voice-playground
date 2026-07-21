@@ -63,31 +63,57 @@
   const mobileMenu = document.querySelector("[data-mobile-menu]");
   const mobileMenuScrim = document.querySelector(".mobile-menu-scrim");
   const mobileMenuToggle = document.querySelector("[data-mobile-menu-toggle]");
+  let mobileMenuReturnFocus = null;
+  let sidebarReturnFocus = null;
+  const focusableSelector = [
+    "a[href]",
+    "button:not([disabled])",
+    "input:not([disabled])",
+    "select:not([disabled])",
+    "textarea:not([disabled])",
+    "[tabindex]:not([tabindex='-1'])",
+  ].join(",");
   const updateScrollLock = () => {
     const drawerIsOpen = sidebar?.classList.contains("is-open") || mobileMenu?.classList.contains("is-open");
     document.body.classList.toggle("has-open-drawer", Boolean(drawerIsOpen));
   };
-  const setSidebar = (open) => {
+  const setSidebar = (open, options = {}) => {
     if (!sidebar) return;
+    const wasOpen = sidebar.classList.contains("is-open");
+    if (open && !wasOpen) sidebarReturnFocus = document.activeElement;
     sidebar.classList.toggle("is-open", open);
     if (window.innerWidth <= 1050) sidebar.setAttribute("aria-hidden", String(!open));
     else sidebar.removeAttribute("aria-hidden");
     scrim?.classList.toggle("is-open", open);
     updateScrollLock();
+    if (open && window.innerWidth <= 1050) {
+      window.setTimeout(() => sidebar.querySelector("[data-toc-close]")?.focus(), 0);
+    } else if (wasOpen && options.returnFocus !== false && sidebarReturnFocus instanceof HTMLElement) {
+      sidebarReturnFocus.focus();
+      sidebarReturnFocus = null;
+    }
   };
-  setSidebar(false);
+  setSidebar(false, { returnFocus: false });
   document.querySelectorAll("[data-toc-close]").forEach((button) => {
     button.addEventListener("click", () => setSidebar(false));
   });
 
-  const setMobileMenu = (open) => {
+  const setMobileMenu = (open, options = {}) => {
     if (!mobileMenu) return;
-    if (open) setSidebar(false);
+    const wasOpen = mobileMenu.classList.contains("is-open");
+    if (open && !wasOpen) mobileMenuReturnFocus = document.activeElement;
+    if (open) setSidebar(false, { returnFocus: false });
     mobileMenu.classList.toggle("is-open", open);
     mobileMenu.setAttribute("aria-hidden", String(!open));
     mobileMenuScrim?.classList.toggle("is-open", open);
     mobileMenuToggle?.setAttribute("aria-expanded", String(open));
     updateScrollLock();
+    if (open) {
+      window.setTimeout(() => mobileMenu.querySelector("[data-mobile-menu-close]")?.focus(), 0);
+    } else if (wasOpen && options.returnFocus !== false && mobileMenuReturnFocus instanceof HTMLElement) {
+      mobileMenuReturnFocus.focus();
+      mobileMenuReturnFocus = null;
+    }
   };
   mobileMenuToggle?.addEventListener("click", () => setMobileMenu(true));
   document.querySelectorAll("[data-mobile-menu-close]").forEach((button) => {
@@ -97,18 +123,45 @@
     link.addEventListener("click", () => setMobileMenu(false));
   });
   document.querySelector("[data-open-toc]")?.addEventListener("click", () => {
-    setMobileMenu(false);
+    setMobileMenu(false, { returnFocus: false });
     setSidebar(true);
   });
   document.addEventListener("keydown", (event) => {
-    if (event.key !== "Escape") return;
-    setMobileMenu(false);
-    setSidebar(false);
+    if (event.key === "Escape") {
+      setMobileMenu(false);
+      setSidebar(false);
+      return;
+    }
+    if (event.key !== "Tab") return;
+    const openDrawer = mobileMenu?.classList.contains("is-open")
+      ? mobileMenu
+      : sidebar?.classList.contains("is-open") && window.innerWidth <= 1050
+        ? sidebar
+        : null;
+    if (!openDrawer) return;
+    const focusable = [...openDrawer.querySelectorAll(focusableSelector)].filter(
+      (element) => element instanceof HTMLElement && element.offsetParent !== null,
+    );
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable.at(-1);
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
   });
   window.addEventListener("resize", () => {
     if (window.innerWidth <= 1050) return;
-    setMobileMenu(false);
-    setSidebar(false);
+    setMobileMenu(false, { returnFocus: false });
+    setSidebar(false, { returnFocus: false });
+  });
+  window.addEventListener("pageshow", () => {
+    setMobileMenu(false, { returnFocus: false });
+    setSidebar(false, { returnFocus: false });
+    document.body.classList.remove("has-open-drawer");
   });
 
   const slugify = (value) =>
@@ -226,19 +279,31 @@
       highlighted.parentNode?.insertBefore(frame, highlighted);
       frame.append(highlighted);
 
+      const disclosure = pre.closest(".code-disclosure");
+      const filename = disclosure?.querySelector("summary code")?.textContent?.trim();
+      if (filename) {
+        frame.classList.add("has-code-label");
+        const label = document.createElement("span");
+        label.className = "code-label";
+        label.textContent = filename;
+        frame.append(label);
+      }
+
       const button = document.createElement("button");
       button.type = "button";
       button.className = "copy-code";
-      button.textContent = "Copy";
-      button.setAttribute("aria-label", "Copy code to clipboard");
+      const isPortuguese = document.documentElement.lang.toLocaleLowerCase().startsWith("pt");
+      const copyLabel = isPortuguese ? "Copiar" : "Copy";
+      button.textContent = copyLabel;
+      button.setAttribute("aria-label", isPortuguese ? "Copiar código" : "Copy code to clipboard");
       button.addEventListener("click", async () => {
         try {
           await navigator.clipboard.writeText(code.textContent ?? "");
-          button.textContent = "Copied ✓";
+          button.textContent = isPortuguese ? "Copiado ✓" : "Copied ✓";
           button.classList.add("is-copied");
           showToast("Code copied / Código copiado");
           window.setTimeout(() => {
-            button.textContent = "Copy";
+            button.textContent = copyLabel;
             button.classList.remove("is-copied");
           }, 1800);
         } catch {

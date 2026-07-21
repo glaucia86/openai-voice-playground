@@ -4,6 +4,12 @@ Build a fluid, interruptible speech-to-speech conversational agent with Next.js 
 
 [Versão em português](README-PT-BR.md) · [Workshop index](../../docs/README.md) · [Standalone English tutorial](tutorial/tutorial-en.md) · [Tutorial em português](tutorial/tutorial.md) · [Back to all labs](../../README.md)
 
+| Duration | Level | Prerequisites | Outcome | Cost |
+| --- | --- | --- | --- | --- |
+| 3–4 h | intermediate | Node.js 22+, Git, OpenAI API, microphone, modern browser | live conversation with mute, interruption, and text | offline gates: none; session: usage-based billing |
+
+Start with Lab 01 if this is your first voice application, or open **[Start in 5 minutes](tutorial/tutorial-en.md#start-in-5-minutes)** directly.
+
 ## What this lab teaches
 
 - why a live conversation is a stateful session rather than a chain of audio uploads;
@@ -23,7 +29,7 @@ The **[English workshop guide](../../docs/workshop-guide.md)** explains cloning,
 
 ## Run locally
 
-Requirements: Node.js 20+, npm, an OpenAI project API key, and a browser that supports WebRTC and microphone access.
+Requirements: Node.js 22+, npm, an OpenAI project API key, and a browser that supports WebRTC and microphone access.
 
 From this directory:
 

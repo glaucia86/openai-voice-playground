@@ -1,0 +1,5 @@
+flowchart LR
+  B[Navegador + microfone] -->|pedido validado| A[API de autorização]
+  A -->|OPENAI_API_KEY somente no servidor| C[Client secret de 60 s]
+  C --> W[Sessão WebRTC]
+  W <-->|áudio e eventos em tempo real| O[OpenAI Realtime API]

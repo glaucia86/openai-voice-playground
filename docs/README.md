@@ -76,3 +76,9 @@ Você encontrará estes blocos ao longo da trilha:
 - Lab 01 em inglês: **[Standalone Text to Speech tutorial](../labs/lab-01-text-to-speech/tutorial/tutorial-en.md)**.
 - Lab 02 em português: **[Agente Realtime do zero ao deploy](../labs/lab-02-realtime-voice-agent/tutorial/tutorial.md)**.
 - Lab 02 em inglês: **[Standalone Realtime Voice Agent tutorial](../labs/lab-02-realtime-voice-agent/tutorial/tutorial-en.md)**.
+
+## Apoio durante o workshop
+
+- Problemas de ambiente, cache, imports ou Pages: **[troubleshooting em português](troubleshooting-pt-br.md)** · **[English troubleshooting](troubleshooting.md)**.
+- Preparar demonstrações reais sem expor credenciais: **[roteiro em português](demo-recording-guide-pt-br.md)** · **[recording plan in English](demo-recording-guide.md)**.
+- Evidências de UX e DevEx antes/depois: **[auditoria em português](ux-audit-pt-br.md)** · **[audit in English](ux-audit.md)**.

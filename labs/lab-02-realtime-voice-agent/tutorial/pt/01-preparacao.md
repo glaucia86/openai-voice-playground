@@ -2,6 +2,24 @@
 layout: default
 title: "Lab 02 · Capítulo 1 — Preparação"
 description: "Prepare conta, terminal, microfone, API key e a base do agente Realtime."
+lang: pt-BR
+lab_label: "Lab 02 · Agente Realtime"
+lab_index: "/labs/lab-02-realtime-voice-agent/tutorial/tutorial.html"
+lab_index_label: "Índice do Lab 02"
+step_label: "Preparação"
+step_position: "Etapa 1 de 3"
+alternate_url: "/labs/lab-02-realtime-voice-agent/tutorial/en/01-preparation.html"
+alternate_lang: en
+alternate_label: "Read in English"
+checkpoint_url: "/labs/lab-02-realtime-voice-agent/tutorial/tutorial.html#checkpoints-de-recuperação"
+checkpoint_label: "Checkpoints do Lab 02"
+previous_url: "/labs/lab-02-realtime-voice-agent/tutorial/tutorial.html"
+previous_label: "Visão geral e Comece em 5 minutos"
+previous_kicker: "← Anterior"
+next_url: "/labs/lab-02-realtime-voice-agent/tutorial/pt/02-construcao-arquivo-por-arquivo.html"
+next_label: "Construir autorização, WebRTC e interface"
+next_kicker: "Próximo capítulo →"
+chapter_nav_label: "Navegação do workshop Lab 02"
 ---
 
 # Lab 02 · Capítulo 1 — Prepare conta, terminal, microfone e projeto
@@ -147,5 +165,9 @@ Essa ordem evita usar uma chamada faturável para descobrir erros que TypeScript
 - [ ] `npm run check:lab02` passa no starter;
 - [ ] `.env.local` está ignorado;
 - [ ] microfone e sessão Realtime ainda não foram iniciados.
+
+> **Pergunta de compreensão:** por que a sessão deve ser aberta somente depois que schema, autorização e cleanup passam nos gates offline?
+
+**Conclusão:** ambiente, orçamento, branch e segredo estão prontos sem ativar mídia. O próximo capítulo constrói a sessão em fatias verificáveis.
 
 [Próximo: construa a aplicação arquivo por arquivo →](02-construcao-arquivo-por-arquivo.md)

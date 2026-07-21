@@ -14,7 +14,7 @@
   },
   "homepage": "https://github.com/glaucia86/openai-voice-playground/tree/main/labs/lab-02-realtime-voice-agent#readme",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   },
   "scripts": {
     "dev": "next dev",

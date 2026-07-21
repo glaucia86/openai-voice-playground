@@ -17,6 +17,6 @@
     "check": "npm run docs:check && npm run check:lab01 && npm run check:lab02"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   }
 }

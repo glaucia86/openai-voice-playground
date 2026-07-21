@@ -30,6 +30,43 @@ description: Hands-on, bilingual workshops for OpenAI Text to Speech and Realtim
   </div>
 </section>
 
+<section class="home-section quick-start" id="comece-em-5-minutos" aria-labelledby="quick-start-title">
+  <div class="home-section__heading">
+    <div>
+      <span class="section-label">Comece em 5 minutos · Start in 5 minutes</span>
+      <h2 id="quick-start-title">Veja o resultado. Depois escolha como construir.</h2>
+    </div>
+    <p>O início rápido pressupõe Node.js 22+, Git, uma conta da API OpenAI com cobrança ativa e uma API key criada. As chamadas de voz podem gerar custo.</p>
+  </div>
+  <div class="quick-start-grid">
+    <article class="quick-card">
+      <span>01 · Recomendado primeiro</span>
+      <h3>Text to Speech</h3>
+      <dl><div><dt>Tempo</dt><dd>2–3 h</dd></div><div><dt>Nível</dt><dd>Iniciante</dd></div><div><dt>Teste rápido</dt><dd>~5 min</dd></div></dl>
+      <p>Gere, reproduza e baixe áudio sem enviar a chave ao navegador.</p>
+      <a class="button button--primary" href="{{ '/labs/lab-01-text-to-speech/tutorial/tutorial.html#comece-em-5-minutos' | relative_url }}">Executar ou construir · PT</a>
+      <a href="{{ '/labs/lab-01-text-to-speech/tutorial/tutorial-en.html#start-in-5-minutes' | relative_url }}">Start in English →</a>
+    </article>
+    <article class="quick-card quick-card--realtime">
+      <span>02 · Depois ou independente</span>
+      <h3>Realtime Voice Agent</h3>
+      <dl><div><dt>Tempo</dt><dd>3–4 h</dd></div><div><dt>Nível</dt><dd>Intermediário</dd></div><div><dt>Teste rápido</dt><dd>~5 min</dd></div></dl>
+      <p>Converse por WebRTC usando um client secret curto e controles explícitos de microfone.</p>
+      <a class="button button--primary" href="{{ '/labs/lab-02-realtime-voice-agent/tutorial/tutorial.html#comece-em-5-minutos' | relative_url }}">Executar ou construir · PT</a>
+      <a href="{{ '/labs/lab-02-realtime-voice-agent/tutorial/tutorial-en.html#start-in-5-minutes' | relative_url }}">Start in English →</a>
+    </article>
+    <aside class="quick-route" aria-label="Escolha de rota de aprendizagem">
+      <span class="section-label">Escolha sua rota</span>
+      <ol>
+        <li><strong>Quero testar:</strong> clone a <code>main</code> e execute a solução final.</li>
+        <li><strong>Quero aprender:</strong> use o starter e avance pelos checkpoints.</li>
+        <li><strong>Quero dominar:</strong> crie a aplicação desde uma pasta vazia.</li>
+      </ol>
+      <a href="{{ '/docs/workshop-guide-pt-br.html' | relative_url }}">Comparar as três rotas →</a>
+    </aside>
+  </div>
+</section>
+
 <section class="home-section" id="workshops">
   <div class="home-section__heading">
     <div>
@@ -44,12 +81,15 @@ description: Hands-on, bilingual workshops for OpenAI Text to Speech and Realtim
       <span class="lab-number">Lab 01 · Request/response</span>
       <h3>Text to Speech</h3>
       <p>Transforme texto validado em áudio expressivo com streaming, player, download, limites e uma fronteira server-side segura.</p>
+      <dl class="lab-card__facts"><div><dt>Tempo</dt><dd>2–3 h</dd></div><div><dt>Nível</dt><dd>Iniciante</dd></div><div><dt>Custo</dt><dd>API por uso</dd></div></dl>
       <ul class="tag-list"><li>Next.js</li><li>Speech API</li><li>Streaming</li><li>TypeScript</li></ul>
       <div class="lab-links">
         <a href="{{ '/labs/lab-01-text-to-speech/tutorial/tutorial.html' | relative_url }}">Português →</a>
         <a href="{{ '/labs/lab-01-text-to-speech/tutorial/tutorial-en.html' | relative_url }}">English →</a>
         <a href="{{ '/labs/lab-01-text-to-speech/tutorial/article.html' | relative_url }}">Artigo arquitetural</a>
+        <a href="https://github.com/glaucia86/openai-voice-playground/tree/main/labs/lab-01-text-to-speech">Código final ↗</a>
         <a href="https://github.com/glaucia86/openai-voice-playground/tree/workshop/lab-01-v1-starter">Starter branch ↗</a>
+        <a href="https://github.com/glaucia86/openai-voice-playground/tree/workshop/lab-01-v1-step-01-contract">1º checkpoint ↗</a>
       </div>
     </article>
 
@@ -57,14 +97,33 @@ description: Hands-on, bilingual workshops for OpenAI Text to Speech and Realtim
       <span class="lab-number">Lab 02 · Live conversation</span>
       <h3>Realtime Voice Agent</h3>
       <p>Construa um agente speech-to-speech com autorização curta, WebRTC, turnos, mute, interrupção, transcript e cleanup.</p>
+      <dl class="lab-card__facts"><div><dt>Tempo</dt><dd>3–4 h</dd></div><div><dt>Nível</dt><dd>Intermediário</dd></div><div><dt>Custo</dt><dd>API por uso</dd></div></dl>
       <ul class="tag-list"><li>Realtime API</li><li>WebRTC</li><li>Agents SDK</li><li>Ephemeral key</li></ul>
       <div class="lab-links">
         <a href="{{ '/labs/lab-02-realtime-voice-agent/tutorial/tutorial.html' | relative_url }}">Português →</a>
         <a href="{{ '/labs/lab-02-realtime-voice-agent/tutorial/tutorial-en.html' | relative_url }}">English →</a>
         <a href="{{ '/labs/lab-02-realtime-voice-agent/tutorial/article.html' | relative_url }}">Artigo arquitetural</a>
+        <a href="https://github.com/glaucia86/openai-voice-playground/tree/main/labs/lab-02-realtime-voice-agent">Código final ↗</a>
         <a href="https://github.com/glaucia86/openai-voice-playground/tree/workshop/lab-02-v1-starter">Starter branch ↗</a>
+        <a href="https://github.com/glaucia86/openai-voice-playground/tree/workshop/lab-02-v1-step-01-session-contract">1º checkpoint ↗</a>
       </div>
     </article>
+  </div>
+</section>
+
+<section class="home-section" aria-labelledby="results-title">
+  <div class="home-section__heading">
+    <div><span class="section-label">Resultado antes do código</span><h2 id="results-title">Veja o que você vai construir.</h2></div>
+    <p>A demonstração do Lab 01 é real e está comprimida. A gravação do Lab 02 está explicitamente pendente; nenhum resultado foi fabricado.</p>
+  </div>
+  <div class="demo-grid">
+    <figure class="demo-card">
+      <img src="{{ '/docs/assets/openai-voice-labs-demo.gif' | relative_url }}" loading="lazy" width="960" height="540" alt="Demonstração real da interface do Lab 01 Text to Speech, da tela inicial até a área de geração de áudio.">
+      <figcaption><strong>Lab 01 · demonstração real</strong><span>A interface recebe texto, gera áudio e apresenta os controles de reprodução e download. A gravação não contém credenciais nem dados pessoais.</span></figcaption>
+    </figure>
+    <div class="demo-card demo-card--pending" role="img" aria-label="Demonstração do Lab 02 pendente de gravação com credencial controlada">
+      <div><span>REC</span><strong>Lab 02 · gravação pendente</strong><p>O espaço está pronto, mas uma conversa Realtime real exige credencial, microfone e consumo da API. Veja o roteiro seguro para gravar sem expor tokens.</p><a href="{{ '/docs/demo-recording-guide-pt-br.html' | relative_url }}">Abrir roteiro de gravação →</a></div>
+    </div>
   </div>
 </section>
 

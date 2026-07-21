@@ -532,7 +532,7 @@ O repositório fixa as versões principais no `package.json`:
 }
 ```
 
-Usamos Node.js 20 ou superior. O `package-lock.json` entra no repositório e o CI usa `npm ci`. “Funcionou hoje na minha máquina com `latest`” não é reprodutibilidade.
+Usamos Node.js 22 ou superior. O `package-lock.json` entra no repositório e o CI usa `npm ci`. “Funcionou hoje na minha máquina com `latest`” não é reprodutibilidade.
 
 ### TypeScript 7 com Next.js 15: o detalhe que apareceu na validação
 

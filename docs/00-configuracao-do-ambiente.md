@@ -44,7 +44,7 @@ Você não “cria a API da OpenAI” neste repositório. Você cria um **projet
 
 Você precisa de:
 
-- Node.js 20 ou superior;
+- Node.js 22 ou superior;
 - npm, instalado junto com Node.js;
 - Git;
 - editor de código;

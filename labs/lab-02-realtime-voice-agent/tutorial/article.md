@@ -127,7 +127,7 @@ git --version
 
 Você precisa de:
 
-- Node.js 20 ou superior;
+- Node.js 22 ou superior;
 - npm e Git;
 - editor de código;
 - navegador recente com WebRTC e permissão de microfone;

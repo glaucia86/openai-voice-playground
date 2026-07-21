@@ -115,7 +115,7 @@ git --version
 
 You need:
 
-- Node.js 20 or newer;
+- Node.js 22 or newer;
 - npm, installed with Node.js;
 - Git;
 - a current browser;

@@ -123,7 +123,7 @@ git --version
 
 You need:
 
-- Node.js 20 or newer;
+- Node.js 22 or newer;
 - npm and Git;
 - a current editor;
 - a browser with WebRTC and microphone support;

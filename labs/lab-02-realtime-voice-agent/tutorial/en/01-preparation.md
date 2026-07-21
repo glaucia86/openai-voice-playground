@@ -2,6 +2,24 @@
 layout: default
 title: "Lab 02 · Chapter 1 — Preparation"
 description: "Prepare the account, terminal, microphone, API key, and Realtime agent base."
+lang: en
+lab_label: "Lab 02 · Realtime Agent"
+lab_index: "/labs/lab-02-realtime-voice-agent/tutorial/tutorial-en.html"
+lab_index_label: "Lab 02 index"
+step_label: "Preparation"
+step_position: "Step 1 of 3"
+alternate_url: "/labs/lab-02-realtime-voice-agent/tutorial/pt/01-preparacao.html"
+alternate_lang: pt-BR
+alternate_label: "Leia em português"
+checkpoint_url: "/labs/lab-02-realtime-voice-agent/tutorial/tutorial-en.html#recovery-checkpoints"
+checkpoint_label: "Lab 02 checkpoints"
+previous_url: "/labs/lab-02-realtime-voice-agent/tutorial/tutorial-en.html"
+previous_label: "Overview and Start in 5 minutes"
+previous_kicker: "← Previous"
+next_url: "/labs/lab-02-realtime-voice-agent/tutorial/en/02-file-by-file-build.html"
+next_label: "Build authorization, WebRTC, and the interface"
+next_kicker: "Next chapter →"
+chapter_nav_label: "Lab 02 workshop navigation"
 ---
 
 # Lab 02 · Chapter 1 — Prepare the account, terminal, microphone, and project
@@ -131,5 +149,9 @@ Before the live test, you will build the strict request schema, server-side clie
 - [ ] `npm run check:lab02` passes on the starter;
 - [ ] `.env.local` is ignored;
 - [ ] no microphone or Realtime session has started.
+
+> **Comprehension prompt:** why should the session open only after schema, authorization, and cleanup pass offline gates?
+
+**Conclusion:** environment, budget, branch, and secret are ready without activating media. The next chapter builds the session in verifiable slices.
 
 [Next: build the application file by file →](02-file-by-file-build.md)

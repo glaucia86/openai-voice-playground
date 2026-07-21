@@ -2,6 +2,24 @@
 layout: default
 title: "Lab 01 · Capítulo 3 — Execução, testes e deploy"
 description: "Valide, execute, diagnostique e publique a aplicação Text to Speech."
+lang: pt-BR
+lab_label: "Lab 01 · Text to Speech"
+lab_index: "/labs/lab-01-text-to-speech/tutorial/tutorial.html"
+lab_index_label: "Índice do Lab 01"
+step_label: "Execução, testes e deploy"
+step_position: "Etapa 3 de 3"
+alternate_url: "/labs/lab-01-text-to-speech/tutorial/en/03-run-test-deploy.html"
+alternate_lang: en
+alternate_label: "Read in English"
+checkpoint_url: "/labs/lab-01-text-to-speech/tutorial/tutorial.html#checkpoints-de-recuperação"
+checkpoint_label: "Checkpoints do Lab 01"
+previous_url: "/labs/lab-01-text-to-speech/tutorial/pt/02-construcao-arquivo-por-arquivo.html"
+previous_label: "Construir a aplicação arquivo por arquivo"
+previous_kicker: "← Capítulo anterior"
+next_url: "/labs/lab-02-realtime-voice-agent/tutorial/tutorial.html"
+next_label: "Avançar para o Lab 02 · Agente Realtime"
+next_kicker: "Próximo laboratório →"
+chapter_nav_label: "Navegação do workshop Lab 01"
 ---
 
 # Lab 01 · Capítulo 3 — Execute, teste, diagnostique e publique
@@ -89,16 +107,22 @@ Pare o servidor com `Ctrl+C` quando terminar.
 
 ## 5. Diagnóstico orientado a sintomas
 
-| Sintoma | O que verificar |
-| --- | --- |
-| `configured: false` | `.env.local`, nome `OPENAI_API_KEY` e reinício do servidor |
-| `401 unauthorized` | token compartilhado digitado na interface quando configurado |
-| `403 cross_origin_request` | `APP_ORIGIN` e domínio usados no navegador |
-| `413 request_too_large` | tamanho real do texto/instruções e corpo JSON |
-| `429 rate_limit_exceeded` | aguarde `Retry-After`; não remova o limitador |
-| `503 security_configuration_incomplete` | variáveis obrigatórias do ambiente de produção |
-| áudio baixa mas não toca | formato, `Content-Type` e suporte do navegador |
-| TypeScript não resolve `@/` | `baseUrl`, `paths` e diretório atual |
+Comece pelo sintoma, execute o diagnóstico e só então aplique a correção. A última coluna evita “corrigir” o erro sem provar o fluxo.
+
+| Sintoma | Causa provável | Como diagnosticar | Como corrigir | Como confirmar |
+| --- | --- | --- | --- | --- |
+| `npm` não encontra pacotes | dependências ausentes ou diretório errado | `pwd`, `node --version`, `npm ls --depth=0` | entre em `labs/lab-01-text-to-speech` e rode `npm ci` com Node.js 22+ | `npm run typecheck` termina com código zero |
+| servidor não abre ou porta ocupada | outro processo usa 3000 | observe `EADDRINUSE`; tente `lsof -i :3000` ou `Get-NetTCPConnection -LocalPort 3000` | encerre o processo conhecido ou rode `npm run dev -- --port 3001` | a URL informada pelo Next.js responde |
+| `configured: false` | `.env.local` ausente, nome errado ou servidor não reiniciado | `git check-ignore -v .env.local` e `curl localhost:3000/api/health` | use exatamente `OPENAI_API_KEY=...`, salve e reinicie `npm run dev` | health mostra `configured: true` sem revelar a chave |
+| `401 unauthorized` | token do workshop ausente ou API key inválida | confira o código seguro e o `X-Request-Id`; não imprima a chave | informe `PLAYGROUND_ACCESS_TOKEN` na UI quando exigido ou rotacione uma chave inválida | uma frase curta gera áudio |
+| quota/créditos indisponíveis ou `429` | limite de projeto, saldo ou rate limit | confira `Retry-After` e os painéis de Usage/Billing | aguarde o limite, habilite cobrança ou ajuste orçamento; não remova o limitador | health continua seguro e um teste curto funciona dentro do orçamento |
+| modelo sem acesso | projeto não pode usar o modelo configurado | confira o modelo no health e a mensagem sanitizada associada ao request ID | valide acesso ao `gpt-4o-mini-tts` no projeto ou use um modelo permitido de forma consistente no código e docs | build passa e a chamada curta retorna áudio |
+| `403 cross_origin_request` ou CORS | `APP_ORIGIN` não corresponde à origem real | compare a URL do navegador com `APP_ORIGIN` | defina a origem canônica completa e reinicie/republique | a mesma origem recebe resposta; outra origem continua bloqueada |
+| `413 request_too_large` | texto, instruções ou JSON excedem limites | reduza a entrada e observe o status | mantenha o limite e use conteúdo curto | pedido permitido funciona e pedido excessivo continua rejeitado |
+| áudio baixa mas não toca | formato ou `Content-Type` não suportado | inspecione Network e teste `mp3` | use formato suportado e preserve o header devolvido pela API | player reproduz e download tem extensão correta |
+| build ou import falha só no CI | diferença de maiúsculas/minúsculas ou arquivo gerado desatualizado | `git ls-files | sort`, `npm run docs:check`, `npm run check` | faça o import casar exatamente com o nome e rode `npm run docs:generate` quando o código exibido mudou | checks locais e CI passam |
+
+Problemas específicos da documentação, cache e workflow do Pages estão no [guia compartilhado de troubleshooting](../../../../docs/troubleshooting-pt-br.md).
 
 Para comparar sua implementação com um checkpoint sem substituir arquivos:
 
@@ -157,3 +181,22 @@ Na Vercel, deixe `CLIENT_IP_HEADER` ausente para usar o header protegido da plat
 - [ ] orçamento, alertas e owner da chave estão definidos.
 
 Você concluiu o fluxo prático. Agora use o [artigo arquitetural](../article.md) para revisar streaming, privacidade, segurança e limites de produção com mais profundidade.
+
+<div class="next-steps-cta" markdown="1">
+
+## Próximos passos
+
+Você aprendeu a proteger a chave no servidor, validar entrada, encaminhar áudio em streaming, administrar estados de UI e provar responsabilidades com testes offline. Agora escolha uma evolução pequena: adicionar uma voz permitida com teste, incluir autenticação real, medir latência sem registrar texto, ampliar testes de interface ou preparar um deploy seguro com orçamento e rate limit distribuído.
+
+O próximo salto natural é o [Lab 02 — Agente Realtime](../../../lab-02-realtime-voice-agent/tutorial/tutorial.md), onde a requisição delimitada vira uma sessão WebRTC com microfone, turnos e interrupção.
+
+<div class="next-steps-cta__links">
+  <a href="https://developers.openai.com/api/docs/guides/text-to-speech">Documentação oficial de Text to Speech ↗</a>
+  <a href="https://nextjs.org/docs/app/getting-started/route-handlers">Next.js Route Handlers ↗</a>
+  <a href="https://www.typescriptlang.org/docs/">TypeScript ↗</a>
+  <a href="https://github.com/glaucia86/openai-voice-playground/issues/new">Enviar feedback / abrir issue ↗</a>
+  <a href="../../../../CONTRIBUTING.md">Como contribuir</a>
+  <a href="https://github.com/glaucia86/openai-voice-playground">Repositório · estrela opcional ↗</a>
+</div>
+
+</div>

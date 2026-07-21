@@ -2,6 +2,24 @@
 layout: default
 title: "Lab 02 · Chapter 2 — File-by-file build"
 description: "Create the Realtime Voice Agent application with the complete content of every file."
+lang: en
+lab_label: "Lab 02 · Realtime Voice Agent"
+lab_index: "/labs/lab-02-realtime-voice-agent/tutorial/tutorial-en.html"
+lab_index_label: "Lab 02 index"
+step_label: "File-by-file build"
+step_position: "Step 2 of 3"
+alternate_url: "/labs/lab-02-realtime-voice-agent/tutorial/pt/02-construcao-arquivo-por-arquivo.html"
+alternate_lang: pt-BR
+alternate_label: "Leia em português"
+checkpoint_url: "/labs/lab-02-realtime-voice-agent/tutorial/tutorial-en.html#recovery-checkpoints"
+checkpoint_label: "Lab 02 checkpoints"
+previous_url: "/labs/lab-02-realtime-voice-agent/tutorial/en/01-preparation.html"
+previous_label: "Prepare the account, terminal, and project"
+previous_kicker: "← Previous chapter"
+next_url: "/labs/lab-02-realtime-voice-agent/tutorial/en/03-run-test-deploy.html"
+next_label: "Run, test, diagnose, and deploy"
+next_kicker: "Next chapter →"
+chapter_nav_label: "Lab 02 workshop navigation"
 ---
 
 # Lab 02 · Chapter 2 — Build file by file
@@ -22,7 +40,7 @@ labs/lab-02-realtime-voice-agent
 
 ## Passo 1 — Configure a reproducible base
 
-Start by aligning Next.js, TypeScript, Vitest, and the build. Starter users should open and verify each file; empty-directory users should create every file.
+**Step objective:** Start by aligning Next.js, TypeScript, Vitest, and the build. Starter users should open and verify each file; empty-directory users should create every file.
 
 In the lab terminal, make sure the directories and files exist:
 
@@ -37,7 +55,7 @@ List variable names with empty values only. The real key belongs in `.env.local`
 
 Open `.env.example`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>.env.example</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>.env.example</code></summary>
 
 ```dotenv
 # Server-only. Never prefix this variable with NEXT_PUBLIC_.
@@ -68,7 +86,7 @@ Protect secrets, dependencies, and generated artifacts before the first commit.
 
 Open `.gitignore`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>.gitignore</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>.gitignore</code></summary>
 
 ```text
 .env*
@@ -91,7 +109,7 @@ Define reproducible scripts, versions, and dependencies. Never edit `package-loc
 
 Open `package.json`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>package.json</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>package.json</code></summary>
 
 ```json
 {
@@ -110,7 +128,7 @@ Open `package.json`, remove any placeholder, and add exactly:
   },
   "homepage": "https://github.com/glaucia86/openai-voice-playground/tree/main/labs/lab-02-realtime-voice-agent#readme",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   },
   "scripts": {
     "dev": "next dev",
@@ -160,7 +178,7 @@ Configure Next.js headers, limits, and production behavior.
 
 Open `next.config.mjs`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>next.config.mjs</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>next.config.mjs</code></summary>
 
 ```js
 import { fileURLToPath } from "node:url";
@@ -216,7 +234,7 @@ Enable strict typing and the `@/` alias used by imports.
 
 Open `tsconfig.json`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>tsconfig.json</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>tsconfig.json</code></summary>
 
 ```json
 {
@@ -254,7 +272,7 @@ Teach Vitest to resolve the same alias and measure the relevant files.
 
 Open `vitest.config.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>vitest.config.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>vitest.config.ts</code></summary>
 
 ```ts
 import { defineConfig } from "vitest/config";
@@ -290,7 +308,7 @@ Run the TypeScript 7 compiler separately from the compiler used by Next.js.
 
 Open `scripts/typecheck.mjs`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>scripts/typecheck.mjs</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>scripts/typecheck.mjs</code></summary>
 
 ```js
 import { spawnSync } from "node:child_process";
@@ -332,7 +350,7 @@ Declare asset imports used by the interface.
 
 Open `src/types/assets.d.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/types/assets.d.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/types/assets.d.ts</code></summary>
 
 ```ts
 declare module "*.css";
@@ -352,9 +370,15 @@ npm run typecheck
 
 Do not continue while the command fails. Read the first message, verify the file path, and compare with the checkpoint before reinstalling dependencies.
 
+> **Before continuing, confirm that:** the command exited with code zero, every path matches filename casing, and you can summarize this slice's responsibility.
+
+> **Comprehension prompt:** what problem does “Configure a reproducible base” prevent before the next slice?
+
+**Step 1 conclusion:** this slice is validated. The next step assumes this behavior works; return to this checkpoint if something breaks.
+
 ## Passo 2 — Model the session contract
 
-Before requesting a microphone or credential, fix the models, voices, languages, profiles, limits, instructions, and lifetime. These tests use no network.
+**Step objective:** Before requesting a microphone or credential, fix the models, voices, languages, profiles, limits, instructions, and lifetime. These tests use no network.
 
 In the lab terminal, make sure the directories and files exist:
 
@@ -369,7 +393,7 @@ Centralize allowlists and limits the client may not choose freely.
 
 Open `src/lib/constants.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/lib/constants.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/lib/constants.ts</code></summary>
 
 ```ts
 export const REALTIME_MODEL = "gpt-realtime-2.1" as const;
@@ -435,7 +459,7 @@ Turn untrusted input into a strict, typed contract.
 
 Open `src/lib/schemas.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/lib/schemas.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/lib/schemas.ts</code></summary>
 
 ```ts
 import { z } from "zod";
@@ -467,7 +491,7 @@ Build agent instructions without letting the user goal replace system rules.
 
 Open `src/lib/realtime-config.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/lib/realtime-config.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/lib/realtime-config.ts</code></summary>
 
 ```ts
 import {
@@ -515,7 +539,7 @@ Calculate session duration and limits with small, testable functions.
 
 Open `src/lib/session-lifetime.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/lib/session-lifetime.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/lib/session-lifetime.ts</code></summary>
 
 ```ts
 import { REALTIME_SESSION_LIMIT_SECONDS } from "@/lib/constants";
@@ -537,7 +561,7 @@ Create the test that proves this responsibility without calling OpenAI.
 
 Open `tests/schemas.test.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>tests/schemas.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>tests/schemas.test.ts</code></summary>
 
 ```ts
 import { describe, expect, it } from "vitest";
@@ -587,7 +611,7 @@ Create the test that proves this responsibility without calling OpenAI.
 
 Open `tests/realtime-config.test.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>tests/realtime-config.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>tests/realtime-config.test.ts</code></summary>
 
 ```ts
 import { describe, expect, it } from "vitest";
@@ -628,7 +652,7 @@ Create the test that proves this responsibility without calling OpenAI.
 
 Open `tests/session-lifetime.test.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>tests/session-lifetime.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>tests/session-lifetime.test.ts</code></summary>
 
 ```ts
 import { describe, expect, it } from "vitest";
@@ -663,9 +687,15 @@ npm test -- schemas.test.ts realtime-config.test.ts session-lifetime.test.ts
 
 Do not continue while the command fails. Read the first message, verify the file path, and compare with the checkpoint before reinstalling dependencies.
 
+> **Before continuing, confirm that:** the command exited with code zero, every path matches filename casing, and you can summarize this slice's responsibility.
+
+> **Comprehension prompt:** what problem does “Model the session contract” prevent before the next slice?
+
+**Step 2 conclusion:** this slice is validated. The next step assumes this behavior works; return to this checkpoint if something breaks.
+
 ## Passo 3 — Create authorization and client-secret issuance
 
-Now build the server-side boundary. The standard API key stops here; the browser response contains only minimal data and the short-lived client secret.
+**Step objective:** Now build the server-side boundary. The standard API key stops here; the browser response contains only minimal data and the short-lived client secret.
 
 In the lab terminal, make sure the directories and files exist:
 
@@ -680,7 +710,7 @@ Normalize failures into stable responses without forwarding raw provider details
 
 Open `src/lib/errors.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/lib/errors.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/lib/errors.ts</code></summary>
 
 ```ts
 import OpenAI from "openai";
@@ -787,7 +817,7 @@ Record operational metadata only; text, audio, and credentials stay out of logs.
 
 Open `src/lib/observability.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/lib/observability.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/lib/observability.ts</code></summary>
 
 ```ts
 type LogLevel = "info" | "error";
@@ -825,7 +855,7 @@ Create the OpenAI client lazily and on the server only.
 
 Open `src/lib/openai.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/lib/openai.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/lib/openai.ts</code></summary>
 
 ```ts
 import OpenAI from "openai";
@@ -863,7 +893,7 @@ Implement local development quota and distributed production quota.
 
 Open `src/lib/rate-limit.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/lib/rate-limit.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/lib/rate-limit.ts</code></summary>
 
 ```ts
 import { Ratelimit, type Duration } from "@upstash/ratelimit";
@@ -999,7 +1029,7 @@ Bound the bytes actually read before parsing JSON.
 
 Open `src/lib/request-body.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/lib/request-body.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/lib/request-body.ts</code></summary>
 
 ```ts
 import { AppError } from "@/lib/errors";
@@ -1073,7 +1103,7 @@ Make production fail closed when mandatory safeguards are absent.
 
 Open `src/lib/security-config.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/lib/security-config.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/lib/security-config.ts</code></summary>
 
 ```ts
 export type SecurityConfiguration = {
@@ -1137,7 +1167,7 @@ Apply origin, access, and quota checks before any billable operation.
 
 Open `src/lib/request-guard.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/lib/request-guard.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/lib/request-guard.ts</code></summary>
 
 ```ts
 import { createHash, timingSafeEqual } from "node:crypto";
@@ -1271,7 +1301,7 @@ Expose non-sensitive diagnostics only to prove configuration.
 
 Open `src/app/api/health/route.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/app/api/health/route.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/app/api/health/route.ts</code></summary>
 
 ```ts
 import {
@@ -1332,7 +1362,7 @@ Create a short-lived client secret and return only the minimal `no-store` contra
 
 Open `src/app/api/realtime/token/route.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/app/api/realtime/token/route.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/app/api/realtime/token/route.ts</code></summary>
 
 ```ts
 import { randomUUID } from "node:crypto";
@@ -1459,7 +1489,7 @@ Add security headers and a per-response nonce without exposing secrets.
 
 Open `src/middleware.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/middleware.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/middleware.ts</code></summary>
 
 ```ts
 import { NextRequest, NextResponse } from "next/server";
@@ -1511,7 +1541,7 @@ Create the test that proves this responsibility without calling OpenAI.
 
 Open `tests/errors.test.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>tests/errors.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>tests/errors.test.ts</code></summary>
 
 ```ts
 import OpenAI from "openai";
@@ -1607,7 +1637,7 @@ Create the test that proves this responsibility without calling OpenAI.
 
 Open `tests/observability.test.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>tests/observability.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>tests/observability.test.ts</code></summary>
 
 ```ts
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -1652,7 +1682,7 @@ Create the test that proves this responsibility without calling OpenAI.
 
 Open `tests/rate-limit.test.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>tests/rate-limit.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>tests/rate-limit.test.ts</code></summary>
 
 ```ts
 import { afterEach, describe, expect, it } from "vitest";
@@ -1726,7 +1756,7 @@ Create the test that proves this responsibility without calling OpenAI.
 
 Open `tests/request-body.test.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>tests/request-body.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>tests/request-body.test.ts</code></summary>
 
 ```ts
 import { describe, expect, it } from "vitest";
@@ -1817,7 +1847,7 @@ Create the test that proves this responsibility without calling OpenAI.
 
 Open `tests/request-guard.test.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>tests/request-guard.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>tests/request-guard.test.ts</code></summary>
 
 ```ts
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -1953,7 +1983,7 @@ Create the test that proves this responsibility without calling OpenAI.
 
 Open `tests/security-config.test.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>tests/security-config.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>tests/security-config.test.ts</code></summary>
 
 ```ts
 import { describe, expect, it } from "vitest";
@@ -2025,7 +2055,7 @@ Create the test that proves this responsibility without calling OpenAI.
 
 Open `tests/middleware.test.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>tests/middleware.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>tests/middleware.test.ts</code></summary>
 
 ```ts
 import { NextRequest } from "next/server";
@@ -2061,9 +2091,15 @@ npm run typecheck && npm test
 
 Do not continue while the command fails. Read the first message, verify the file path, and compare with the checkpoint before reinstalling dependencies.
 
+> **Before continuing, confirm that:** the command exited with code zero, every path matches filename casing, and you can summarize this slice's responsibility.
+
+> **Comprehension prompt:** what problem does “Create authorization and client-secret issuance” prevent before the next slice?
+
+**Step 3 conclusion:** this slice is validated. The next step assumes this behavior works; return to this checkpoint if something breaks.
+
 ## Passo 4 — Create the agent, WebRTC flow, states, and interface
 
-This slice replaces the starter page with a real conversation. A user gesture starts the session; events update state; End releases resources; the transcript remains in memory.
+**Step objective:** This slice replaces the starter page with a real conversation. A user gesture starts the session; events update state; End releases resources; the transcript remains in memory.
 
 In the lab terminal, make sure the directories and files exist:
 
@@ -2078,7 +2114,7 @@ Convert API errors into safe, reusable browser messages.
 
 Open `src/lib/client-api.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/lib/client-api.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/lib/client-api.ts</code></summary>
 
 ```ts
 export type ClientApiError = {
@@ -2118,7 +2154,7 @@ Present progress and errors in an accessible live region.
 
 Open `src/components/status-message.tsx`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/components/status-message.tsx</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/components/status-message.tsx</code></summary>
 
 ```tsx
 import { AlertCircle, CheckCircle2, Info } from "lucide-react";
@@ -2158,7 +2194,7 @@ Create visual feedback that respects reduced-motion preferences.
 
 Open `src/components/waveform.tsx`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/components/waveform.tsx</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/components/waveform.tsx</code></summary>
 
 ```tsx
 import type { CSSProperties } from "react";
@@ -2207,7 +2243,7 @@ Implement authorization, agent, WebRTC session, events, mute, text, transcript, 
 
 Open `src/components/realtime-voice-agent.tsx`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/components/realtime-voice-agent.tsx</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/components/realtime-voice-agent.tsx</code></summary>
 
 ```tsx
 "use client";
@@ -2801,7 +2837,7 @@ Compose the main presentation and voice experience.
 
 Open `src/components/voice-playground.tsx`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/components/voice-playground.tsx</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/components/voice-playground.tsx</code></summary>
 
 ```tsx
 "use client";
@@ -2925,7 +2961,7 @@ Define metadata, fonts, language, and the root page structure.
 
 Open `src/app/layout.tsx`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/app/layout.tsx</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/app/layout.tsx</code></summary>
 
 ```tsx
 import "@fontsource-variable/jetbrains-mono";
@@ -2981,7 +3017,7 @@ Render the main experience through the App Router.
 
 Open `src/app/page.tsx`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/app/page.tsx</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/app/page.tsx</code></summary>
 
 ```tsx
 import {
@@ -3140,7 +3176,7 @@ Apply the responsive visual system, visible focus, contrast, and reduced motion.
 
 Open `src/app/globals.css`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/app/globals.css</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/app/globals.css</code></summary>
 
 ```css
 :root {
@@ -3652,7 +3688,7 @@ Describe the app for installation and browser metadata.
 
 Open `src/app/manifest.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/app/manifest.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/app/manifest.ts</code></summary>
 
 ```ts
 import type { MetadataRoute } from "next";
@@ -3679,7 +3715,7 @@ Add the vector icon used by the application.
 
 Open `src/app/icon.svg`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>src/app/icon.svg</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>src/app/icon.svg</code></summary>
 
 ```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
@@ -3696,7 +3732,7 @@ Create the test that proves this responsibility without calling OpenAI.
 
 Open `tests/client-api.test.ts`, remove any placeholder, and add exactly:
 
-<details class="code-disclosure" markdown="1"><summary><strong>tests/client-api.test.ts</strong></summary>
+<details class="code-disclosure" markdown="1"><summary><code>tests/client-api.test.ts</code></summary>
 
 ```ts
 import { describe, expect, it } from "vitest";
@@ -3752,6 +3788,12 @@ npm run check
 ```
 
 Do not continue while the command fails. Read the first message, verify the file path, and compare with the checkpoint before reinstalling dependencies.
+
+> **Before continuing, confirm that:** the command exited with code zero, every path matches filename casing, and you can summarize this slice's responsibility.
+
+> **Comprehension prompt:** what problem does “Create the agent, WebRTC flow, states, and interface” prevent before the next slice?
+
+**Step 4 conclusion:** this slice is validated. The next step assumes this behavior works; return to this checkpoint if something breaks.
 
 ## Chapter checkpoint
 

@@ -2,6 +2,24 @@
 layout: default
 title: "Lab 02 · Chapter 3 — Run, test, and deploy"
 description: "Validate, run, diagnose, and deploy the Realtime voice agent."
+lang: en
+lab_label: "Lab 02 · Realtime Agent"
+lab_index: "/labs/lab-02-realtime-voice-agent/tutorial/tutorial-en.html"
+lab_index_label: "Lab 02 index"
+step_label: "Run, test, and deploy"
+step_position: "Step 3 of 3"
+alternate_url: "/labs/lab-02-realtime-voice-agent/tutorial/pt/03-execucao-testes-deploy.html"
+alternate_lang: pt-BR
+alternate_label: "Leia em português"
+checkpoint_url: "/labs/lab-02-realtime-voice-agent/tutorial/tutorial-en.html#recovery-checkpoints"
+checkpoint_label: "Lab 02 checkpoints"
+previous_url: "/labs/lab-02-realtime-voice-agent/tutorial/en/02-file-by-file-build.html"
+previous_label: "Build authorization, WebRTC, and the interface"
+previous_kicker: "← Previous chapter"
+next_url: "/docs/README.html"
+next_label: "Review the learning path and choose next steps"
+next_kicker: "Complete workshop →"
+chapter_nav_label: "Lab 02 workshop navigation"
 ---
 
 # Lab 02 · Chapter 3 — Run, test, diagnose, and deploy
@@ -73,17 +91,23 @@ Do not leave the tab connected. Explicit ending remains part of the test.
 
 ## 5. Troubleshoot by symptom
 
-| Symptom | Check |
-| --- | --- |
-| browser never requests microphone | OS permission, site permission, and user gesture |
-| `configured: false` | `.env.local`, key, and server restart |
-| client secret expires before connect | create it immediately before `connect` |
-| WebRTC fails | HTTPS/localhost, firewall, corporate network, browser console |
-| agent hears itself | use headphones and the correct microphone profile |
-| transcript duplicates | reconcile history snapshots instead of blind append |
-| microphone stays active | call `session.close()` and stop tracks during cleanup |
-| `429 rate_limit_exceeded` | wait for `Retry-After`; keep the safeguard |
-| `503 security_configuration_incomplete` | mandatory production variables |
+| Symptom | Likely cause | Diagnose | Fix | Confirm |
+| --- | --- | --- | --- | --- |
+| packages missing or Node incompatible | no install, wrong directory, or Node < 22 | `pwd`, `node --version`, `npm ls --depth=0` | enter Lab 02 and run `npm ci` with Node.js 22+ | `npm run typecheck` exits zero |
+| port 3000 busy | another local server is running | inspect `EADDRINUSE`; use `lsof -i :3000` or `Get-NetTCPConnection -LocalPort 3000` | stop the known process or use `npm run dev -- --port 3001` | the Next.js URL opens |
+| `configured: false` | missing `.env.local`, invalid key, or no restart | `git check-ignore -v .env.local` and `curl localhost:3000/api/health` | use `OPENAI_API_KEY=...`, save, restart | health reports `configured: true` without a credential |
+| unavailable quota/credits or model | project billing, limit, or no `gpt-realtime-2.1` access | inspect request ID, Usage/Billing, and health model | enable billing/limit or consistently use an allowed model | one short planned smoke test connects within budget |
+| browser never requests microphone | denied permission, insecure context, or no user gesture | inspect site permissions, `navigator.mediaDevices`, and console | use HTTPS/localhost, allow permission, click again | microphone indicator appears only during the session |
+| unsupported browser | WebRTC/media APIs unavailable or restricted | try current Chrome, Edge, Firefox, or Safari and inspect console | update/switch browser; avoid restricted webviews | session reaches connected state |
+| client secret expires before connect | issued too early or delayed beyond TTL | inspect issuance time without logging the value | issue immediately before `connect`; never reuse it | retry connects and response remains `no-store` |
+| WebRTC fails | firewall, VPN, corporate network, HTTPS, or negotiation | inspect `chrome://webrtc-internals`, console, and Network without copying tokens | try another network, remove a known VPN, confirm HTTPS, retry briefly | audio flows; **End** releases the connection |
+| `403 cross_origin_request` or CORS | `APP_ORIGIN` differs from the domain | compare browser origin with the protected variable | correct the full origin and redeploy | right origin gets a secret; another remains blocked |
+| agent hears itself | speaker feedback reaches microphone | use headphones and observe unexpected turns | keep headphones and choose the right noise-reduction profile | agent responds only to the learner |
+| transcript duplicates | history handled as append rather than snapshot | observe repeated items after history events | reconcile snapshots and keep state in memory | each turn appears once and disappears on refresh |
+| microphone stays active | cleanup did not close session/tracks | click **End** and inspect the system indicator | call `session.close()` and stop every track on cleanup/unmount | indicator disappears and a new session starts cleanly |
+| build/import fails in CI | filename casing or stale generated guide | `git ls-files | sort`, `npm run docs:check`, `npm run check` | match import and filename exactly; regenerate docs after displayed-code changes | local and remote checks pass |
+
+For stale cache, Pages workflow, or generated documentation issues, use the [shared troubleshooting guide](../../../../docs/troubleshooting.md).
 
 Compare without replacing files:
 
@@ -139,3 +163,22 @@ Leave `CLIENT_IP_HEADER` absent on Vercel. Elsewhere, name the header overwritte
 - [ ] budget and alerts are active.
 
 Done. Read the [architecture article](../article-en.md) for deeper WebRTC, state-machine, retention, abuse, and server-side-control reasoning.
+
+<div class="next-steps-cta" markdown="1">
+
+## Next steps
+
+You learned to separate authorization from media, issue an ephemeral credential, negotiate WebRTC, model turns/interruption, and release microphone and session resources. Evolve one thing at a time: function calling with schemas and human approval, real authentication, content-free observability, bounded reconnection, history with an explicit retention policy, or automated session-state tests.
+
+Before persisting transcripts or adding tools, define purpose, consent, authorization, and deletion. A short-lived client secret does not solve identity or abuse by itself.
+
+<div class="next-steps-cta__links">
+  <a href="https://developers.openai.com/api/docs/guides/voice-agents">Official voice agents guide ↗</a>
+  <a href="https://developers.openai.com/api/docs/guides/realtime-webrtc">Realtime with WebRTC ↗</a>
+  <a href="https://developers.openai.com/api/docs/guides/realtime-costs">Realtime costs ↗</a>
+  <a href="https://github.com/glaucia86/openai-voice-playground/issues/new">Share feedback / open an issue ↗</a>
+  <a href="../../../../CONTRIBUTING.md">Contributing guide</a>
+  <a href="https://github.com/glaucia86/openai-voice-playground">Repository · optional star ↗</a>
+</div>
+
+</div>

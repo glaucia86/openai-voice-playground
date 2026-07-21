@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="330" viewBox="0 0 1120 330" role="img" aria-labelledby="title desc">
+  <title id="title">Arquitetura do Lab 01 Text to Speech</title>
+  <desc id="desc">A pessoa usa a interface Next.js. A rota de servidor valida o pedido, usa a API key para chamar a OpenAI Speech API e devolve um stream ao player e download no navegador.</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#76f7c5"/></marker></defs>
+  <rect width="1120" height="330" rx="28" fill="#07111f"/>
+  <text x="42" y="46" fill="#76f7c5" font-family="ui-monospace,monospace" font-size="15" font-weight="700">LAB 01 · REQUEST / RESPONSE</text>
+  <g fill="#112238" stroke="#304760" stroke-width="2">
+    <rect x="42" y="104" width="160" height="116" rx="18"/><rect x="258" y="104" width="174" height="116" rx="18"/><rect x="488" y="104" width="190" height="116" rx="18"/><rect x="734" y="104" width="170" height="116" rx="18"/><rect x="960" y="104" width="118" height="116" rx="18"/>
+  </g>
+  <g fill="#f4f8ff" font-family="Inter,system-ui,sans-serif" font-size="17" font-weight="700" text-anchor="middle">
+    <text x="122" y="155">Pessoa</text><text x="122" y="181">usuária</text>
+    <text x="345" y="155">Interface</text><text x="345" y="181">Next.js</text>
+    <text x="583" y="146">Route Handler</text><text x="583" y="172">/api/speech</text><text x="583" y="198" fill="#76f7c5" font-size="13">API key no servidor</text>
+    <text x="819" y="155">OpenAI</text><text x="819" y="181">Speech API</text>
+    <text x="1019" y="155">Player</text><text x="1019" y="181">+ download</text>
+  </g>
+  <g stroke="#76f7c5" stroke-width="3" fill="none" marker-end="url(#arrow)"><path d="M202 162H248"/><path d="M432 162H478"/><path d="M678 162H724"/><path d="M904 162H950"/></g>
+  <text x="560" y="285" fill="#9eacc0" font-family="Inter,system-ui,sans-serif" font-size="15" text-anchor="middle">O navegador nunca recebe OPENAI_API_KEY; ele recebe somente o áudio e metadados seguros.</text>
+</svg>

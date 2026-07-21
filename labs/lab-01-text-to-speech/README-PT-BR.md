@@ -4,6 +4,12 @@ Construa uma interface acessível de texto para voz com Next.js 15, TypeScript 7
 
 [Read in English](README.md) · [Índice do workshop](../../docs/README.md) · [Tutorial completo em português](tutorial/tutorial.md) · [Standalone English tutorial](tutorial/tutorial-en.md) · [Voltar para todos os labs](../../README-PT-BR.md)
 
+| Tempo | Nível | Pré-requisitos | Resultado | Custo |
+| --- | --- | --- | --- | --- |
+| 2–3 h | iniciante | Node.js 22+, Git e conta da API OpenAI | texto vira áudio reproduzível e baixável | testes offline: nenhum; voz: cobrança por uso |
+
+Quer ver antes de construir? Abra **[Comece em 5 minutos](tutorial/tutorial.md#comece-em-5-minutos)**. O Lab 01 é o ponto de partida recomendado.
+
 ## O que você aprende
 
 - por que TTS delimitado é request/response, não uma sessão Realtime;

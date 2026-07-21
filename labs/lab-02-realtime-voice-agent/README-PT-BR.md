@@ -4,6 +4,12 @@ Construa um agente conversacional speech-to-speech fluido e interrompível com N
 
 [Read in English](README.md) · [Índice do workshop](../../docs/README.md) · [Tutorial completo em português](tutorial/tutorial.md) · [Standalone English tutorial](tutorial/tutorial-en.md) · [Voltar para todos os labs](../../README-PT-BR.md)
 
+| Tempo | Nível | Pré-requisitos | Resultado | Custo |
+| --- | --- | --- | --- | --- |
+| 3–4 h | intermediário | Node.js 22+, Git, API OpenAI, microfone e navegador moderno | conversa ao vivo com mute, interrupção e texto | gates offline: nenhum; sessão: cobrança por uso |
+
+Comece pelo Lab 01 se esta é sua primeira aplicação de voz, ou abra diretamente **[Comece em 5 minutos](tutorial/tutorial.md#comece-em-5-minutos)**.
+
 ## O que você aprende
 
 - por que uma conversa ao vivo é uma sessão com estado, não uma sequência de uploads de áudio;
@@ -23,7 +29,7 @@ O **[guia de acompanhamento](../../docs/workshop-guide-pt-br.md)** explica clone
 
 ## Execute localmente
 
-Pré-requisitos: Node.js 20+, npm, uma API key de projeto da OpenAI e navegador com suporte a WebRTC e microfone.
+Pré-requisitos: Node.js 22+, npm, uma API key de projeto da OpenAI e navegador com suporte a WebRTC e microfone.
 
 Dentro desta pasta:
 

@@ -2,6 +2,21 @@
 layout: default
 title: "Lab 01 — Text to Speech: workshop passo a passo"
 description: "Construa uma aplicação OpenAI Text to Speech arquivo por arquivo, do terminal ao deploy."
+lang: pt-BR
+lab_label: "Lab 01 · Text to Speech"
+lab_index: "/labs/lab-01-text-to-speech/tutorial/tutorial.html"
+lab_index_label: "Índice do Lab 01"
+step_label: "Visão geral"
+step_position: "Etapa 0 de 3"
+alternate_url: "/labs/lab-01-text-to-speech/tutorial/tutorial-en.html"
+alternate_lang: en
+alternate_label: "Read in English"
+checkpoint_url: "/labs/lab-01-text-to-speech/tutorial/tutorial.html#checkpoints-de-recuperação"
+checkpoint_label: "Checkpoints do Lab 01"
+next_url: "/labs/lab-01-text-to-speech/tutorial/pt/01-preparacao.html"
+next_label: "Preparar conta, terminal e projeto"
+next_kicker: "Próximo capítulo →"
+chapter_nav_label: "Navegação do workshop Lab 01"
 ---
 
 # Lab 01 — Text to Speech: workshop passo a passo
@@ -20,6 +35,59 @@ Ao terminar, você terá uma aplicação Next.js que:
 - trata erros sem vazar detalhes internos;
 - possui testes que não fazem chamadas pagas;
 - pode ser publicada na Vercel.
+
+## Comece em 5 minutos
+
+<dl class="lab-meta-grid">
+  <div><dt>Resultado</dt><dd>Texto vira áudio reproduzível e baixável</dd></div>
+  <div><dt>Tempo completo</dt><dd>2–3 horas</dd></div>
+  <div><dt>Dificuldade</dt><dd>Iniciante</dd></div>
+  <div><dt>Tecnologias</dt><dd>Next.js, TypeScript, Speech API, streaming</dd></div>
+  <div><dt>Pré-requisitos</dt><dd>Node.js 22+, Git e conta da API OpenAI</dd></div>
+  <div><dt>Custo</dt><dd>Chamadas de voz são cobradas conforme o uso; testes offline não geram custo</dd></div>
+</dl>
+
+Se você já possui uma API key e quer ver a solução final antes de construir, abra o terminal na pasta onde guarda projetos e execute:
+
+```bash
+git clone --depth 1 https://github.com/glaucia86/openai-voice-playground.git
+cd openai-voice-playground/labs/lab-01-text-to-speech
+npm ci
+cp .env.example .env.local
+npm run dev
+```
+
+No Windows PowerShell, substitua `cp .env.example .env.local` por `Copy-Item .env.example .env.local`. Antes de `npm run dev`, abra `.env.local`, coloque sua chave depois de `OPENAI_API_KEY=` e salve. Acesse <http://localhost:3000>, use uma frase curta e faça apenas o teste que pretende pagar.
+
+<div class="quick-command" markdown="1">
+
+### Prefere construir?
+
+- **Com apoio (recomendado):** use a [branch starter](https://github.com/glaucia86/openai-voice-playground/tree/workshop/lab-01-v1-starter) e o [primeiro checkpoint](https://github.com/glaucia86/openai-voice-playground/tree/workshop/lab-01-v1-step-01-contract).
+- **Desde uma pasta vazia:** abra o [Capítulo 1](pt/01-preparacao.md) e escolha o Caminho C.
+- **Código final:** consulte a [implementação na `main`](https://github.com/glaucia86/openai-voice-playground/tree/main/labs/lab-01-text-to-speech) sem substituir seu trabalho.
+
+</div>
+
+## Veja o resultado antes de construir
+
+<figure class="workshop-demo">
+  <img src="../../../docs/assets/openai-voice-labs-demo.gif" loading="lazy" width="960" height="540" alt="Demonstração real da interface do Lab 01 Text to Speech, incluindo a área que gera e reproduz áudio.">
+  <figcaption>Gravação real e comprimida do Lab 01. O fluxo recebe um texto curto, gera o áudio e apresenta player e download; nenhuma credencial ou informação pessoal aparece.</figcaption>
+</figure>
+
+Se você prefere movimento reduzido, a descrição equivalente é: a pessoa digita texto, escolhe voz e formato, envia o pedido, aguarda o estado de processamento e recebe controles para reproduzir ou baixar o áudio.
+
+## Arquitetura em uma tela
+
+<figure class="architecture-figure">
+  <img src="../../../docs/assets/lab-01-architecture-pt-br.svg" loading="lazy" width="1120" height="330" alt="Fluxo do Lab 01: pessoa usuária, interface Next.js, rota de servidor, OpenAI Speech API e player com download.">
+  <figcaption>Fonte editável: <a href="../../../docs/architecture/lab-01-pt-br.mmd">Mermaid</a>. O SVG é usado no GitHub Pages para manter a renderização previsível e acessível.</figcaption>
+</figure>
+
+A interface roda no navegador e envia somente os campos permitidos para `/api/speech`. A Route Handler roda no servidor, valida o corpo, aplica origem, acesso e quota, usa `OPENAI_API_KEY` para chamar a Speech API e encaminha o stream. O navegador recebe áudio e metadados seguros — nunca a chave padrão. No laboratório, limites locais ajudam no desenvolvimento; em produção ainda são necessários autenticação real, rate limit distribuído, orçamento e observabilidade sem conteúdo.
+
+> **Pergunta de compreensão:** por que o navegador recebe o áudio, mas nunca deve receber `OPENAI_API_KEY`?
 
 ## Escolha como acompanhar
 
@@ -66,6 +134,8 @@ O primeiro gate deve passar sem API key e sem chamada à OpenAI. Depois, abra o 
 | interface e testes | `workshop/lab-01-v1-step-03-interface` | [ver diff](https://github.com/glaucia86/openai-voice-playground/compare/workshop/lab-01-v1-step-02-server...workshop/lab-01-v1-step-03-interface) |
 
 Não faça checkout de um checkpoint com alterações não salvas. Primeiro faça commit na sua branch; depois use a referência para comparar.
+
+> **Antes de continuar, confirme que:** você escolheu uma das três rotas, sabe que a API pode gerar custo, tem Node.js 22+ e consegue explicar onde a API key ficará.
 
 ## Evidência final
 

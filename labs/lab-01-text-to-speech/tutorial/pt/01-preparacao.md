@@ -2,6 +2,24 @@
 layout: default
 title: "Lab 01 · Capítulo 1 — Preparação"
 description: "Prepare conta, terminal, API key e a base do laboratório de Text to Speech."
+lang: pt-BR
+lab_label: "Lab 01 · Text to Speech"
+lab_index: "/labs/lab-01-text-to-speech/tutorial/tutorial.html"
+lab_index_label: "Índice do Lab 01"
+step_label: "Preparação"
+step_position: "Etapa 1 de 3"
+alternate_url: "/labs/lab-01-text-to-speech/tutorial/en/01-preparation.html"
+alternate_lang: en
+alternate_label: "Read in English"
+checkpoint_url: "/labs/lab-01-text-to-speech/tutorial/tutorial.html#checkpoints-de-recuperação"
+checkpoint_label: "Checkpoints do Lab 01"
+previous_url: "/labs/lab-01-text-to-speech/tutorial/tutorial.html"
+previous_label: "Visão geral e Comece em 5 minutos"
+previous_kicker: "← Anterior"
+next_url: "/labs/lab-01-text-to-speech/tutorial/pt/02-construcao-arquivo-por-arquivo.html"
+next_label: "Construir a aplicação arquivo por arquivo"
+next_kicker: "Próximo capítulo →"
+chapter_nav_label: "Navegação do workshop Lab 01"
 ---
 
 # Lab 01 · Capítulo 1 — Prepare conta, terminal e projeto
@@ -177,5 +195,9 @@ Antes de avançar, confirme:
 - [ ] `.env.local` contém a chave somente na máquina local;
 - [ ] `git check-ignore -v .env.local` mostra uma regra;
 - [ ] nenhuma chamada paga foi necessária.
+
+> **Pergunta de compreensão:** por que provar que `.env.local` está ignorado deve acontecer antes de criar a primeira rota?
+
+**Conclusão:** ambiente, branch e segredo estão prontos. No próximo capítulo você criará contrato, servidor, streaming, interface e testes em fatias verificáveis.
 
 [Próximo: construa a aplicação arquivo por arquivo →](02-construcao-arquivo-por-arquivo.md)

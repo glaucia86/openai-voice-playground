@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="330" viewBox="0 0 1120 330" role="img" aria-labelledby="title desc">
+  <title id="title">Arquitetura do Lab 02 Realtime Voice Agent</title>
+  <desc id="desc">O navegador pede autorização ao servidor. O servidor usa a API key apenas para emitir um client secret curto. O navegador usa esse segredo para abrir uma sessão WebRTC diretamente com a OpenAI Realtime API.</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#a88bff"/></marker></defs>
+  <rect width="1120" height="330" rx="28" fill="#07111f"/>
+  <text x="42" y="46" fill="#a88bff" font-family="ui-monospace,monospace" font-size="15" font-weight="700">LAB 02 · LIVE SESSION / WEBRTC</text>
+  <g fill="#112238" stroke="#304760" stroke-width="2"><rect x="42" y="104" width="190" height="116" rx="18"/><rect x="288" y="104" width="190" height="116" rx="18"/><rect x="534" y="104" width="170" height="116" rx="18"/><rect x="760" y="104" width="150" height="116" rx="18"/><rect x="966" y="104" width="112" height="116" rx="18"/></g>
+  <g fill="#f4f8ff" font-family="Inter,system-ui,sans-serif" font-size="17" font-weight="700" text-anchor="middle">
+    <text x="137" y="155">Navegador</text><text x="137" y="181">+ microfone</text><text x="383" y="155">API de</text><text x="383" y="181">autorização</text><text x="619" y="146">Client secret</text><text x="619" y="172">de 60 s</text><text x="619" y="198" fill="#a88bff" font-size="13">não é API key</text><text x="835" y="155">Sessão</text><text x="835" y="181">WebRTC</text><text x="1022" y="155">OpenAI</text><text x="1022" y="181">Realtime</text>
+  </g>
+  <g stroke="#a88bff" stroke-width="3" fill="none" marker-end="url(#arrow)"><path d="M232 162H278"/><path d="M478 162H524"/><path d="M704 162H750"/><path d="M910 162H956"/></g>
+  <text x="560" y="285" fill="#9eacc0" font-family="Inter,system-ui,sans-serif" font-size="15" text-anchor="middle">A API key fica no servidor; áudio e eventos trafegam pela sessão WebRTC no navegador.</text>
+</svg>

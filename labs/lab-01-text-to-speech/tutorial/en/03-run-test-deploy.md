@@ -2,6 +2,24 @@
 layout: default
 title: "Lab 01 · Chapter 3 — Run, test, and deploy"
 description: "Validate, run, diagnose, and deploy the Text to Speech application."
+lang: en
+lab_label: "Lab 01 · Text to Speech"
+lab_index: "/labs/lab-01-text-to-speech/tutorial/tutorial-en.html"
+lab_index_label: "Lab 01 index"
+step_label: "Run, test, and deploy"
+step_position: "Step 3 of 3"
+alternate_url: "/labs/lab-01-text-to-speech/tutorial/pt/03-execucao-testes-deploy.html"
+alternate_lang: pt-BR
+alternate_label: "Leia em português"
+checkpoint_url: "/labs/lab-01-text-to-speech/tutorial/tutorial-en.html#recovery-checkpoints"
+checkpoint_label: "Lab 01 checkpoints"
+previous_url: "/labs/lab-01-text-to-speech/tutorial/en/02-file-by-file-build.html"
+previous_label: "Build the application file by file"
+previous_kicker: "← Previous chapter"
+next_url: "/labs/lab-02-realtime-voice-agent/tutorial/tutorial-en.html"
+next_label: "Continue to Lab 02 · Realtime Agent"
+next_kicker: "Next lab →"
+chapter_nav_label: "Lab 01 workshop navigation"
 ---
 
 # Lab 01 · Chapter 3 — Run, test, diagnose, and deploy
@@ -66,16 +84,22 @@ Stop the server with `Ctrl+C` when finished.
 
 ## 5. Troubleshoot by symptom
 
-| Symptom | Check |
-| --- | --- |
-| `configured: false` | `.env.local`, `OPENAI_API_KEY`, and server restart |
-| `401 unauthorized` | shared token entered in the UI when configured |
-| `403 cross_origin_request` | `APP_ORIGIN` and browser domain |
-| `413 request_too_large` | actual text/instruction and JSON body size |
-| `429 rate_limit_exceeded` | wait for `Retry-After`; keep the limiter |
-| `503 security_configuration_incomplete` | mandatory production variables |
-| audio downloads but does not play | format, `Content-Type`, and browser support |
-| TypeScript cannot resolve `@/` | `baseUrl`, `paths`, and current directory |
+Start with the symptom, run the diagnostic, and only then apply a fix. The final column prevents a plausible change from being mistaken for a proven repair.
+
+| Symptom | Likely cause | Diagnose | Fix | Confirm |
+| --- | --- | --- | --- | --- |
+| `npm` cannot find packages | missing dependencies or wrong directory | `pwd`, `node --version`, `npm ls --depth=0` | enter `labs/lab-01-text-to-speech` and run `npm ci` with Node.js 22+ | `npm run typecheck` exits zero |
+| server does not open or port is busy | another process uses 3000 | inspect `EADDRINUSE`; try `lsof -i :3000` or `Get-NetTCPConnection -LocalPort 3000` | stop the known process or run `npm run dev -- --port 3001` | the URL printed by Next.js responds |
+| `configured: false` | missing/misnamed `.env.local` or no restart | `git check-ignore -v .env.local` and `curl localhost:3000/api/health` | use exactly `OPENAI_API_KEY=...`, save, restart `npm run dev` | health reports `configured: true` without revealing the key |
+| `401 unauthorized` | workshop token missing or provider key invalid | inspect the safe code and `X-Request-Id`; never print the key | enter `PLAYGROUND_ACCESS_TOKEN` when required or rotate an invalid key | one short sentence produces audio |
+| unavailable quota/credits or `429` | project limit, billing, or rate limit | inspect `Retry-After` and Usage/Billing | wait, enable billing, or adjust the budget; keep the limiter | one short planned test works within budget |
+| model unavailable | project lacks access to the configured model | compare the health model with the safe error tied to the request ID | confirm `gpt-4o-mini-tts` access or consistently choose an allowed model in code and docs | build passes and the short call returns audio |
+| `403 cross_origin_request` or CORS | `APP_ORIGIN` differs from the real origin | compare the browser URL with `APP_ORIGIN` | set the full canonical origin and restart/redeploy | that origin works while another remains blocked |
+| `413 request_too_large` | text, instructions, or JSON exceeds limits | reduce input and inspect the status | keep the safeguard and use short content | allowed request works; excessive request remains rejected |
+| audio downloads but does not play | unsupported format or `Content-Type` | inspect Network and retry with `mp3` | use a supported format and preserve the API response header | player works and download extension is correct |
+| build/import fails only in CI | filename casing or stale generated guide | `git ls-files | sort`, `npm run docs:check`, `npm run check` | match import casing exactly and run `npm run docs:generate` when displayed code changed | local and remote checks pass |
+
+Documentation, cache, and Pages workflow problems are covered in the [shared troubleshooting guide](../../../../docs/troubleshooting.md).
 
 Inspect the final checkpoint without replacing files:
 
@@ -131,3 +155,22 @@ On Vercel, leave `CLIENT_IP_HEADER` absent to use the platform-protected header.
 - [ ] budget, alerts, and key ownership are defined.
 
 You completed the hands-on path. Use the [architecture article](../article-en.md) to review streaming, privacy, security, and production limits in greater depth.
+
+<div class="next-steps-cta" markdown="1">
+
+## Next steps
+
+You learned to keep the key on the server, validate input, forward an audio stream, model explicit UI states, and prove responsibilities with offline tests. Choose one small extension: add an allowed voice with a test, introduce real authentication, measure latency without logging text, expand UI tests, or prepare a safe deployment with a budget and distributed rate limiting.
+
+The natural next step is [Lab 02 — Realtime Agent](../../../lab-02-realtime-voice-agent/tutorial/tutorial-en.md), where a bounded request becomes a WebRTC session with microphone, turns, and interruption.
+
+<div class="next-steps-cta__links">
+  <a href="https://developers.openai.com/api/docs/guides/text-to-speech">Official Text to Speech docs ↗</a>
+  <a href="https://nextjs.org/docs/app/getting-started/route-handlers">Next.js Route Handlers ↗</a>
+  <a href="https://www.typescriptlang.org/docs/">TypeScript ↗</a>
+  <a href="https://github.com/glaucia86/openai-voice-playground/issues/new">Share feedback / open an issue ↗</a>
+  <a href="../../../../CONTRIBUTING.md">Contributing guide</a>
+  <a href="https://github.com/glaucia86/openai-voice-playground">Repository · optional star ↗</a>
+</div>
+
+</div>

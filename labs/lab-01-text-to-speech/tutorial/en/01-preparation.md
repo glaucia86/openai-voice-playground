@@ -2,6 +2,24 @@
 layout: default
 title: "Lab 01 · Chapter 1 — Preparation"
 description: "Prepare the account, terminal, API key, and Text to Speech lab base."
+lang: en
+lab_label: "Lab 01 · Text to Speech"
+lab_index: "/labs/lab-01-text-to-speech/tutorial/tutorial-en.html"
+lab_index_label: "Lab 01 index"
+step_label: "Preparation"
+step_position: "Step 1 of 3"
+alternate_url: "/labs/lab-01-text-to-speech/tutorial/pt/01-preparacao.html"
+alternate_lang: pt-BR
+alternate_label: "Leia em português"
+checkpoint_url: "/labs/lab-01-text-to-speech/tutorial/tutorial-en.html#recovery-checkpoints"
+checkpoint_label: "Lab 01 checkpoints"
+previous_url: "/labs/lab-01-text-to-speech/tutorial/tutorial-en.html"
+previous_label: "Overview and Start in 5 minutes"
+previous_kicker: "← Previous"
+next_url: "/labs/lab-01-text-to-speech/tutorial/en/02-file-by-file-build.html"
+next_label: "Build the application file by file"
+next_kicker: "Next chapter →"
+chapter_nav_label: "Lab 01 workshop navigation"
 ---
 
 # Lab 01 · Chapter 1 — Prepare the account, terminal, and project
@@ -151,5 +169,9 @@ Git must print the ignore rule, and `.env.local` must not appear in status. Stop
 - [ ] `.env.local` contains the key only on your machine;
 - [ ] Git proves that `.env.local` is ignored;
 - [ ] no paid request was required.
+
+> **Comprehension prompt:** why should you prove that `.env.local` is ignored before creating the first route?
+
+**Conclusion:** environment, branch, and secret are ready. The next chapter builds the contract, server, streaming path, interface, and tests in verifiable slices.
 
 [Next: build the application file by file →](02-file-by-file-build.md)

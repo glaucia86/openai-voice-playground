@@ -72,6 +72,15 @@
         {% unless page.url == '/' %}
           <button type="button" data-open-toc><span>04</span>Sumário desta página</button>
         {% endunless %}
+        {% if page.lab_index %}
+          <a href="{{ page.lab_index | relative_url }}"><span>05</span>{{ page.lab_index_label | default: "Lab index · Índice do lab" }}</a>
+        {% endif %}
+        {% if page.checkpoint_url %}
+          <a href="{{ page.checkpoint_url | relative_url }}"><span>06</span>{{ page.checkpoint_label | default: "Checkpoints" }}</a>
+        {% endif %}
+        {% if page.alternate_url %}
+          <a href="{{ page.alternate_url | relative_url }}" hreflang="{{ page.alternate_lang }}"><span>PT/EN</span>{{ page.alternate_label }}</a>
+        {% endif %}
       </nav>
       <a class="mobile-menu__github" href="https://github.com/{{ site.repository }}" target="_blank" rel="noreferrer">Open repository on GitHub ↗</a>
     </aside>
@@ -81,10 +90,24 @@
       <main id="main-content" class="home-content">{{ content }}</main>
     {% else %}
       <div class="document-hero">
-        <div>
-          <a href="{{ '/' | relative_url }}">OpenAI Voice Labs</a>
-          <span aria-hidden="true">/</span>
-          <span>{{ page.title }}</span>
+        <div class="document-hero__inner">
+          <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <a href="{{ '/' | relative_url }}">OpenAI Voice Labs</a>
+            <span aria-hidden="true">/</span>
+            {% if page.lab_index %}
+              <a href="{{ page.lab_index | relative_url }}">{{ page.lab_label }}</a>
+              <span aria-hidden="true">/</span>
+              <span aria-current="page">{{ page.step_label | default: page.title }}</span>
+            {% else %}
+              <span aria-current="page">{{ page.title }}</span>
+            {% endif %}
+          </nav>
+          {% if page.step_position or page.alternate_url %}
+            <div class="document-hero__meta">
+              {% if page.step_position %}<span>{{ page.step_position }}</span>{% endif %}
+              {% if page.alternate_url %}<a href="{{ page.alternate_url | relative_url }}" hreflang="{{ page.alternate_lang }}">{{ page.alternate_label }}</a>{% endif %}
+            </div>
+          {% endif %}
         </div>
       </div>
       <div class="page-grid">
@@ -93,6 +116,12 @@
             <span class="sidebar-kicker">On this page · Nesta página</span>
             <button type="button" class="sidebar-close" data-toc-close aria-label="Close page navigation">×</button>
           </div>
+          {% if page.lab_index %}
+            <div class="sidebar-shortcuts" aria-label="Workshop shortcuts">
+              <a href="{{ page.lab_index | relative_url }}">{{ page.lab_index_label | default: "Lab index · Índice" }}</a>
+              {% if page.checkpoint_url %}<a href="{{ page.checkpoint_url | relative_url }}">{{ page.checkpoint_label | default: "Checkpoints" }}</a>{% endif %}
+            </div>
+          {% endif %}
           <div class="completion-card">
             <div><span>Workshop progress</span><strong data-completion-label>0%</strong></div>
             <div class="completion-track" aria-hidden="true"><span data-completion-bar></span></div>
@@ -105,9 +134,26 @@
 
         <main id="main-content" class="workshop-content" data-workshop-content>
           <article>{{ content }}</article>
+          {% if page.previous_url or page.next_url %}
+            <nav class="chapter-nav" aria-label="{{ page.chapter_nav_label | default: 'Workshop chapter navigation' }}">
+              {% if page.previous_url %}
+                <a class="chapter-nav__link chapter-nav__link--previous" href="{{ page.previous_url | relative_url }}">
+                  <small>{{ page.previous_kicker | default: "← Previous · Anterior" }}</small>
+                  <span>{{ page.previous_label }}</span>
+                </a>
+              {% else %}<span></span>{% endif %}
+              {% if page.next_url %}
+                <a class="chapter-nav__link chapter-nav__link--next" href="{{ page.next_url | relative_url }}">
+                  <small>{{ page.next_kicker | default: "Next · Próximo →" }}</small>
+                  <span>{{ page.next_label }}</span>
+                </a>
+              {% endif %}
+            </nav>
+          {% endif %}
           <nav class="document-footer-nav" aria-label="Document actions">
-            <a href="{{ '/' | relative_url }}">← All workshops</a>
-            <button type="button" data-scroll-top>Back to top ↑</button>
+            <a href="{{ '/' | relative_url }}">← All workshops · Todos os workshops</a>
+            {% if page.lab_index %}<a href="{{ page.lab_index | relative_url }}">{{ page.lab_index_label | default: "Lab index · Índice" }}</a>{% endif %}
+            <button type="button" data-scroll-top>Back to top · Voltar ao topo ↑</button>
           </nav>
         </main>
       </div>
@@ -123,7 +169,10 @@
       </div>
       <nav aria-label="Footer navigation">
         <a href="{{ '/docs/README.html' | relative_url }}">Workshop index</a>
+        <a href="{{ '/docs/troubleshooting-pt-br.html' | relative_url }}">Troubleshooting</a>
+        <a href="{{ '/docs/ux-audit-pt-br.html' | relative_url }}">UX audit</a>
         <a href="{{ '/docs/github-pages-pt-br.html' | relative_url }}">Publishing guide</a>
+        <a href="{{ '/CONTRIBUTING.html' | relative_url }}">Contribute</a>
         <a href="https://github.com/{{ site.repository }}" target="_blank" rel="noreferrer">Repository ↗</a>
       </nav>
     </footer>

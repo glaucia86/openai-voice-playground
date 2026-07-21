@@ -1,0 +1,6 @@
+flowchart LR
+  U[Learner] --> UI[Next.js interface]
+  UI -->|validated JSON| R[Route Handler /api/speech]
+  R -->|OPENAI_API_KEY on server only| O[OpenAI Speech API]
+  O -->|audio stream| R
+  R --> A[Browser player and download]

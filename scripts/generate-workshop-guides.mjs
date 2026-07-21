@@ -387,11 +387,31 @@ async function renderGuide(lab, locale) {
   const previous = isPt ? lab.ptPrevious : lab.enPrevious;
   const next = isPt ? lab.ptNext : lab.enNext;
   const opposite = isPt ? "../en/02-file-by-file-build.md" : "../pt/02-construcao-arquivo-por-arquivo.md";
+  const tutorialBase = `/labs/${lab.id}/tutorial`;
+  const labLabel = `Lab ${lab.number} · ${title}`;
   const lines = [
     "---",
     "layout: default",
     `title: "Lab ${lab.number} · ${isPt ? "Capítulo 2 — Construção arquivo por arquivo" : "Chapter 2 — File-by-file build"}"`,
     `description: "${isPt ? `Crie a aplicação ${title} com o conteúdo completo de cada arquivo.` : `Create the ${title} application with the complete content of every file.`}"`,
+    `lang: ${isPt ? "pt-BR" : "en"}`,
+    `lab_label: "${labLabel}"`,
+    `lab_index: "${tutorialBase}/${isPt ? "tutorial" : "tutorial-en"}.html"`,
+    `lab_index_label: "${isPt ? `Índice do Lab ${lab.number}` : `Lab ${lab.number} index`}"`,
+    `step_label: "${isPt ? "Construção arquivo por arquivo" : "File-by-file build"}"`,
+    `step_position: "${isPt ? "Etapa 2 de 3" : "Step 2 of 3"}"`,
+    `alternate_url: "${tutorialBase}/${isPt ? "en/02-file-by-file-build" : "pt/02-construcao-arquivo-por-arquivo"}.html"`,
+    `alternate_lang: ${isPt ? "en" : "pt-BR"}`,
+    `alternate_label: "${isPt ? "Read in English" : "Leia em português"}"`,
+    `checkpoint_url: "${tutorialBase}/${isPt ? "tutorial" : "tutorial-en"}.html#${isPt ? "checkpoints-de-recuperação" : "recovery-checkpoints"}"`,
+    `checkpoint_label: "${isPt ? `Checkpoints do Lab ${lab.number}` : `Lab ${lab.number} checkpoints`}"`,
+    `previous_url: "${tutorialBase}/${isPt ? "pt/01-preparacao" : "en/01-preparation"}.html"`,
+    `previous_label: "${isPt ? "Preparar conta, terminal e projeto" : "Prepare the account, terminal, and project"}"`,
+    `previous_kicker: "${isPt ? "← Capítulo anterior" : "← Previous chapter"}"`,
+    `next_url: "${tutorialBase}/${isPt ? "pt/03-execucao-testes-deploy" : "en/03-run-test-deploy"}.html"`,
+    `next_label: "${isPt ? "Executar, testar, diagnosticar e publicar" : "Run, test, diagnose, and deploy"}"`,
+    `next_kicker: "${isPt ? "Próximo capítulo →" : "Next chapter →"}"`,
+    `chapter_nav_label: "${isPt ? `Navegação do workshop Lab ${lab.number}` : `Lab ${lab.number} workshop navigation`}"`,
     "---",
     "",
     `# Lab ${lab.number} · ${isPt ? "Capítulo 2 — Construa arquivo por arquivo" : "Chapter 2 — Build file by file"}`,
@@ -422,7 +442,7 @@ async function renderGuide(lab, locale) {
     lines.push(
       `## Passo ${step} — ${isPt ? group.ptTitle : group.enTitle}`,
       "",
-      isPt ? group.ptIntro : group.enIntro,
+      `**${isPt ? "Objetivo da etapa" : "Step objective"}:** ${isPt ? group.ptIntro : group.enIntro}`,
       "",
       isPt
         ? "No terminal do laboratório, garanta que as pastas e os arquivos existam:"
@@ -446,7 +466,7 @@ async function renderGuide(lab, locale) {
           ? `Abra \`${file}\`, apague qualquer placeholder e coloque exatamente:`
           : `Open \`${file}\`, remove any placeholder, and add exactly:`,
         "",
-        `<details class="code-disclosure" markdown="1"><summary><strong>${file}</strong></summary>`,
+        `<details class="code-disclosure" markdown="1"><summary><code>${file}</code></summary>`,
         "",
         `\`\`\`${languageFor(file)}`,
         content.trimEnd(),
@@ -471,6 +491,14 @@ async function renderGuide(lab, locale) {
       isPt
         ? "Não avance enquanto o comando retornar erro. Leia a primeira mensagem, confira o caminho do arquivo e compare com o checkpoint antes de reinstalar dependências."
         : "Do not continue while the command fails. Read the first message, verify the file path, and compare with the checkpoint before reinstalling dependencies.",
+      "",
+      `> **${isPt ? "Antes de continuar, confirme que" : "Before continuing, confirm that"}:** ${isPt ? "o comando terminou com código zero, o caminho de cada arquivo respeita maiúsculas e minúsculas e você consegue resumir a responsabilidade desta fatia." : "the command exited with code zero, every path matches filename casing, and you can summarize this slice's responsibility."}`,
+      "",
+      `> **${isPt ? "Pergunta de compreensão" : "Comprehension prompt"}:** ${isPt ? `qual problema o passo “${group.ptTitle}” evita antes da próxima fatia?` : `what problem does “${group.enTitle}” prevent before the next slice?`}`,
+      "",
+      isPt
+        ? `**Conclusão do passo ${step}:** a fatia está validada. O próximo passo parte desse comportamento funcionando; se algo quebrar, volte a este checkpoint.`
+        : `**Step ${step} conclusion:** this slice is validated. The next step assumes this behavior works; return to this checkpoint if something breaks.`,
       "",
     );
   }

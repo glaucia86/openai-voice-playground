@@ -2,7 +2,7 @@
 
 Construa um agente conversacional speech-to-speech fluido e interrompível com Next.js 15, TypeScript 7, OpenAI Realtime, WebRTC e OpenAI Agents SDK.
 
-[Read in English](README.md) · [Índice do workshop](../../docs/README.md) · [Tutorial completo em português](tutorial/tutorial.md) · [Standalone English tutorial](tutorial/tutorial-en.md) · [Voltar para todos os labs](../../README-PT-BR.md)
+[English](README.md) · [Índice do workshop](../../docs/README.md) · [Tutorial completo](tutorial/tutorial.md) · [Tutorial independente em inglês](tutorial/tutorial-en.md) · [Voltar para todos os labs](../../README-PT-BR.md)
 
 | Tempo | Nível | Pré-requisitos | Resultado | Custo |
 | --- | --- | --- | --- | --- |

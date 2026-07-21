@@ -2,6 +2,38 @@
   const root = document.documentElement;
   const content = document.querySelector("[data-workshop-content] article") ?? document.querySelector("main");
   const toast = document.querySelector("[data-toast]");
+  const isPortuguese = root.lang.toLocaleLowerCase().startsWith("pt");
+  const messages = isPortuguese
+    ? {
+        lightTheme: "Tema claro ativado",
+        darkTheme: "Tema escuro ativado",
+        markComplete: "Marcar seção como concluída",
+        progressReset: "Progresso do workshop reiniciado",
+        copy: "Copiar",
+        copyCode: "Copiar código",
+        copied: "Copiado ✓",
+        copiedToast: "Código copiado",
+        copyError: "Não foi possível copiar automaticamente",
+        noMatch: "Nenhuma seção encontrada",
+        page: "Página",
+        section: "Seção",
+        topic: "Tópico",
+      }
+    : {
+        lightTheme: "Light theme enabled",
+        darkTheme: "Dark theme enabled",
+        markComplete: "Mark section as complete",
+        progressReset: "Workshop progress reset",
+        copy: "Copy",
+        copyCode: "Copy code to clipboard",
+        copied: "Copied ✓",
+        copiedToast: "Code copied",
+        copyError: "Could not copy automatically",
+        noMatch: "No matching section",
+        page: "Page",
+        section: "Section",
+        topic: "Topic",
+      };
   let toastTimer;
 
   const showToast = (message) => {
@@ -44,7 +76,7 @@
     const nextTheme = root.dataset.theme === "light" ? "dark" : "light";
     root.dataset.theme = nextTheme;
     safeStorage.set("voice-labs-theme", nextTheme);
-    showToast(nextTheme === "light" ? "Light theme enabled" : "Dark theme enabled");
+    showToast(nextTheme === "light" ? messages.lightTheme : messages.darkTheme);
   });
 
   const progressBar = document.querySelector("[data-reading-progress]");
@@ -231,7 +263,7 @@
           check.type = "button";
           check.className = "toc-check";
           check.dataset.completionId = heading.id;
-          check.setAttribute("aria-label", `Mark section as complete: ${heading.textContent}`);
+          check.setAttribute("aria-label", `${messages.markComplete}: ${heading.textContent}`);
           check.addEventListener("click", () => {
             if (completed.has(heading.id)) completed.delete(heading.id);
             else completed.add(heading.id);
@@ -249,7 +281,7 @@
     completed.clear();
     safeStorage.remove(completionKey);
     updateCompletion();
-    showToast("Workshop progress reset / Progresso reiniciado");
+    showToast(messages.progressReset);
   });
 
   if ("IntersectionObserver" in window && headings.length) {
@@ -292,22 +324,21 @@
       const button = document.createElement("button");
       button.type = "button";
       button.className = "copy-code";
-      const isPortuguese = document.documentElement.lang.toLocaleLowerCase().startsWith("pt");
-      const copyLabel = isPortuguese ? "Copiar" : "Copy";
+      const copyLabel = messages.copy;
       button.textContent = copyLabel;
-      button.setAttribute("aria-label", isPortuguese ? "Copiar código" : "Copy code to clipboard");
+      button.setAttribute("aria-label", messages.copyCode);
       button.addEventListener("click", async () => {
         try {
           await navigator.clipboard.writeText(code.textContent ?? "");
-          button.textContent = isPortuguese ? "Copiado ✓" : "Copied ✓";
+          button.textContent = messages.copied;
           button.classList.add("is-copied");
-          showToast("Code copied / Código copiado");
+          showToast(messages.copiedToast);
           window.setTimeout(() => {
             button.textContent = copyLabel;
             button.classList.remove("is-copied");
           }, 1800);
         } catch {
-          showToast("Could not copy automatically");
+          showToast(messages.copyError);
         }
       });
       frame.append(button);
@@ -333,7 +364,7 @@
     if (!matches.length) {
       const empty = document.createElement("p");
       empty.className = "search-empty";
-      empty.textContent = "No matching section / Nenhuma seção encontrada";
+      empty.textContent = messages.noMatch;
       searchResults.append(empty);
       return;
     }
@@ -342,7 +373,7 @@
       link.className = "search-result";
       link.href = `#${entry.id}`;
       const label = document.createElement("small");
-      label.textContent = entry.level === "H1" ? "Page" : entry.level === "H2" ? "Section" : "Topic";
+      label.textContent = entry.level === "H1" ? messages.page : entry.level === "H2" ? messages.section : messages.topic;
       const title = document.createElement("span");
       title.textContent = entry.title;
       link.append(label, title);

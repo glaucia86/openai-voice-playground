@@ -2,11 +2,15 @@
 layout: default
 title: "Como acompanhar os workshops"
 description: "Escolha entre solução final, starter ou pasta vazia e use checkpoints sem perder trabalho."
+lang: pt-BR
+alternate_url: "/docs/workshop-guide.html"
+alternate_lang: en
+alternate_label: "English"
 ---
 
 # Como acompanhar os workshops
 
-[Read in English](workshop-guide.md) · [Índice do workshop](README.md) · [README principal](../README-PT-BR.md)
+[English](workshop-guide.md) · [Índice do workshop](README.md) · [README principal](../README-PT-BR.md)
 
 Os dois laboratórios oferecem três experiências. Escolha uma antes de começar:
 

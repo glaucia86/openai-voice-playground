@@ -10,7 +10,7 @@ step_label: "Overview"
 step_position: "Step 0 of 3"
 alternate_url: "/labs/lab-01-text-to-speech/tutorial/tutorial.html"
 alternate_lang: pt-BR
-alternate_label: "Leia em português"
+alternate_label: "Português"
 checkpoint_url: "/labs/lab-01-text-to-speech/tutorial/tutorial-en.html#recovery-checkpoints"
 checkpoint_label: "Lab 01 checkpoints"
 next_url: "/labs/lab-01-text-to-speech/tutorial/en/01-preparation.html"
@@ -21,7 +21,7 @@ chapter_nav_label: "Lab 01 workshop navigation"
 
 # Lab 01 — Text to Speech: step-by-step workshop
 
-[Leia em português](tutorial.md) · [Workshop index](../../../docs/README.md) · [Lab 02 →](../../lab-02-realtime-voice-agent/tutorial/tutorial-en.md)
+[Português](tutorial.md) · [Workshop index](../../../docs/README-en.md) · [Lab 02 →](../../lab-02-realtime-voice-agent/tutorial/tutorial-en.md)
 
 This workshop does more than explain the architecture. You open a terminal, create the project, create every file, paste a complete implementation, run a checkpoint, and only then continue.
 

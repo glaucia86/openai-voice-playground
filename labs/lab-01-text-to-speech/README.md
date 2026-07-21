@@ -2,7 +2,7 @@
 
 Build an accessible, production-minded text-to-speech interface with Next.js 15, TypeScript 7, the OpenAI SDK, validated server boundaries, streamed audio, and carefully designed loading and error states.
 
-[Versão em português](README-PT-BR.md) · [Workshop index](../../docs/README.md) · [Standalone English tutorial](tutorial/tutorial-en.md) · [Tutorial em português](tutorial/tutorial.md) · [Back to all labs](../../README.md)
+[Português](README-PT-BR.md) · [Workshop index](../../docs/README-en.md) · [Standalone tutorial](tutorial/tutorial-en.md) · [Portuguese tutorial](tutorial/tutorial.md) · [Back to all labs](../../README.md)
 
 | Duration | Level | Prerequisites | Outcome | Cost |
 | --- | --- | --- | --- | --- |

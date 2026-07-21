@@ -5,12 +5,12 @@ description: "Reproducible diagnostics for generated docs, GitHub Pages, cache, 
 lang: en
 alternate_url: "/docs/troubleshooting-pt-br.html"
 alternate_lang: pt-BR
-alternate_label: "Leia em português"
+alternate_label: "Português"
 ---
 
 # Shared troubleshooting — workshops and GitHub Pages
 
-[Leia em português](troubleshooting-pt-br.md) · [Workshop index](README.md)
+[Português](troubleshooting-pt-br.md) · [Workshop index](README-en.md)
 
 Use each lab's final chapter for API, audio, microphone, and WebRTC problems. This page covers the repository's shared layer.
 
@@ -39,4 +39,3 @@ npm run check
 ```
 
 Never paste `.env.local`, headers, client secrets, or content logs into an issue. Share only the OS, browser, command, first sanitized message, `X-Request-Id`, and commit used.
-

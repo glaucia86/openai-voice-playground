@@ -2,11 +2,15 @@
 layout: default
 title: "Publish the workshops with GitHub Pages"
 description: "Enable and validate the bilingual OpenAI Voice Labs static site."
+lang: en
+alternate_url: "/docs/github-pages-pt-br.html"
+alternate_lang: pt-BR
+alternate_label: "Português"
 ---
 
 # Publish the workshops with GitHub Pages
 
-[Leia em português](github-pages-pt-br.md) · [Open the site index](../index.md) · [Workshop index](README.md)
+[Português](github-pages-pt-br.md) · [Open the site index](../en/index.md) · [Workshop index](README-en.md)
 
 The [`.github/workflows/pages.yml`](../.github/workflows/pages.yml) workflow builds Markdown with Jekyll and publishes an artifact through the official GitHub Pages deployment mechanism.
 
@@ -22,12 +26,12 @@ The [`.github/workflows/pages.yml`](../.github/workflows/pages.yml) workflow bui
 After deployment, the `github-pages` environment shows the published URL. The expected project URL is:
 
 ```text
-https://glaucia86.github.io/openai-voice-playground/
+https://glaucia86.github.io/openai-voice-playground/en/
 ```
 
 ## What triggers the site
 
-The workflow runs when `main` changes Pages configuration, `index.md`, `docs/**`, or any `labs/*/tutorial/**` directory. Application-only changes do not deploy documentation unless the tutorial changes too.
+The workflow runs when `main` changes Pages configuration, `index.md`, `en/**`, `docs/**`, or any `labs/*/tutorial/**` directory. Application-only changes do not deploy documentation unless the tutorial changes too.
 
 ## Validate before pushing
 

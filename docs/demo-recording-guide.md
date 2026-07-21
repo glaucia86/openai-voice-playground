@@ -5,12 +5,12 @@ description: "A safe plan for capturing real OpenAI Voice Labs GIFs and videos."
 lang: en
 alternate_url: "/docs/demo-recording-guide-pt-br.html"
 alternate_lang: pt-BR
-alternate_label: "Leia em português"
+alternate_label: "Português"
 ---
 
 # How to record real lab demonstrations
 
-[Leia em português](demo-recording-guide-pt-br.md) · [Back to workshops](../index.md#workshops)
+[Português](demo-recording-guide-pt-br.md) · [Back to workshops](../en/index.md#workshops)
 
 This plan completes media without fabricating an outcome, exposing credentials, or recording personal data. The current Lab 01 GIF is a real, compressed demonstration. Lab 02 media remains explicitly pending until a controlled session can be recorded.
 
@@ -42,4 +42,3 @@ Show: notice and consent → start → microphone permission → connected state
 ## Review before committing
 
 Inspect frame by frame: no secret, token, request header, personal data, or notification may appear. Then run `npm run docs:links` and view the page at 360 px and 1440 px. If a real safe recording is unavailable, keep the honest placeholder.
-

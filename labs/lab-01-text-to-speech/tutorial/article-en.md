@@ -2,6 +2,10 @@
 layout: default
 title: "Lab 01 — Text to Speech architecture article"
 description: "Architecture, security, streaming, testing, and production decisions for the Text to Speech lab."
+lang: en
+alternate_url: "/labs/lab-01-text-to-speech/tutorial/article.html"
+alternate_lang: pt-BR
+alternate_label: "Português"
 ---
 
 # Lab 01 — Text to Speech architecture article with OpenAI, Next.js 15, and TypeScript 7
@@ -20,7 +24,7 @@ description: "Architecture, security, streaming, testing, and production decisio
 - **Prerequisite module:** none; everything required to complete the lab is included here
 - **Completion evidence:** the app runs and `npm run check:lab01` passes from the repository root
 
-[Step-by-step workshop](tutorial-en.md) · [Portuguese article](article.md) · [Workshop index](../../../docs/README.md) · [Module 02 — Realtime →](../../lab-02-realtime-voice-agent/tutorial/tutorial-en.md)
+[Step-by-step workshop](tutorial-en.md) · [Portuguese article](article.md) · [Workshop index](../../../docs/README-en.md) · [Module 02 — Realtime →](../../lab-02-realtime-voice-agent/tutorial/tutorial-en.md)
 
 ---
 
@@ -928,4 +932,4 @@ That is the standard worth carrying into other AI projects: do not only show tha
 
 ---
 
-[Step-by-step workshop](tutorial-en.md) · [Portuguese article](article.md) · [Workshop index](../../../docs/README.md) · [Module 02 — Realtime →](../../lab-02-realtime-voice-agent/tutorial/tutorial-en.md)
+[Step-by-step workshop](tutorial-en.md) · [Portuguese article](article.md) · [Workshop index](../../../docs/README-en.md) · [Module 02 — Realtime →](../../lab-02-realtime-voice-agent/tutorial/tutorial-en.md)

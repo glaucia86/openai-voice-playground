@@ -2,6 +2,10 @@
 layout: default
 title: "Lab 01 — Artigo arquitetural de Text to Speech"
 description: "Decisões de arquitetura, segurança, streaming, testes e produção do laboratório de Text to Speech."
+lang: pt-BR
+alternate_url: "/labs/lab-01-text-to-speech/tutorial/article-en.html"
+alternate_lang: en
+alternate_label: "English"
 ---
 
 # Laboratório 01 — Artigo arquitetural de Text to Speech com OpenAI, Next.js 15 e TypeScript 7
@@ -13,7 +17,7 @@ description: "Decisões de arquitetura, segurança, streaming, testes e produç�
 **Código deste lab:** [`labs/lab-01-text-to-speech`](https://github.com/glaucia86/openai-voice-playground/tree/main/labs/lab-01-text-to-speech)<br>
 **Última validação técnica:** 19 de julho de 2026
 
-**Idioma:** Português · [Read in English](article-en.md)
+**Idioma:** Português · [English](article-en.md)
 
 - **Trilha:** Módulo 01 de 02
 - **Tempo estimado:** 2–3 horas

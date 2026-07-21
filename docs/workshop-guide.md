@@ -2,11 +2,15 @@
 layout: default
 title: "How to follow the workshops"
 description: "Choose the final solution, a starter, or an empty directory and use checkpoints safely."
+lang: en
+alternate_url: "/docs/workshop-guide-pt-br.html"
+alternate_lang: pt-BR
+alternate_label: "Português"
 ---
 
 # How to follow the workshops
 
-[Leia em português](workshop-guide-pt-br.md) · [Workshop index](README.md) · [Main README](../README.md)
+[Português](workshop-guide-pt-br.md) · [Workshop index](README-en.md) · [Main README](../README.md)
 
 Both labs offer three learning experiences. Choose one before you start:
 

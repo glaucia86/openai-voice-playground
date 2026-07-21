@@ -5,12 +5,12 @@ description: "Roteiro seguro para capturar GIFs e vídeos reais dos OpenAI Voice
 lang: pt-BR
 alternate_url: "/docs/demo-recording-guide.html"
 alternate_lang: en
-alternate_label: "Read in English"
+alternate_label: "English"
 ---
 
 # Como gravar demonstrações reais dos laboratórios
 
-[Read in English](demo-recording-guide.md) · [Voltar aos workshops](../index.md#workshops)
+[English](demo-recording-guide.md) · [Voltar aos workshops](../index.md#workshops)
 
 Este roteiro existe para completar a mídia sem inventar um resultado, revelar credenciais ou gravar dados pessoais. O GIF atual do Lab 01 é uma demonstração real e comprimida. A mídia do Lab 02 permanece marcada como pendente até que uma sessão controlada possa ser gravada.
 
@@ -42,4 +42,3 @@ Mostre: aviso e consentimento → iniciar → permissão do microfone → estado
 ## Revisão antes do commit
 
 Assista quadro a quadro e confirme: nenhum segredo, token, request header, dado pessoal ou notificação aparece. Depois rode `npm run docs:links` e abra a página em 360 px e 1440 px. Se não houver uma gravação real e segura, mantenha o placeholder honesto.
-

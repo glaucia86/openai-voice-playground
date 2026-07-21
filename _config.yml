@@ -1,7 +1,7 @@
 title: OpenAI Voice Labs
 description: Step-by-step workshops for building responsible OpenAI voice applications.
 theme: jekyll-theme-cayman
-lang: en
+lang: pt-BR
 markdown: kramdown
 highlighter: rouge
 kramdown:

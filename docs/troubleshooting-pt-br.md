@@ -5,12 +5,12 @@ description: "Diagnóstico reproduzível para documentação gerada, GitHub Page
 lang: pt-BR
 alternate_url: "/docs/troubleshooting.html"
 alternate_lang: en
-alternate_label: "Read in English"
+alternate_label: "English"
 ---
 
 # Troubleshooting compartilhado — workshops e GitHub Pages
 
-[Read in English](troubleshooting.md) · [Índice dos workshops](README.md)
+[English](troubleshooting.md) · [Índice dos workshops](README.md)
 
 Use os capítulos finais de cada laboratório para problemas de API, áudio, microfone e WebRTC. Esta página trata a camada compartilhada do repositório.
 
@@ -39,4 +39,3 @@ npm run check
 ```
 
 Não cole `.env.local`, headers, client secrets ou logs de conteúdo numa issue. Informe apenas sistema, navegador, comando, primeira mensagem sanitizada, `X-Request-Id` e commit usado.
-

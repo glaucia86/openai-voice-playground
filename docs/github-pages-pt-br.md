@@ -2,11 +2,15 @@
 layout: default
 title: "Publicar os workshops no GitHub Pages"
 description: "Ative e valide o site estático bilíngue dos OpenAI Voice Labs."
+lang: pt-BR
+alternate_url: "/docs/github-pages.html"
+alternate_lang: en
+alternate_label: "English"
 ---
 
 # Publicar os workshops no GitHub Pages
 
-[Read in English](github-pages.md) · [Abrir a página inicial](../index.md) · [Índice do workshop](README.md)
+[English](github-pages.md) · [Abrir a página inicial](../index.md) · [Índice do workshop](README.md)
 
 O workflow [`.github/workflows/pages.yml`](../.github/workflows/pages.yml) compila o conteúdo Markdown com Jekyll e publica um artefato pelo mecanismo oficial do GitHub Pages.
 
@@ -25,12 +29,19 @@ Depois do deploy, o ambiente `github-pages` mostra a URL publicada. Para este re
 https://glaucia86.github.io/openai-voice-playground/
 ```
 
+A versão em inglês usa uma rota própria:
+
+```text
+https://glaucia86.github.io/openai-voice-playground/en/
+```
+
 ## O que dispara o site
 
 O workflow executa quando `main` recebe alterações em:
 
 - configuração ou workflow do Pages;
 - `index.md`;
+- `en/**`;
 - `docs/**`;
 - qualquer diretório `labs/*/tutorial/**`.
 

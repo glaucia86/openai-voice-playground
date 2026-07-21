@@ -2,6 +2,7 @@
 layout: default
 title: "Módulo 00 — Configuração do ambiente e da API"
 description: "Prepare ferramentas, projeto da API OpenAI, segredo local e primeira execução."
+lang: pt-BR
 ---
 
 # Módulo 00 — Configuração do ambiente, da API e execução local

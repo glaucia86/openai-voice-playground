@@ -10,7 +10,7 @@ step_label: "Visão geral"
 step_position: "Etapa 0 de 3"
 alternate_url: "/labs/lab-02-realtime-voice-agent/tutorial/tutorial-en.html"
 alternate_lang: en
-alternate_label: "Read in English"
+alternate_label: "English"
 checkpoint_url: "/labs/lab-02-realtime-voice-agent/tutorial/tutorial.html#checkpoints-de-recuperação"
 checkpoint_label: "Checkpoints do Lab 02"
 next_url: "/labs/lab-02-realtime-voice-agent/tutorial/pt/01-preparacao.html"
@@ -21,7 +21,7 @@ chapter_nav_label: "Navegação do workshop Lab 02"
 
 # Lab 02 — Agente Realtime: workshop passo a passo
 
-[Read in English](tutorial-en.md) · [Índice dos workshops](../../../docs/README.md) · [← Lab 01](../../lab-01-text-to-speech/tutorial/tutorial.md)
+[English](tutorial-en.md) · [Índice dos workshops](../../../docs/README.md) · [← Lab 01](../../lab-01-text-to-speech/tutorial/tutorial.md)
 
 Neste workshop você cria uma aplicação speech-to-speech real seguindo ações concretas: abra o terminal, crie o arquivo indicado, coloque o conteúdo completo, execute o checkpoint e só então avance.
 

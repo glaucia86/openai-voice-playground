@@ -2,6 +2,10 @@
 layout: default
 title: "Lab 02 — Realtime voice-agent architecture article"
 description: "Architecture, WebRTC, security, state, testing, and production decisions for the Realtime agent."
+lang: en
+alternate_url: "/labs/lab-02-realtime-voice-agent/tutorial/article.html"
+alternate_lang: pt-BR
+alternate_label: "Português"
 ---
 
 # Lab 02 — Realtime voice-agent architecture article with OpenAI Realtime, WebRTC, and Agents SDK
@@ -20,7 +24,7 @@ description: "Architecture, WebRTC, security, state, testing, and production dec
 - **Prerequisite module:** none; Lab 01 is recommended but not required
 - **Completion evidence:** the app runs and `npm run check:lab02` passes from the repository root
 
-[Step-by-step workshop](tutorial-en.md) · [Portuguese article](article.md) · [← Module 01 — TTS](../../lab-01-text-to-speech/tutorial/tutorial-en.md) · [Workshop index](../../../docs/README.md)
+[Step-by-step workshop](tutorial-en.md) · [Portuguese article](article.md) · [← Module 01 — TTS](../../lab-01-text-to-speech/tutorial/tutorial-en.md) · [Workshop index](../../../docs/README-en.md)
 
 ---
 
@@ -1170,4 +1174,4 @@ That is the difference between a voice demo and an engineering foundation. A dem
 
 ---
 
-[Step-by-step workshop](tutorial-en.md) · [Portuguese article](article.md) · [← Module 01 — TTS](../../lab-01-text-to-speech/tutorial/tutorial-en.md) · [Workshop index](../../../docs/README.md)
+[Step-by-step workshop](tutorial-en.md) · [Portuguese article](article.md) · [← Module 01 — TTS](../../lab-01-text-to-speech/tutorial/tutorial-en.md) · [Workshop index](../../../docs/README-en.md)

@@ -10,7 +10,7 @@ step_label: "Run, test, and deploy"
 step_position: "Step 3 of 3"
 alternate_url: "/labs/lab-01-text-to-speech/tutorial/pt/03-execucao-testes-deploy.html"
 alternate_lang: pt-BR
-alternate_label: "Leia em português"
+alternate_label: "Português"
 checkpoint_url: "/labs/lab-01-text-to-speech/tutorial/tutorial-en.html#recovery-checkpoints"
 checkpoint_label: "Lab 01 checkpoints"
 previous_url: "/labs/lab-01-text-to-speech/tutorial/en/02-file-by-file-build.html"

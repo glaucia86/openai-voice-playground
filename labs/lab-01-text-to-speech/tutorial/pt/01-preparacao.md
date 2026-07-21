@@ -10,7 +10,7 @@ step_label: "Preparação"
 step_position: "Etapa 1 de 3"
 alternate_url: "/labs/lab-01-text-to-speech/tutorial/en/01-preparation.html"
 alternate_lang: en
-alternate_label: "Read in English"
+alternate_label: "English"
 checkpoint_url: "/labs/lab-01-text-to-speech/tutorial/tutorial.html#checkpoints-de-recuperação"
 checkpoint_label: "Checkpoints do Lab 01"
 previous_url: "/labs/lab-01-text-to-speech/tutorial/tutorial.html"

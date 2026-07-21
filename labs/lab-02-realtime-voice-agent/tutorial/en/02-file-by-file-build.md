@@ -10,7 +10,7 @@ step_label: "File-by-file build"
 step_position: "Step 2 of 3"
 alternate_url: "/labs/lab-02-realtime-voice-agent/tutorial/pt/02-construcao-arquivo-por-arquivo.html"
 alternate_lang: pt-BR
-alternate_label: "Leia em português"
+alternate_label: "Português"
 checkpoint_url: "/labs/lab-02-realtime-voice-agent/tutorial/tutorial-en.html#recovery-checkpoints"
 checkpoint_label: "Lab 02 checkpoints"
 previous_url: "/labs/lab-02-realtime-voice-agent/tutorial/en/01-preparation.html"

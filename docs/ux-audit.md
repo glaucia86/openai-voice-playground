@@ -5,12 +5,12 @@ description: "Evidence-based before-and-after evaluation of OpenAI Voice Labs."
 lang: en
 alternate_url: "/docs/ux-audit-pt-br.html"
 alternate_lang: pt-BR
-alternate_label: "Leia em português"
+alternate_label: "Português"
 ---
 
 # UX, DevEx, and learning audit
 
-[Leia em português](ux-audit-pt-br.md) · [Workshop index](README.md)
+[Português](ux-audit-pt-br.md) · [Workshop index](README-en.md)
 
 ## Method
 
@@ -44,4 +44,3 @@ The baseline is commit `e05ca3e`, inspected as both an instructor and a beginner
 - A real Realtime demonstration requires a controlled credentialed microphone session and API cost; the placeholder does not fake an outcome.
 - Scoring does not replace participant research. The recommended next step is watching at least three beginners complete each path and measuring duration, blockers, and recovery.
 - GitHub Pages hosts documentation only; the applications still require a server-side Next.js host.
-

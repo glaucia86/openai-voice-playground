@@ -10,7 +10,7 @@ step_label: "Construção arquivo por arquivo"
 step_position: "Etapa 2 de 3"
 alternate_url: "/labs/lab-01-text-to-speech/tutorial/en/02-file-by-file-build.html"
 alternate_lang: en
-alternate_label: "Read in English"
+alternate_label: "English"
 checkpoint_url: "/labs/lab-01-text-to-speech/tutorial/tutorial.html#checkpoints-de-recuperação"
 checkpoint_label: "Checkpoints do Lab 01"
 previous_url: "/labs/lab-01-text-to-speech/tutorial/pt/01-preparacao.html"

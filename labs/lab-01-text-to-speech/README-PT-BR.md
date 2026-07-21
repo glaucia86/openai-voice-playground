@@ -2,7 +2,7 @@
 
 Construa uma interface acessível de texto para voz com Next.js 15, TypeScript 7, SDK da OpenAI, fronteira de servidor validada, áudio em streaming e estados de carregamento e erro bem desenhados.
 
-[Read in English](README.md) · [Índice do workshop](../../docs/README.md) · [Tutorial completo em português](tutorial/tutorial.md) · [Standalone English tutorial](tutorial/tutorial-en.md) · [Voltar para todos os labs](../../README-PT-BR.md)
+[English](README.md) · [Índice do workshop](../../docs/README.md) · [Tutorial completo](tutorial/tutorial.md) · [Tutorial independente em inglês](tutorial/tutorial-en.md) · [Voltar para todos os labs](../../README-PT-BR.md)
 
 | Tempo | Nível | Pré-requisitos | Resultado | Custo |
 | --- | --- | --- | --- | --- |

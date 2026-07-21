@@ -402,7 +402,7 @@ async function renderGuide(lab, locale) {
     `step_position: "${isPt ? "Etapa 2 de 3" : "Step 2 of 3"}"`,
     `alternate_url: "${tutorialBase}/${isPt ? "en/02-file-by-file-build" : "pt/02-construcao-arquivo-por-arquivo"}.html"`,
     `alternate_lang: ${isPt ? "en" : "pt-BR"}`,
-    `alternate_label: "${isPt ? "Read in English" : "Leia em português"}"`,
+    `alternate_label: "${isPt ? "English" : "Português"}"`,
     `checkpoint_url: "${tutorialBase}/${isPt ? "tutorial" : "tutorial-en"}.html#${isPt ? "checkpoints-de-recuperação" : "recovery-checkpoints"}"`,
     `checkpoint_label: "${isPt ? `Checkpoints do Lab ${lab.number}` : `Lab ${lab.number} checkpoints`}"`,
     `previous_url: "${tutorialBase}/${isPt ? "pt/01-preparacao" : "en/01-preparation"}.html"`,

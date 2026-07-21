@@ -2,6 +2,10 @@
 layout: default
 title: "Lab 02 — Artigo arquitetural do agente Realtime"
 description: "Decisões de arquitetura, WebRTC, segurança, estados, testes e produção do agente Realtime."
+lang: pt-BR
+alternate_url: "/labs/lab-02-realtime-voice-agent/tutorial/article-en.html"
+alternate_lang: en
+alternate_label: "English"
 ---
 
 # Laboratório 02 — Artigo arquitetural do agente de voz com OpenAI Realtime, WebRTC e Agents SDK
@@ -13,7 +17,7 @@ description: "Decisões de arquitetura, WebRTC, segurança, estados, testes e pr
 **Código deste lab:** [`labs/lab-02-realtime-voice-agent`](https://github.com/glaucia86/openai-voice-playground/tree/main/labs/lab-02-realtime-voice-agent)<br>
 **Última validação técnica:** 19 de julho de 2026
 
-**Idioma:** Português · [Read in English](article-en.md)
+**Idioma:** Português · [English](article-en.md)
 
 - **Trilha:** Módulo 02 de 02
 - **Tempo estimado:** 3–4 horas

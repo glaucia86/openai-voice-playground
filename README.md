@@ -11,7 +11,7 @@
 <p>
   <a href="README-PT-BR.md">Português</a>
   ·
-  <a href="docs/README.md">Workshop path</a>
+  <a href="docs/README-en.md">Workshop path</a>
   ·
   <a href="docs/workshop-guide.md">How to follow</a>
   ·
@@ -101,7 +101,7 @@ Every lab provides:
 
 ## 🧭 Workshop path
 
-New to the OpenAI API or running the repository for the first time? Start with the **[workshop index](docs/README.md)**. It follows the same progressive idea used by hands-on engineering workshops: prepare the environment once, complete one bounded module at a time, verify a checkpoint, and then move forward.
+New to the OpenAI API or running the repository for the first time? Start with the **[workshop index](docs/README-en.md)**. It follows the same progressive idea used by hands-on engineering workshops: prepare the environment once, complete one bounded module at a time, verify a checkpoint, and then move forward.
 
 | Module | Start here | Result |
 | --- | --- | --- |

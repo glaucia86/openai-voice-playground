@@ -5,12 +5,12 @@ description: "Avaliação baseada em evidências dos OpenAI Voice Labs antes e d
 lang: pt-BR
 alternate_url: "/docs/ux-audit.html"
 alternate_lang: en
-alternate_label: "Read in English"
+alternate_label: "English"
 ---
 
 # Auditoria de UX, DevEx e aprendizagem
 
-[Read in English](ux-audit.md) · [Índice dos workshops](README.md)
+[English](ux-audit.md) · [Índice dos workshops](README.md)
 
 ## Método
 
@@ -44,4 +44,3 @@ A linha de base é o commit `e05ca3e`, inspecionado como instrutor e como partic
 - A demonstração Realtime real depende de uma sessão controlada com credencial, microfone e custo; o placeholder não finge resultado.
 - A pontuação não substitui teste com participantes reais. O próximo passo recomendado é observar pelo menos três iniciantes concluindo cada caminho e medir tempo, bloqueios e recuperação.
 - GitHub Pages hospeda apenas documentação; as aplicações continuam exigindo host Next.js server-side.
-

@@ -10,6 +10,7 @@ on:
       - "_layouts/**"
       - "assets/**"
       - "index.md"
+      - "en/**"
       - "docs/**"
       - "labs/*/tutorial/**"
   workflow_dispatch:
